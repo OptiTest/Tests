@@ -14,6 +14,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -75,9 +76,10 @@ public class Test1 extends TestCase {
 	  driver.findElement(By.linkText("Estimated click value")).click();
 	  assertEquals("Estimated click value","Keywords | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
+	  
   }
   
-  /*@Test
+  @Test
   public void gettingStartedWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
@@ -146,25 +148,47 @@ public class Test1 extends TestCase {
 	  driver.findElement(By.linkText("4. Create a Twitter campaign")).click();
 	  assertEquals("4. Create a Twitter campaign","Twitter for Business | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
-  }*/
+  }
   
   @Test public void TwitterForBusinessWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  String account;
-	  String message = testMessage();
-	  
-	  //Test tweet:
-	 /* driver.findElement(By.cssSelector("textarea.tweet-text.tweetbox")).sendKeys(message);
-	  driver.findElement(By.xpath("//div[@id='dashboard']/div[7]/div[2]/div[2]/div[2]/button")).click();
-	  Thread.sleep(5000);*/
+	  Actions builder = new Actions(driver);
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
-	  System.out.print(driver.findElement(By.xpath("//*[@id='dashboard']/div[8]/div[2]/div[1]/span/div[1]/div[1]/span[1]")).getText());
+	  
+	  String account = driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span/div[1]/div[1]/span[1]")).getText();
+	  String message = testMessage();
+	  String getAccount;
+	  String getMessage;
+	  
+	  //Test twitt:
+	  driver.findElement(By.cssSelector("textarea.tweet-text.tweetbox")).sendKeys(message);
+	  driver.findElement(By.xpath("//button[@class='post_tweet ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  Thread.sleep(5000);
+	 
 	  driver.findElement(By.linkText("Twitter for Business")).click();
 	  wait.until(presenceOfElementLocated(By.className("inbox_tweet")));
 	  driver.findElement(By.className("inbox_tweet"));
-	  System.out.print(driver.findElement(By.className("inbox_tweet")).getAttribute("textContent"));
-	  System.out.print(driver.findElement(By.className("headline_tweet")).getAttribute("textContent"));
-	  Thread.sleep(5000);
+	  
+	  getMessage=driver.findElement(By.className("inbox_tweet")).getAttribute("textContent");
+	  assertEquals("Message",message,getMessage.substring(account.length()+1, 1+account.length()+message.length()));
+	  
+	  getMessage=driver.findElement(By.className("headline_tweet")).getAttribute("textContent");
+	  assertEquals("Check message",message, getMessage.substring(0, message.length()));
+	  
+	  getAccount=driver.findElement(By.id("my_twitter_name")).getAttribute("textContent");
+	  assertEquals("Check account name",account,getAccount);
+	  
+	  getAccount=driver.findElement(By.className("inbox_tweet")).getAttribute("textContent");
+	  assertEquals("Check account name",account,getAccount.substring(0, account.length()));
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Test View all link:
+	  wait.until(presenceOfElementLocated(By.linkText("View all")));
+	  driver.findElement(By.linkText("View all")).click();
+	  driver.findElement(By.id("tab-searches"));
+	  driver.findElement(By.id("search-twitter-input")).sendKeys("ad");
+	  Thread.sleep(3000);
+	  builder.sendKeys(driver.findElement(By.id("search-twitter-input")), Keys.ENTER);
   }
 	    
   //===============================================================================================
