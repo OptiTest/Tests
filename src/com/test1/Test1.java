@@ -186,7 +186,7 @@ public class Test1 extends TestCase {
 	  assertEquals("Check account name",account,getAccount.substring(0, account.length()));
 	  driver.get("http://dashboard.optify.net");
 	 
-	  //Test View all link:
+	  //Social monitor:
 	  while(contin){
 		  try{
 			  try{contin=false;
@@ -201,8 +201,7 @@ public class Test1 extends TestCase {
 					  driver.findElement(By.xpath("//*[@id='search-action']/a")).click();
 					  Thread.sleep(5000);
 			  
-					  removeTwitterSearchSave();
-				  
+					  removeTwitterSearchSave();  
 			  }
 		  }
 		  catch(WebDriverException ex){
