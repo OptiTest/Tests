@@ -18,6 +18,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.interactions.Action;
@@ -151,6 +152,9 @@ public class Test1 extends TestCase {
   }
   
   @Test public void TwitterForBusinessWidget() throws Exception{
+	  int cathSum=0;
+	  boolean contin=true;
+	  
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
@@ -181,14 +185,39 @@ public class Test1 extends TestCase {
 	  getAccount=driver.findElement(By.className("inbox_tweet")).getAttribute("textContent");
 	  assertEquals("Check account name",account,getAccount.substring(0, account.length()));
 	  driver.get("http://dashboard.optify.net");
-	  
+	 
 	  //Test View all link:
-	  wait.until(presenceOfElementLocated(By.linkText("View all")));
-	  driver.findElement(By.linkText("View all")).click();
-	  driver.findElement(By.id("tab-searches"));
-	  driver.findElement(By.id("search-twitter-input")).sendKeys("ad");
-	  Thread.sleep(3000);
-	  builder.sendKeys(driver.findElement(By.id("search-twitter-input")), Keys.ENTER);
+	  while(contin){
+		  try{
+			  try{contin=false;
+				  wait.until(presenceOfElementLocated(By.linkText("Add terms to monitor")));
+			  	  driver.findElement(By.linkText("Add terms to monitor")).click();
+			  } 
+			  finally{driver.findElement(By.id("tab-searches"));
+			  		  driver.findElement(By.id("search-twitter-input")).sendKeys("ad");
+					  Thread.sleep(5000);
+					  driver.findElement(By.id("search-twitter-input")).sendKeys(Keys.ENTER);
+					  Thread.sleep(5000);
+					  driver.findElement(By.xpath("//*[@id='search-action']/a")).click();
+					  Thread.sleep(5000);
+			  
+					  removeTwitterSearchSave();
+				  
+			  }
+		  }
+		  catch(WebDriverException ex){
+			  if(cathSum>3)
+				  throw ex;
+			  
+			  cathSum++;
+			  contin=true;
+			  driver.findElement(By.linkText("View all")).click();
+			  removeTwitterSearchSave();
+			  driver.get("http://dashboard.optify.net");
+			  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
+		  }
+		  
+	  }
   }
 	    
   //===============================================================================================
@@ -230,6 +259,19 @@ public class Test1 extends TestCase {
 	  }
 	return null;
 	}
+  
+  //================================================================================================
+  void removeTwitterSearchSave() throws InterruptedException{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@title='Remove Saved Search']/span")));
+	  driver.findElement(By.xpath("//*[@title='Remove Saved Search']/span")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  Thread.sleep(5000);
+  }
 
+  //================================================================================================
 } 
 
