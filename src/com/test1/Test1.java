@@ -1,8 +1,6 @@
 package com.test1;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -12,18 +10,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.HasInputDevices;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.Mouse;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -151,18 +143,23 @@ public class Test1 extends TestCase {
 	  driver.get("http://dashboard.optify.net");
   }
   
-  @Test public void TwitterForBusinessWidget() throws Exception{
+  @Test 
+  public void twitterForBusinessWidget() throws Exception{
 	  int cathSum=0;
 	  boolean contin=true;
-	  
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 	  
 	  String account = driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span/div[1]/div[1]/span[1]")).getText();
 	  String message = testMessage();
 	  String getAccount;
 	  String getMessage;
+	  
+	  //Test title link:
+	  driver.findElement(By.linkText("Twitter for Business")).click();
+	  assertEquals("Twitter for Business","Twitter for Business | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
 	  
 	  //Test twitt:
 	  driver.findElement(By.cssSelector("textarea.tweet-text.tweetbox")).sendKeys(message);
@@ -200,8 +197,15 @@ public class Test1 extends TestCase {
 					  Thread.sleep(5000);
 					  driver.findElement(By.xpath("//*[@id='search-action']/a")).click();
 					  Thread.sleep(5000);
-			  
-					  removeTwitterSearchSave();  
+					  
+					  driver.get("http://dashboard.optify.net");
+					  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[5]/div[2]/div[2]/div[3]/div[2]/div/ul/li[1]/div/div[1]/div/div[2]/a")));
+					  assertEquals("Check Social Monitor value","ad",driver.findElement(By.xpath("//*[@id='dashboard']/div[5]/div[2]/div[2]/div[3]/div[2]/div/ul/li[1]/div/div[1]/div/div[2]/a")).getText());
+					  driver.findElement(By.linkText("View all")).click();
+					  
+					  removeTwitterSearchSave();
+					  driver.get("http://dashboard.optify.net");
+					  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 			  }
 		  }
 		  catch(WebDriverException ex){
@@ -217,10 +221,57 @@ public class Test1 extends TestCase {
 		  }
 		  
 	  }
+   
+	  //Check drop down:
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[14]/ul/li[1]")).click();
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[14]/ul/li[2]")).click();
+  }
+  
+  @Test
+  public void keywordPerformanceWidget() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  wait.until(presenceOfElementLocated(By.linkText("Keyword performance")));
+	   
+	  //Test title link:
+	  driver.findElement(By.linkText("Keyword performance")).click();
+	  assertEquals("Keyword performance","Keywords | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	 //Test rank1:
+	 String rank="";
+	 int rows=0;
+	 
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")));
+	 rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).getText();
+	 driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).click();
+	 Thread.sleep(5000);
+	 rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
+	 
+	 assertEquals("rank1",rank,Integer.toString(rows));
+	 
+	 driver.get("http://dashboard.optify.net");
+	 
+	 //Test rank2:
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
+	 rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).getText();
+	 driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).click();
+	 Thread.sleep(7000);
+	 rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
+	 
+	 assertEquals("rank2",rank,Integer.toString(rows));
+	 
+	 driver.get("http://dashboard.optify.net");
+	 
+	 
   }
 	    
   //===============================================================================================
-  Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 	    return new Function<WebDriver, WebElement>() {
 	        public WebElement apply(WebDriver driver) {
 	            return driver.findElement(locator);
@@ -229,48 +280,40 @@ public class Test1 extends TestCase {
   }
   
   //================================================================================================
-  void switcWindow(){
+  private void switcWindow(){
 	  for(String winHandle : driver.getWindowHandles())
 		  driver.switchTo().window(winHandle);
   }
   
   //================================================================================================
-  String testMessage(){
+  private String testMessage(){
 	  return Integer.toString((int)((System.currentTimeMillis()/(1000*60*60))%24))+
 	         Integer.toString((int) ((System.currentTimeMillis()/(1000*60))%60));
   }
   
   //================================================================================================
-  public By byDom(String domExpression) {
-	  final Object o = ((JavascriptExecutor) driver).executeScript("return " + domExpression + ";");
-	
-	  if (o instanceof WebElement) {
-	      return new By() {
-	          @Override
-	          public List<WebElement> findElements(SearchContext searchContext) {
-	              return new ArrayList<WebElement>() {
-	                  {
-	                      add((WebElement) o);
-	                  }
-	              };
-	          }
-	      };
-	  }
-	return null;
-	}
-  
-  //================================================================================================
-  void removeTwitterSearchSave() throws InterruptedException{
+  private void removeTwitterSearchSave() throws InterruptedException{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//*[@title='Remove Saved Search']/span")));
 	  driver.findElement(By.xpath("//*[@title='Remove Saved Search']/span")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  driver.findElement(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  Thread.sleep(5000);
   }
 
   //================================================================================================
+  private int getRowCount(By by) throws Exception {
+      try { WebElement table = driver.findElement(by);
+            List<WebElement> rows = table.findElements(By.tagName("tr"));
+            return rows.size();
+      
+      } catch (Exception e) {
+          return -1;
+      }
+  }
+  
+  //=================================================================================
 } 
 
