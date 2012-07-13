@@ -230,44 +230,68 @@ public class Test1 extends TestCase {
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[14]/ul/li[2]")).click();
+	  Thread.sleep(3000);
   }
   
   @Test
   public void keywordPerformanceWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  wait.until(presenceOfElementLocated(By.linkText("Keyword performance")));
-	   
+	  Actions builder = new Actions(driver);
+	  wait.until(presenceOfElementLocated(By.className("keyword_widget_title")));
+	  
 	  //Test title link:
-	  driver.findElement(By.linkText("Keyword performance")).click();
+	  Thread.sleep(5000);
+	  driver.findElement(By.className("keyword_widget_title")).click();
 	  assertEquals("Keyword performance","Keywords | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
+	
+	  //Test rank1:
+	  String rank="";
+	  int rows=0;
+	 
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")));
+	  rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).getText();
+	  driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).click();
+	  Thread.sleep(5000);
+	  rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
+	 
+	  assertEquals("rank1",rank,Integer.toString(rows));
+	 
+	  driver.get("http://dashboard.optify.net");
 	  
-	 //Test rank1:
-	 String rank="";
-	 int rows=0;
-	 
-	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")));
-	 rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).getText();
-	 driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).click();
-	 Thread.sleep(5000);
-	 rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
-	 
-	 assertEquals("rank1",rank,Integer.toString(rows));
-	 
-	 driver.get("http://dashboard.optify.net");
-	 
-	 //Test rank2:
-	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
-	 rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).getText();
-	 driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).click();
-	 Thread.sleep(7000);
-	 rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
-	 
-	 assertEquals("rank2",rank,Integer.toString(rows));
-	 
-	 driver.get("http://dashboard.optify.net");
-	 
-	 
+	  //Test rank2:
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
+	  rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).getText();
+	  driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).click();
+	  Thread.sleep(7000);
+	  rows=getRowsNum(By.xpath("//*[@id='keyword_table']/tbody"));
+	  
+	  assertEquals("rank2",rank,Integer.toString(rows));
+	  
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Test search engine drop dawn:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[25]/ul/li[2]")).click();
+	  Thread.sleep(5000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[25]/ul/li[1]")).click();
+	  Thread.sleep(3000);
+	   
+	  
+	  //Test list drop dawn:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[2]")).click();
+	  Thread.sleep(5000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[1]")).click();
+	  Thread.sleep(5000);
   }
 	    
   //===============================================================================================
@@ -314,6 +338,19 @@ public class Test1 extends TestCase {
       }
   }
   
-  //=================================================================================
+  //================================================================================================
+  private int getRowsNum(By by) throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  int sum=0;
+	  int MAX_ROWS=100;
+	  
+	  while((sum+=getRowCount(by))>MAX_ROWS){
+		  driver.findElement(By.linkText("Next")).click();
+		  wait.until(presenceOfElementLocated(by));
+		  Thread.sleep(5000);
+	  }
+	  
+	  return sum;
+  }
 } 
 

@@ -1,0 +1,82 @@
+[0.001][INFO]:      ChromeDriver 21.0.1180.4 D:\selenium-2.23.1\chromedriver.exe
+[1.073][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chrome.switches": [ "--ignore-certificate-errors", "--start-maximized" ],
+   "platform": "ANY",
+   "version": ""
+}
+
+[1.074][INFO]:      Launching chrome: "C:\Users\oras\AppData\Local\Google\Chrome\Application\chrome.exe" --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank --ignore-certificate-errors --start-maximized
+[1.908][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.57
+[1.933][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3)
+[1.933][FINE]:      Command finished (/session/f3f3eeff46efc24106665fadf146cff3) with response {
+   "sessionId": "f3f3eeff46efc24106665fadf146cff3",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "21.0.1180.4",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "windows",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "20.0.1132.57",
+      "webStorageEnabled": true
+   }
+}
+
+[1.954][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/url) with params {
+   "url": "http://dashboard.optify.net/login"
+}
+
+[1.954][FINER]:     Waiting for all views to stop loading...
+[1.955][FINER]:     Done waiting for all views to stop loading
+[4.221][FINER]:     Waiting for all views to stop loading...
+[4.224][FINER]:     Done waiting for all views to stop loading
+[4.224][FINE]:      Command finished (/session/f3f3eeff46efc24106665fadf146cff3/url) with response {
+   "sessionId": "f3f3eeff46efc24106665fadf146cff3",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[4.234][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+   "using": "id",
+   "value": "j_username"
+}
+
+[4.235][FINER]:     Waiting for all views to stop loading...
+[4.235][FINER]:     Done waiting for all views to stop loading
+[4.248][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/window_handle)
+[4.248][FINER]:     Waiting for all views to stop loading...
+[4.248][FINER]:     Done waiting for all views to stop loading
+[4.258][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+   "using": "link text",
+   "value": "Twitter for Business"
+}
+
+[4.258][FINER]:     Waiting for all views to stop loading...
+[4.258][FINER]:     Done waiting for all views to stop loading
+[4.264][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+   "using": "class name",
+   "value": "keyword_widget_title"
+}
+
+[4.264][FINER]:     Waiting for all views to stop loading...
+[4.264][FINER]:     Done waiting for all views to stop loading
+[4.272][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+   "using": "link text",
+   "value": "Average score"
+}
+
+[4.272][FINER]:     Waiting for all views to stop loading...
+[4.272][FINER]:     Done waiting for all views to stop loading
