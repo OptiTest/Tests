@@ -1,16 +1,16 @@
-[0.001][INFO]:      ChromeDriver 21.0.1180.4 D:\selenium-2.23.1\chromedriver.exe
-[1.073][FINE]:      Initializing session with capabilities {
+[0.000][INFO]:      ChromeDriver 21.0.1180.4 D:\selenium-2.23.1\chromedriver.exe
+[1.313][FINE]:      Initializing session with capabilities {
    "browserName": "chrome",
-   "chrome.switches": [ "--ignore-certificate-errors", "--start-maximized" ],
+   "chrome.switches": [ "--start-maximized" ],
    "platform": "ANY",
    "version": ""
 }
 
-[1.074][INFO]:      Launching chrome: "C:\Users\oras\AppData\Local\Google\Chrome\Application\chrome.exe" --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank --ignore-certificate-errors --start-maximized
-[1.908][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.57
-[1.933][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3)
-[1.933][FINE]:      Command finished (/session/f3f3eeff46efc24106665fadf146cff3) with response {
-   "sessionId": "f3f3eeff46efc24106665fadf146cff3",
+[1.314][INFO]:      Launching chrome: "C:\Users\oras\AppData\Local\Google\Chrome\Application\chrome.exe" --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank --start-maximized
+[1.839][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.57
+[1.876][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450)
+[1.876][FINE]:      Command finished (/session/65c86e5d27986e3ceb4a89065ff3d450) with response {
+   "sessionId": "65c86e5d27986e3ceb4a89065ff3d450",
    "status": 0,
    "value": {
       "acceptSslCerts": false,
@@ -33,50 +33,72 @@
    }
 }
 
-[1.954][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/url) with params {
+[1.896][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/url) with params {
    "url": "http://dashboard.optify.net/login"
 }
 
-[1.954][FINER]:     Waiting for all views to stop loading...
-[1.955][FINER]:     Done waiting for all views to stop loading
-[4.221][FINER]:     Waiting for all views to stop loading...
-[4.224][FINER]:     Done waiting for all views to stop loading
-[4.224][FINE]:      Command finished (/session/f3f3eeff46efc24106665fadf146cff3/url) with response {
-   "sessionId": "f3f3eeff46efc24106665fadf146cff3",
+[1.896][FINER]:     Waiting for all views to stop loading...
+[1.897][FINER]:     Done waiting for all views to stop loading
+[6.682][FINER]:     Waiting for all views to stop loading...
+[6.683][FINER]:     Done waiting for all views to stop loading
+[6.683][WARNING]:   AfterExecuteCommand failed: Chrome did not respond to 'WaitForAllTabsToStopLoading'. Elapsed time was 0 ms.
+[6.683][FINE]:      Command finished (/session/65c86e5d27986e3ceb4a89065ff3d450/url) with response {
+   "sessionId": "65c86e5d27986e3ceb4a89065ff3d450",
    "status": 0,
    "value": {
 
    }
 }
 
-[4.234][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+[6.701][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
    "using": "id",
    "value": "j_username"
 }
 
-[4.235][FINER]:     Waiting for all views to stop loading...
-[4.235][FINER]:     Done waiting for all views to stop loading
-[4.248][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/window_handle)
-[4.248][FINER]:     Waiting for all views to stop loading...
-[4.248][FINER]:     Done waiting for all views to stop loading
-[4.258][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+[6.701][FINER]:     Waiting for all views to stop loading...
+[6.701][FINER]:     Done waiting for all views to stop loading
+[6.720][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/window_handle)
+[6.720][FINER]:     Waiting for all views to stop loading...
+[6.724][FINER]:     Done waiting for all views to stop loading
+[6.736][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
    "using": "link text",
    "value": "Twitter for Business"
 }
 
-[4.258][FINER]:     Waiting for all views to stop loading...
-[4.258][FINER]:     Done waiting for all views to stop loading
-[4.264][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+[6.736][FINER]:     Waiting for all views to stop loading...
+[6.738][FINER]:     Done waiting for all views to stop loading
+[6.756][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
    "using": "class name",
    "value": "keyword_widget_title"
 }
 
-[4.264][FINER]:     Waiting for all views to stop loading...
-[4.264][FINER]:     Done waiting for all views to stop loading
-[4.272][FINE]:      Command received (/session/f3f3eeff46efc24106665fadf146cff3/element) with params {
+[6.756][FINER]:     Waiting for all views to stop loading...
+[6.757][FINER]:     Done waiting for all views to stop loading
+[6.770][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
+   "using": "link text",
+   "value": "Page optimization"
+}
+
+[6.770][FINER]:     Waiting for all views to stop loading...
+[6.770][FINER]:     Done waiting for all views to stop loading
+[6.775][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
+   "using": "link text",
+   "value": "Link opportunities"
+}
+
+[6.775][FINER]:     Waiting for all views to stop loading...
+[6.775][FINER]:     Done waiting for all views to stop loading
+[6.780][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
+   "using": "link text",
+   "value": "Keyword trends"
+}
+
+[6.781][FINER]:     Waiting for all views to stop loading...
+[6.781][FINER]:     Done waiting for all views to stop loading
+[6.789][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
    "using": "link text",
    "value": "Average score"
 }
 
-[4.272][FINER]:     Waiting for all views to stop loading...
-[4.272][FINER]:     Done waiting for all views to stop loading
+[6.789][FINER]:     Waiting for all views to stop loading...
+[6.789][FINER]:     Done waiting for all views to stop loading
