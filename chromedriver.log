@@ -1,16 +1,16 @@
-[0.000][INFO]:      ChromeDriver 21.0.1180.4 D:\selenium-2.23.1\chromedriver.exe
-[1.313][FINE]:      Initializing session with capabilities {
+[-0.000][INFO]:     ChromeDriver 21.0.1180.4 D:\selenium-2.23.1\chromedriver.exe
+[1.328][FINE]:      Initializing session with capabilities {
    "browserName": "chrome",
    "chrome.switches": [ "--start-maximized" ],
    "platform": "ANY",
    "version": ""
 }
 
-[1.314][INFO]:      Launching chrome: "C:\Users\oras\AppData\Local\Google\Chrome\Application\chrome.exe" --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank --start-maximized
-[1.839][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.57
-[1.876][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450)
-[1.876][FINE]:      Command finished (/session/65c86e5d27986e3ceb4a89065ff3d450) with response {
-   "sessionId": "65c86e5d27986e3ceb4a89065ff3d450",
+[1.328][INFO]:      Launching chrome: "C:\Users\oras\AppData\Local\Google\Chrome\Application\chrome.exe" --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --ignore-certificate-errors --disable-popup-blocking --homepage=about:blank --start-maximized
+[2.200][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.57
+[2.243][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573)
+[2.244][FINE]:      Command finished (/session/d6761c2452d2cbd9f68db422aaf3f573) with response {
+   "sessionId": "d6761c2452d2cbd9f68db422aaf3f573",
    "status": 0,
    "value": {
       "acceptSslCerts": false,
@@ -33,72 +33,67 @@
    }
 }
 
-[1.896][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/url) with params {
+[2.277][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/url) with params {
    "url": "http://dashboard.optify.net/login"
 }
 
-[1.896][FINER]:     Waiting for all views to stop loading...
-[1.897][FINER]:     Done waiting for all views to stop loading
-[6.682][FINER]:     Waiting for all views to stop loading...
-[6.683][FINER]:     Done waiting for all views to stop loading
-[6.683][WARNING]:   AfterExecuteCommand failed: Chrome did not respond to 'WaitForAllTabsToStopLoading'. Elapsed time was 0 ms.
-[6.683][FINE]:      Command finished (/session/65c86e5d27986e3ceb4a89065ff3d450/url) with response {
-   "sessionId": "65c86e5d27986e3ceb4a89065ff3d450",
+[2.277][FINER]:     Waiting for all views to stop loading...
+[2.277][FINER]:     Done waiting for all views to stop loading
+[7.525][FINER]:     Waiting for all views to stop loading...
+[8.911][FINER]:     Done waiting for all views to stop loading
+[8.912][FINE]:      Command finished (/session/d6761c2452d2cbd9f68db422aaf3f573/url) with response {
+   "sessionId": "d6761c2452d2cbd9f68db422aaf3f573",
    "status": 0,
    "value": {
 
    }
 }
 
-[6.701][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
+[8.924][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/element) with params {
    "using": "id",
    "value": "j_username"
 }
 
-[6.701][FINER]:     Waiting for all views to stop loading...
-[6.701][FINER]:     Done waiting for all views to stop loading
-[6.720][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/window_handle)
-[6.720][FINER]:     Waiting for all views to stop loading...
-[6.724][FINER]:     Done waiting for all views to stop loading
-[6.736][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "link text",
-   "value": "Twitter for Business"
+[8.924][FINER]:     Waiting for all views to stop loading...
+[8.929][FINER]:     Done waiting for all views to stop loading
+[8.932][FINER]:     Waiting for all views to stop loading...
+[8.932][FINER]:     Done waiting for all views to stop loading
+[8.932][WARNING]:   AfterExecuteCommand failed: Chrome did not respond to 'WaitForAllTabsToStopLoading'. Elapsed time was 0 ms.
+[8.932][WARNING]:   Command finished (/session/d6761c2452d2cbd9f68db422aaf3f573/element) with response {
+   "sessionId": "d6761c2452d2cbd9f68db422aaf3f573",
+   "status": 13,
+   "value": {
+      "message": "findElement execution failed;\n Chrome did not respond to 'ExecuteJavascript'. Elapsed time was 0 ms."
+   }
 }
 
-[6.736][FINER]:     Waiting for all views to stop loading...
-[6.738][FINER]:     Done waiting for all views to stop loading
-[6.756][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "class name",
-   "value": "keyword_widget_title"
-}
-
-[6.756][FINER]:     Waiting for all views to stop loading...
-[6.757][FINER]:     Done waiting for all views to stop loading
-[6.770][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "link text",
-   "value": "Page optimization"
-}
-
-[6.770][FINER]:     Waiting for all views to stop loading...
-[6.770][FINER]:     Done waiting for all views to stop loading
-[6.775][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "link text",
-   "value": "Link opportunities"
-}
-
-[6.775][FINER]:     Waiting for all views to stop loading...
-[6.775][FINER]:     Done waiting for all views to stop loading
-[6.780][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "link text",
-   "value": "Keyword trends"
-}
-
-[6.781][FINER]:     Waiting for all views to stop loading...
-[6.781][FINER]:     Done waiting for all views to stop loading
-[6.789][FINE]:      Command received (/session/65c86e5d27986e3ceb4a89065ff3d450/element) with params {
-   "using": "link text",
-   "value": "Average score"
-}
-
-[6.789][FINER]:     Waiting for all views to stop loading...
-[6.789][FINER]:     Done waiting for all views to stop loading
+[8.951][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.951][FINER]:     Waiting for all views to stop loading...
+[8.951][FINER]:     Done waiting for all views to stop loading
+[8.957][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.957][FINER]:     Waiting for all views to stop loading...
+[8.957][FINER]:     Done waiting for all views to stop loading
+[8.963][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.963][FINER]:     Waiting for all views to stop loading...
+[8.963][FINER]:     Done waiting for all views to stop loading
+[8.967][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.967][FINER]:     Waiting for all views to stop loading...
+[8.967][FINER]:     Done waiting for all views to stop loading
+[8.973][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.973][FINER]:     Waiting for all views to stop loading...
+[8.973][FINER]:     Done waiting for all views to stop loading
+[8.979][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.979][FINER]:     Waiting for all views to stop loading...
+[8.980][FINER]:     Done waiting for all views to stop loading
+[8.983][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.983][FINER]:     Waiting for all views to stop loading...
+[8.983][FINER]:     Done waiting for all views to stop loading
+[8.988][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.988][FINER]:     Waiting for all views to stop loading...
+[8.988][FINER]:     Done waiting for all views to stop loading
+[8.994][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[8.994][FINER]:     Waiting for all views to stop loading...
+[8.994][FINER]:     Done waiting for all views to stop loading
+[9.000][FINE]:      Command received (/session/d6761c2452d2cbd9f68db422aaf3f573/title)
+[9.001][FINER]:     Waiting for all views to stop loading...
+[9.001][FINER]:     Done waiting for all views to stop loading
