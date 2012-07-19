@@ -485,6 +485,145 @@ public class Test1 extends TestCase {
 	  driver.findElement(By.xpath("//a[@class='confirm_delete_ok']/button")).click();
   }
   
+  @Test
+  public void welcomeToolbar() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String winHandleBefore = driver.getWindowHandle();
+	  goBase();
+	  
+	  //Test Collapse/Expand:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")));
+	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
+	  
+	  //Test Add Keywords:
+	  driver.findElement(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Test Send an email:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='send_email email-required orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
+	      //Do something.
+	  
+	  //Test View Traffic:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
+	  driver.findElement(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
+	  assertEquals("View Traffic","Lead Intelligence | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Test Create a report:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
+	  driver.findElement(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
+	  assertEquals("Create a report","Report | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Test links:
+	  driver.findElement(By.linkText("Help me customize my dashboard")).click();
+	  switcWindow();
+	  assertEquals("Help me customize my dashboard","Customizing your dashboard : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  driver.findElement(By.linkText("Submit a support ticket")).click();
+	  switcWindow();
+	  assertEquals("Submit a support ticket","Help and Support : Submit a request for assistance",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  driver.findElement(By.linkText("Take me to the Help home page")).click();
+	  switcWindow();
+	  assertEquals("Take me to the Help home page","Help and Support : Using Optify",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Test see more actions:
+	  
+	  //Add keywords:
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[2]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Add pages:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[3]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  assertEquals("Add pages","Pages | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Add Urls:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[4]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  assertEquals("Add Urls","Links | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Import Contacts:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[6]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  assertEquals("Import Contacts","Contact Manager | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Create an Email:
+	  
+	  //Send an email:
+	  
+	  //Create a Landing Page:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[9]")).click();
+	  assertEquals("Create a Landing Page","Create Landing Page | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Create a Lead Score:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[10]")).click();
+	  assertEquals("Create a Lead Score","Lead Scoring | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //View your Traffic:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[12]")).click();
+	  assertEquals("View your Traffic","Lead Intelligence | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Create an alert:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[13]")).click();
+	  assertEquals("Create an alert","Alerts | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+	  
+	  //Create a report:
+	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
+	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[15]")).click();
+	  assertEquals("Create a report","Report | Optify",driver.getTitle());
+	  driver.get("http://dashboard.optify.net");
+  }
   //===============================================================================================
   private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 	    return new Function<WebDriver, WebElement>() {
