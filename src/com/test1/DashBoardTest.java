@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
 
 @RunWith(BlockJUnit4ClassRunner.class)
-public class Test1 extends TestCase {
+public class DashBoardTest extends TestCase {
 
   private static ChromeDriverService service;
   private static WebDriver driver;
@@ -71,7 +71,6 @@ public class Test1 extends TestCase {
 	  driver.findElement(By.linkText("Estimated click value")).click();
 	  assertEquals("Estimated click value","Keywords | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
-	  
   }
   
   @Test
@@ -170,7 +169,6 @@ public class Test1 extends TestCase {
 	 
 	  driver.findElement(By.linkText("Twitter for Business")).click();
 	  wait.until(presenceOfElementLocated(By.className("inbox_tweet")));
-	  driver.findElement(By.className("inbox_tweet"));
 	  
 	  getMessage=driver.findElement(By.className("inbox_tweet")).getAttribute("textContent");
 	  assertEquals("Message",message,getMessage.substring(account.length()+1, 1+account.length()+message.length()));
@@ -201,10 +199,9 @@ public class Test1 extends TestCase {
 					  Thread.sleep(5000);
 					  
 					  driver.get("http://dashboard.optify.net");
-					  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[5]/div[2]/div[2]/div[3]/div[2]/div/ul/li[1]/div/div[1]/div/div[2]/a")));
-					  assertEquals("Check Social Monitor value","ad",driver.findElement(By.xpath("//*[@id='dashboard']/div[5]/div[2]/div[2]/div[3]/div[2]/div/ul/li[1]/div/div[1]/div/div[2]/a")).getText());
+					  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[2]/div[3]/div[2]/div/ul/li/div/div/div/div[2]/a")));
+					  assertEquals("Check Social Monitor value","ad",driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[2]/div[3]/div[2]/div/ul/li/div/div/div/div[2]/a")).getText());
 					  driver.findElement(By.linkText("View all")).click();
-					  
 					  removeTwitterSearchSave();
 					  driver.get("http://dashboard.optify.net");
 					  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
@@ -216,6 +213,7 @@ public class Test1 extends TestCase {
 			  
 			  cathSum++;
 			  contin=true;
+			  wait.until(presenceOfElementLocated(By.linkText("View all")));
 			  driver.findElement(By.linkText("View all")).click();
 			  removeTwitterSearchSave();
 			  driver.get("http://dashboard.optify.net");
@@ -224,13 +222,14 @@ public class Test1 extends TestCase {
 	  }
    
 	  //Check drop down:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[14]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//html/body/div[17]/ul/li[1]")).click();
 	  Thread.sleep(3000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[14]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//html/body/div[17]/ul/li[2]")).click();
 	  Thread.sleep(3000);
   }
   
@@ -245,27 +244,27 @@ public class Test1 extends TestCase {
 	  driver.findElement(By.className("keyword_widget_title")).click();
 	  assertEquals("Keyword performance","Keywords | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
-	
+
 	  //Test rank1:
 	  String rank="";
 	  int rows=0;
 	 
-	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")));
-	  rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).getText();
-	  driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/a")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div/div/a")));
+	  rank=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div/div/a")).getText();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div/div/a")).click();
 	  Thread.sleep(5000);
-	  rows=getRowCount(By.xpath("//*[@id='keyword_table']/tbody"));
-	 
+	  rows=getRowsNum(By.xpath("//*[@id='keyword_table']/tbody"));
+
 	  assertEquals("rank1",rank,Integer.toString(rows));
 	 
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Test rank2:
-	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
-	  rank=driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).getText();
-	  driver.findElement(By.xpath("//*[@id='dashboard']/div[11]/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
+	  rank=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).getText();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")).click();
 	  Thread.sleep(7000);
-	  rows=getRowsNum(By.xpath("//*[@id='keyword_table']/tbody"));
+	  rows=getRowsNum(By.xpath("//table[@id='keyword_table']/tbody"));
 	  
 	  assertEquals("rank2",rank,Integer.toString(rows));
 	  
@@ -297,7 +296,7 @@ public class Test1 extends TestCase {
 	 
   @Test
   public void pageOptimizationWidget() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  WebDriverWait wait = new WebDriverWait(driver, 15);
 	  String numerator=""; 
 	  goBase();
 	  
@@ -651,9 +650,9 @@ public class Test1 extends TestCase {
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//*[@title='Remove Saved Search']/span")));
 	  driver.findElement(By.xpath("//*[@title='Remove Saved Search']/span")).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/")));
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//*[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  Thread.sleep(5000);
   }
 
@@ -671,15 +670,18 @@ public class Test1 extends TestCase {
   //================================================================================================
   private int getRowsNum(By by) throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  int num=0;
 	  int sum=0;
 	  int MAX_ROWS=100;
 	  
-	  while((sum+=getRowCount(by))>=MAX_ROWS){
-		  driver.findElement(By.linkText("Next")).click();
+	  while((num=getRowCount(by))>=MAX_ROWS){
+		  sum+=num;
+		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']")));
+		  driver.findElement(By.xpath("//a[@class='next']")).click();
 		  wait.until(presenceOfElementLocated(by));
-		  Thread.sleep(5000);
 	  }
 	  
+	  sum+=num;
 	  return sum;
   }
   
