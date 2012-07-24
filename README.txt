@@ -23,10 +23,9 @@ These instructions require
 To work with sample code in Eclipse, the precompiled library needs to be copied
 into the war directory.
 
-After Installing all packages you can use import option from File->Import.
+After Installing all packages you need to open Eclipse then click on import option from File->Import.
 Then choose importing Git project. 
 You must use registerd user name, please refer to the wiki project Admin.
 Use the following address to get the files by using the Eclipse Git import projects wizard:
  
 https://github.com/OptiTest/Tests.git
-

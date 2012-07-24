@@ -38,7 +38,7 @@ public class DashBoardTest extends TestCase {
 	service.start();
 	
 	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-	String[] listCapability={"--start-maximized"};
+	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
   }
@@ -46,8 +46,8 @@ public class DashBoardTest extends TestCase {
   @Test
   public void dashboardLogIn() {
 	  driver.get("http://dashboard.optify.net/login");
-	  driver.findElement(By.id("j_username")).sendKeys("your username");
-	  driver.findElement(By.id("j_password")).sendKeys("your password");
+	  driver.findElement(By.id("j_username")).sendKeys("orasnin@gmail.com");
+	  driver.findElement(By.id("j_password")).sendKeys("wrwmfy9m");
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
   }
@@ -225,11 +225,11 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[17]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//html/body/div[15]/ul/li[1]")).click();
 	  Thread.sleep(3000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[17]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//html/body/div[15]/ul/li[2]")).click();
 	  Thread.sleep(3000);
   }
   
@@ -269,28 +269,28 @@ public class DashBoardTest extends TestCase {
 	  assertEquals("rank2",rank,Integer.toString(rows));
 	  
 	  driver.get("http://dashboard.optify.net");
-	  
+	 
 	  //Test search engine drop dawn:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[25]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//html/body/div[23]/ul/li[2]")).click();
 	  Thread.sleep(5000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[25]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//html/body/div[23]/ul/li[1]")).click();
 	  Thread.sleep(3000);
-	   
+	
 	  
 	  //Test list drop dawn:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//html/body/div[22]/ul/li[2]")).click();
 	  Thread.sleep(5000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[1]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//html/body/div[22]/ul/li[1]")).click();
 	  Thread.sleep(5000);
   }
 	 
@@ -324,6 +324,7 @@ public class DashBoardTest extends TestCase {
   @Test
   public void linkOpportunitiesWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String getId="";
 	  goBase();
 	  
 	  //Test widget title:
@@ -333,34 +334,38 @@ public class DashBoardTest extends TestCase {
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Test drop down view:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[28]/ul/li[2]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div")).getAttribute("id");
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
 	  Thread.sleep(5000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[28]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
 	  Thread.sleep(5000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
+	  Thread.sleep(5000);
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[1]")).click();
+	  Thread.sleep(5000);
+	  builder.release(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
 	  
 	  //Test drop down list:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[2]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div")).getAttribute("id");
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
 	  Thread.sleep(5000);
-
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
+	  Thread.sleep(5000);
+	  
 	  //Test Add more URLs:
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div[2]/ul/li[2]/a")).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[2]/div/button/span")));
-	  driver.findElement(By.xpath("//html/body/div[10]/div[2]/div/button/span")).click();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/ul/li[2]/a")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Link opportunities","Links | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-2 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div")).getAttribute("id");
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[24]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")).click();
 	  Thread.sleep(5000);
   }
   
@@ -376,9 +381,9 @@ public class DashBoardTest extends TestCase {
 	  driver.get("http://dashboard.optify.net");
     
 	  //Test displaying graph:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all report widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div")));
-	  try{assertEquals("Displaying graph","There are no results matching your filter settings",driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all report widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div")).getText());
-    	throw new Exception("Graph can't be display");
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='chartMessage']")));
+	  try{assertEquals("Displaying graph","There are no results matching your filter settings",driver.findElement(By.xpath("//div[@class='chartMessage']")).getText());
+    	throw new Exception("Graph can't be display");        
 	  }
 	  finally{}
   }
@@ -386,35 +391,41 @@ public class DashBoardTest extends TestCase {
   @Test
   public void websiteFeedWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String getId="";
 	  goBase();
 	  
 	  //Test drop down Score set used:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div/div/span[2]")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[13]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
 	  Thread.sleep(5000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div/div/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[13]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")).click();
 	  Thread.sleep(5000);
-	  
+	 
 	  //Test record:
-	  if(Integer.parseInt(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li")).getText())>0){
+	  if(!driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li")).getText().equals("No website activity at the moment but we'll keep you posted.")){
 		  //Test lead detail link:
 		  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")).click();
 	      assertEquals("Lead Detail","Lead Detail | Optify",driver.getTitle());
 	      driver.get("http://dashboard.optify.net");
 	      
 	      //Test Watch button:
-	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a")));
-	      driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a")).click();
+	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")));
+	      builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong"))).perform();
+	      wait.until(presenceOfElementLocated(By.linkText("WATCH")));
+	      driver.findElement(By.linkText("WATCH")).click();
 	      Thread.sleep(3000);
 	      driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[3]/span[2]/a")).click();
 	      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());
 	      driver.get("http://dashboard.optify.net");
 	      
 	      //Click hide:
+	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")));
+	      builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong"))).perform();
 	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a[3]")));
 	      driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a[3]")).click();
 	      Thread.sleep(3000);
@@ -428,76 +439,90 @@ public class DashBoardTest extends TestCase {
   
   @Test
   public void alertsWidget() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
 	  //Test check box:
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-2 widget-width-1 ui-draggable has-toolbar']/div[4]/span[3]/span")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/span[3]/span/input")));
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/span[3]/span/input")).click();
 	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-2 widget-width-1 ui-draggable has-toolbar']/div[4]/span[3]/span")).click();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/span[3]/span/input")).click();
 	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-2 widget-width-1 ui-draggable has-toolbar']/div[4]/span[2]/span")).click();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/span[2]/span/input")).click();
 	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-2 widget-width-1 ui-draggable has-toolbar']/div[4]/span[2]/span")).click();
+	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/span[2]/span/input")).click();
 	  
 	  //Test records:
-	  if(driver.findElement(By.xpath("//div[@class=' widget ui-widget ui-widget-content ui-corner-all alerts widget-height-2 widget-width-1 ui-draggable has-toolbar']/div[2]/div/ul/li/strong")).getText()!="No alerts now but we'll keep you posted.");
+	  if(!driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/div/ul/li/strong")).getText().equals("No alerts now but we'll keep you posted."));
 		  //Do some test.
+ 
   }
   
   @Test
   public void addWidgets() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String getId="";
 	  goBase();
 	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]")).getAttribute("id");
+	
+	  //Remove widget:
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[3]")).click();
+      builder.release();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//a[@class='confirm_delete_ok']/button")).click();
+	  
 	  //Add alert widget:
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all add_widget widget-height-2 widget-width-1 ui-draggable widget-overlay-enabled']/div[2]/div/div/div/div/div[2]/div/a/span")).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog ui-widget ui-widget-content ui-corner-all add-widget-popup-dialog ui-draggable']/div[2]/ul/li/div/button")));
-	  driver.findElement(By.xpath("//div[@class='ui-dialog ui-widget ui-widget-content ui-corner-all add-widget-popup-dialog ui-draggable']/div[2]/ul/li/div/button")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-widget-widget']/a/span")));
+	  driver.findElement(By.xpath("//div[@class='add-widget-widget']/a/span")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@value='0']")));
+	  driver.findElement(By.xpath("//button[@value='0']")).click();
 	  
 	  //Check widgets menu collapse:
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[30]/ul/li")).click();
-	  Thread.sleep(5000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div"))).perform();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")).click();
+	  builder.release();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"']/div/span/div")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@id='"+getId+"']/div/span/div"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[30]/ul/li")).click();
-	  Thread.sleep(5000);
-	  
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")).click();
+	  Thread.sleep(3000);
 	  //Check widgets menu Edit:
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[30]/ul/li[2]")).click();
-	  Thread.sleep(5000);
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
+	  builder.release();
+	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[5]/div/div[2]/div[3]")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget-settings ui-corner-bottom']/div/div[2]/div")));
+	  driver.findElement(By.xpath("//div[@class='widget-settings ui-corner-bottom']/div/div[2]/div")).click();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[5]/div[2]/a")).click();
-	  Thread.sleep(3000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]/div/span/div"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[30]/ul/li")).click();
-	  Thread.sleep(3000);
-	  
-	  //Remove widget:
-	  driver.findElement(By.xpath("//html/body/div[30]/ul/li[3]")).click();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//a[@class='confirm_delete_ok']/button")).click();
+	  driver.findElement(By.xpath("//div[@class='widget-settings ui-corner-bottom']/div[2]/a")).click();
   }
   
   @Test
   public void welcomeToolbar() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  WebDriverWait wait = new WebDriverWait(driver, 15);
 	  String winHandleBefore = driver.getWindowHandle();
 	  goBase();
 	  
 	  //Test Collapse/Expand:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")));
 	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
+	  Thread.sleep(3000);
 	  
 	  //Test Add Keywords:
-	  driver.findElement(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span")));
+	  driver.findElement(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
@@ -541,7 +566,8 @@ public class DashBoardTest extends TestCase {
 	  //Test see more actions:
 	  
 	  //Add keywords:
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[2]")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
@@ -550,8 +576,8 @@ public class DashBoardTest extends TestCase {
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Add pages:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[3]")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
@@ -560,8 +586,8 @@ public class DashBoardTest extends TestCase {
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Add Urls:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[4]")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
@@ -570,8 +596,8 @@ public class DashBoardTest extends TestCase {
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Import Contacts:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[6]")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
@@ -584,40 +610,40 @@ public class DashBoardTest extends TestCase {
 	  //Send an email:
 	  
 	  //Create a Landing Page:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[9]")).click();
 	  assertEquals("Create a Landing Page","Create Landing Page | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Create a Lead Score:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[10]")).click();
 	  assertEquals("Create a Lead Score","Lead Scoring | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //View your Traffic:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[12]")).click();
 	  assertEquals("View your Traffic","Lead Intelligence | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Create an alert:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[13]")).click();
 	  assertEquals("Create an alert","Alerts | Optify",driver.getTitle());
 	  driver.get("http://dashboard.optify.net");
 	  
 	  //Create a report:
-	  wait.until(presenceOfElementLocated(By.linkText("See More Actions")));
-	  builder.clickAndHold(driver.findElement(By.linkText("See More Actions"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[15]")).click();
 	  assertEquals("Create a report","Report | Optify",driver.getTitle());
@@ -687,7 +713,7 @@ public class DashBoardTest extends TestCase {
   
   //==================================================================================================
   private void goBase(){
-	  if(driver.getTitle()!="Dashboard | Optify")
+	  if(!driver.getTitle().equals("Dashboard | Optify"))
 		  driver.get("http://dashboard.optify.net");
   }
   
