@@ -1,4 +1,4 @@
-package com.test1;
+package com.optifyTest;
 
 import java.io.File;
 import java.util.List;
@@ -23,16 +23,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Function;
 
 @RunWith(BlockJUnit4ClassRunner.class)
-public class DashBoardTest extends TestCase {
+public class DashBoard extends TestCase {
 
+  //Set test parameters:
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-
+  String homeAddress="http://dashboard.optify.net";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
+  static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
+  
   @BeforeClass
   public static void createAndStartService() throws Throwable {
     service = new ChromeDriverService.Builder()
-    	.usingDriverExecutable(new File("D:\\selenium-2.23.1\\chromedriver.exe"))
+    	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
         .build();
 	service.start();
@@ -45,9 +50,9 @@ public class DashBoardTest extends TestCase {
   
   @Test
   public void dashboardLogIn() {
-	  driver.get("http://dashboard.optify.net/login");
-	  driver.findElement(By.id("j_username")).sendKeys("orasnin@gmail.com");
-	  driver.findElement(By.id("j_password")).sendKeys("wrwmfy9m");
+	  driver.get(homeAddress+"/login");
+	  driver.findElement(By.id("j_username")).sendKeys(userName);
+	  driver.findElement(By.id("j_password")).sendKeys(password);
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
   }
@@ -60,17 +65,17 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.linkText("Average score")));
 	  driver.findElement(By.linkText("Average score")).click();
 	  assertEquals("Average score","Pages | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  wait.until(presenceOfElementLocated(By.linkText("Homepage score")));
 	  driver.findElement(By.linkText("Homepage score")).click();
 	  assertEquals("Homepage score","Website Page | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  wait.until(presenceOfElementLocated(By.linkText("Estimated click value")));
 	  driver.findElement(By.linkText("Estimated click value")).click();
 	  assertEquals("Estimated click value","Keywords | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
   }
   
   @Test
@@ -93,7 +98,7 @@ public class DashBoardTest extends TestCase {
 	  
 	  driver.findElement(By.linkText("1. Create your target keywords list")).click();
 	  assertEquals("1. Create your target keywords list","Keywords | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Link2:===============================================================================================
 	  wait.until(presenceOfElementLocated(By.linkText("2. Optimize your website pages")));
@@ -109,7 +114,7 @@ public class DashBoardTest extends TestCase {
 	  
 	  driver.findElement(By.linkText("2. Optimize your website pages")).click();
 	  assertEquals("2. Optimize your website pages","Pages | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Link3:===============================================================================================
 	  wait.until(presenceOfElementLocated(By.linkText("3. View and manage your leads")));
@@ -125,7 +130,7 @@ public class DashBoardTest extends TestCase {
 	  
 	  driver.findElement(By.linkText("3. View and manage your leads")).click();
 	  assertEquals("3. View and manage your leads","Lead Intelligence | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Link4:===============================================================================================
 	  wait.until(presenceOfElementLocated(By.linkText("4. Create a Twitter campaign")));
@@ -141,13 +146,14 @@ public class DashBoardTest extends TestCase {
 	  
 	  driver.findElement(By.linkText("4. Create a Twitter campaign")).click();
 	  assertEquals("4. Create a Twitter campaign","Twitter for Business | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
   }
   
   @Test 
   public void twitterForBusinessWidget() throws Exception{
 	  int cathSum=0;
 	  boolean contin=true;
+	  String getId="";
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
@@ -160,7 +166,7 @@ public class DashBoardTest extends TestCase {
 	  //Test title link:
 	  driver.findElement(By.linkText("Twitter for Business")).click();
 	  assertEquals("Twitter for Business","Twitter for Business | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test twitt:
 	  driver.findElement(By.cssSelector("textarea.tweet-text.tweetbox")).sendKeys(message);
@@ -181,7 +187,7 @@ public class DashBoardTest extends TestCase {
 	  
 	  getAccount=driver.findElement(By.className("inbox_tweet")).getAttribute("textContent");
 	  assertEquals("Check account name",account,getAccount.substring(0, account.length()));
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	 
 	  //Social monitor:
 	  while(contin){
@@ -198,12 +204,12 @@ public class DashBoardTest extends TestCase {
 					  driver.findElement(By.xpath("//*[@id='search-action']/a")).click();
 					  Thread.sleep(5000);
 					  
-					  driver.get("http://dashboard.optify.net");
+					  driver.get(homeAddress);
 					  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[2]/div[3]/div[2]/div/ul/li/div/div/div/div[2]/a")));
 					  assertEquals("Check Social Monitor value","ad",driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[2]/div[3]/div[2]/div/ul/li/div/div/div/div[2]/a")).getText());
 					  driver.findElement(By.linkText("View all")).click();
 					  removeTwitterSearchSave();
-					  driver.get("http://dashboard.optify.net");
+					  driver.get(homeAddress);
 					  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 			  }
 		  }
@@ -216,20 +222,21 @@ public class DashBoardTest extends TestCase {
 			  wait.until(presenceOfElementLocated(By.linkText("View all")));
 			  driver.findElement(By.linkText("View all")).click();
 			  removeTwitterSearchSave();
-			  driver.get("http://dashboard.optify.net");
+			  driver.get(homeAddress);
 			  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 		  }
 	  }
    
 	  //Check drop down:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]")));
+	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div/span/div")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[15]/ul/li[1]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")).click();
 	  Thread.sleep(3000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[1]/span[1]/div[1]/div[1]/span[2]"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[15]/ul/li[2]")).click();
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
 	  Thread.sleep(3000);
   }
   
@@ -243,7 +250,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(5000);
 	  driver.findElement(By.className("keyword_widget_title")).click();
 	  assertEquals("Keyword performance","Keywords | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 
 	  //Test rank1:
 	  String rank="";
@@ -257,7 +264,7 @@ public class DashBoardTest extends TestCase {
 
 	  assertEquals("rank1",rank,Integer.toString(rows));
 	 
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test rank2:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/a")));
@@ -268,7 +275,7 @@ public class DashBoardTest extends TestCase {
 	  
 	  assertEquals("rank2",rank,Integer.toString(rows));
 	  
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	 
 	  //Test search engine drop dawn:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all keyword widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
@@ -304,13 +311,13 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.linkText("Page optimization")));
 	  driver.findElement(By.linkText("Page optimization")).click();
 	  assertEquals("page optimization","Pages | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test Optify page score link:
 	  wait.until(presenceOfElementLocated(By.linkText("Optify page score")));
 	  driver.findElement(By.linkText("Optify page score")).click();
 	  assertEquals("page optimization","Pages | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test widget bar:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div")));
@@ -318,7 +325,7 @@ public class DashBoardTest extends TestCase {
 	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div")).click();
 	  assertEquals("page optimization","Pages | Optify",driver.getTitle()); 
 	  assertEquals("numerator",numerator,driver.findElement(By.xpath("//span[@id='average_optify_score']")).getText()); 
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
   }
   
   @Test
@@ -331,7 +338,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.linkText("Link opportunities")));
 	  driver.findElement(By.linkText("Link opportunities")).click();
 	  assertEquals("Link opportunities","Links | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test drop down view:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
@@ -359,7 +366,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Link opportunities","Links | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
 	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div")).getAttribute("id");
@@ -378,7 +385,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.linkText("Keyword trends")));
 	  driver.findElement(By.linkText("Keyword trends")).click();
 	  assertEquals("Keyword trends","Keyword Reports | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
     
 	  //Test displaying graph:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='chartMessage']")));
@@ -411,7 +418,7 @@ public class DashBoardTest extends TestCase {
 		  //Test lead detail link:
 		  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")).click();
 	      assertEquals("Lead Detail","Lead Detail | Optify",driver.getTitle());
-	      driver.get("http://dashboard.optify.net");
+	      driver.get(homeAddress);
 	      
 	      //Test Watch button:
 	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")));
@@ -421,7 +428,7 @@ public class DashBoardTest extends TestCase {
 	      Thread.sleep(3000);
 	      driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[3]/span[2]/a")).click();
 	      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());
-	      driver.get("http://dashboard.optify.net");
+	      driver.get(homeAddress);
 	      
 	      //Click hide:
 	      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")));
@@ -526,7 +533,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test Send an email:
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='send_email email-required orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
@@ -536,13 +543,13 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
 	  driver.findElement(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
 	  assertEquals("View Traffic","Lead Intelligence | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test Create a report:
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")));
 	  driver.findElement(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']")).click();
 	  assertEquals("Create a report","Report | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Test links:
 	  driver.findElement(By.linkText("Help me customize my dashboard")).click();
@@ -573,7 +580,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Add pages:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -583,7 +590,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add pages","Pages | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Add Urls:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -593,7 +600,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add Urls","Links | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Import Contacts:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -603,7 +610,7 @@ public class DashBoardTest extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Import Contacts","Contact Manager | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Create an Email:
 	  
@@ -615,7 +622,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[9]")).click();
 	  assertEquals("Create a Landing Page","Create Landing Page | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Create a Lead Score:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -623,7 +630,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[10]")).click();
 	  assertEquals("Create a Lead Score","Lead Scoring | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //View your Traffic:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -631,7 +638,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[12]")).click();
 	  assertEquals("View your Traffic","Lead Intelligence | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Create an alert:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -639,7 +646,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[13]")).click();
 	  assertEquals("Create an alert","Alerts | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
 	  
 	  //Create a report:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
@@ -647,7 +654,7 @@ public class DashBoardTest extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[15]")).click();
 	  assertEquals("Create a report","Report | Optify",driver.getTitle());
-	  driver.get("http://dashboard.optify.net");
+	  driver.get(homeAddress);
   }
   //===============================================================================================
   private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
@@ -714,7 +721,7 @@ public class DashBoardTest extends TestCase {
   //==================================================================================================
   private void goBase(){
 	  if(!driver.getTitle().equals("Dashboard | Optify"))
-		  driver.get("http://dashboard.optify.net");
+		  driver.get(homeAddress);
   }
   
   //==================================================================================================

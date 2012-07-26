@@ -29,3 +29,10 @@ You must use registerd user name, please refer to the wiki project Admin.
 Use the following address to get the files by using the Eclipse Git import projects wizard:
  
 https://github.com/OptiTest/Tests.git
+
+-----------Running project ----------------------------------------
+
+Refer to the basic Selenium guide in the Wiki page.
+You must use Junit4 with your testing.
+You must set your username & your password Optify account.
+You must set the path for Selenium libraries.
