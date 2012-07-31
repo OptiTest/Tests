@@ -29,7 +29,7 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net";
+  String homeAddress="http://staging.optifyit.com/";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -524,6 +524,9 @@ public class DashBoard extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")));
 	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
 	  Thread.sleep(5000);
+	  
+	  //Add check change value element when collapse.
+	  
 	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
 	  Thread.sleep(3000);
 	  
