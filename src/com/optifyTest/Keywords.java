@@ -11,9 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.interactions.Actions;
@@ -31,8 +29,8 @@ public class Keywords extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   String homeAddress="http://dashboard.optify.net";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  String userName="your username";
+  String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -68,7 +66,7 @@ public class Keywords extends TestCase {
 	  assertEquals("Keywords page","Keywords | Optify",driver.getTitle());
   }
   
-  //@Test
+  @Test
   public void helpWithThisPage() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -86,35 +84,46 @@ public class Keywords extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Calendar todayDate=Calendar.getInstance();
+	  final int SEVEN = -7;
+	  final int THIRTY = -30;
 	  
+	  //Test 7d dates:
+	  todayDate.add(Calendar.DAY_OF_YEAR,SEVEN);
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']")));
 	  driver.findElement(By.xpath("//a[@class='interval_change_link interval-7d']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d selected']")));
 	  
+	  driver.findElement(By.xpath("//div[@class='interval_date_picker']/button/span")).click();
+	  Thread.sleep(3000);
+	  assertEquals("7d day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
+	  assertEquals("7d month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
+	  assertEquals("7d year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+	  
+	  //Test 30d dates:
+	  todayDate=Calendar.getInstance();
+	  todayDate.add(Calendar.DAY_OF_YEAR,THIRTY);
 	  driver.findElement(By.xpath("//a[@class='interval_change_link interval-30d']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-30d selected']")));
 	  
+	  driver.findElement(By.xpath("//div[@class='interval_date_picker']/button/span")).click();
+	  Thread.sleep(3000);
+	  assertEquals("30d day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
+	  assertEquals("30d month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
+	  assertEquals("30d year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+	  
+	  //Test 24h dates:
+	  todayDate=Calendar.getInstance();
 	  driver.findElement(By.xpath("//a[@class='interval_change_link interval-24h']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h selected']")));
 	  
-	  //Test 24h dates:
 	  driver.findElement(By.xpath("//div[@class='interval_date_picker']/button/span")).click();
 	  Thread.sleep(3000);
-	  System.out.print(driver.findElement(By.xpath("//input[@id='interval_end_date']")));
 	  assertEquals("24h day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
 	  assertEquals("24h month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-	  assertEquals("24h year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-	  
-	  //assertEquals("24h day ",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
-	  //assertEquals("24h month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-	  //assertEquals("24h year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-	  
-	  //Test 7d dates:
-	
-	  driver.get(homeAddress);
+	  assertEquals("24h year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
   }
   
   @Test 
@@ -126,22 +135,33 @@ public class Keywords extends TestCase {
   }
   
   @Test
-  public void KeywordList() throws Exception{
+  public void importKeywordList() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String winHandleBefore = driver.getWindowHandle();
 	  
-	  //Test import:
 	  driver.findElement(By.xpath("//a[@id='import_keywords_open']")).click();
 	                  //We can add some files to upload & equal with the keywords table data base.
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
-	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  
-	  //Test export:
-	  driver.findElement(By.xpath("//a[@id='keyword_grid_export']")).click();
-	  driver.switchTo().alert();
-	  builder.sendKeys(Keys.ENTER);
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[2]/div[2]/a")));
+	  driver.findElement(By.xpath("//html/body/div[10]/div[2]/div[2]/a")).click();
+	  Thread.sleep(3000);
+	  switcWindow();
+	  assertEquals("How to format your file","Importing and exporting keywords : Help and Support",driver.getTitle());
+	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[3]/div/button[2]")));
+	  driver.findElement(By.xpath("//html/body/div[10]/div[3]/div/button[2]")).click();
+  }
+  
+  @Test
+  public void exportKeywordList() throws Exception{
+	  goBase();
+	 
+	  driver.findElement(By.xpath("//a[@id='keyword_grid_export']")).click();
+	  Thread.sleep(3000);
+	 
 	                  //Some file check method.
   }
   
@@ -149,47 +169,76 @@ public class Keywords extends TestCase {
   public void addKeyword() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String getId="";
 	  
 	  //Set cc1:
 	  driver.findElement(By.xpath("//button[@id='add_keywords_open']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 	  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc1");
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']")));
-	  wait.until(presenceOfElementLocated(By.xpath("//input[@class='add-link-input']")));
-	  driver.findElement(By.xpath("//input[@class='add-link-input']")).sendKeys("test");
+	  Thread.sleep(3000);
+	  getId=driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div")).getAttribute("id");
+	  builder.clickAndHold(driver.findElement(By.xpath("//html/body/div[8]/div[2]/div[2]/div/div/div"))).perform();
+	  Thread.sleep(3000);
+	  System.out.print(getId);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")));
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")).sendKeys("test");
 	  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
 	  
-	  Thread.sleep(5000);
+	  //Wait for the add success message:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='success_message hidden-none clear-both']")));
+	  builder.release(driver.findElement(By.xpath("//html/body/div[8]/div[2]/div[2]/div/div/div")));
 	  
 	  //Set cc2:
+	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//button[@id='add_keywords_open']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 	  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc2");
+	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
+  }
+  
+ @Test
+ public void tableSearch() throws Exception{
+	  goBase();
 	  
 	  //Save cc2 to test group.
-	  driver.findElement(By.xpath("//input[@id='keyword-text-filter']")).sendKeys("cc2");
+	  driver.findElement(By.xpath("//div[@class='data-text-filter data-filter-off']/input")).sendKeys("cc2");
 	  Thread.sleep(5000);
-	  assertEquals("get cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td")).getText());
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action button-action action-tags']"))).perform();
+	  assertEquals("get cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span/span")).getText());
+ }
+ 
+ @Test 
+ public void tableActions() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	 
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//div[@class='contents tag-menu']//span[text()='test']")).click();
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']")));
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']")).click();
+	  Thread.sleep(5000);
 	  
-	  //Check test list:
-	  driver.findElement(By.xpath("//span[@class='icon-remove icon-white']")).click();
+	  driver.findElement(By.xpath("//div[@class='data-text-filter-clear']")).click();
+	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//span[@class='filter_selection tags']//a[text()='test']")).click();
 	  Thread.sleep(3000);
-	  assertEquals("Equale cc1","cc1",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td")).getText());
-	  assertEquals("Equale cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td")).getText());
+	  assertEquals("Equale cc1","cc1",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr[2]/td/span")).getText());
+	  assertEquals("Equale cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span")).getText());
   }
 	  
-  @Test
+  //@Test
   public void removeKeywords() throws Exception{
 	  
   
   }
   
-  @Test 
+  //@Test 
   public void getSuggestions() throws Exception{
 	  driver.findElement(By.xpath("//button[@id='keyword-open-suggest']"));
   }
