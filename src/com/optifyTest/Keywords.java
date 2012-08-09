@@ -210,8 +210,10 @@ public class Keywords extends TestCase {
  @Test 
  public void tableActions() throws Exception{
 	  goBase();
+	  String winHandleBefore = driver.getWindowHandle();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	 
+	  //Save cc1 into test group:
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
 	  Thread.sleep(3000);
@@ -224,12 +226,104 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']")).click();
 	  Thread.sleep(5000);
 	  
+	  //Check cc1 & cc2 are in test group:
 	  driver.findElement(By.xpath("//div[@class='data-text-filter-clear']")).click();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//span[@class='filter_selection tags']//a[text()='test']")).click();
 	  Thread.sleep(3000);
 	  assertEquals("Equale cc1","cc1",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr[2]/td/span")).getText());
 	  assertEquals("Equale cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span")).getText());
+	  
+	  //Test view results:
+	  
+	  //Test Google search:
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']")));
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Google US']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Google US']")).click();
+	  Thread.sleep(5000);
+	  
+	  switcWindow();
+	  Thread.sleep(5000);
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  Thread.sleep(3000);
+	  
+	  //Test Twitter search:
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']")));
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Twitter']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Twitter']")).click();
+	  Thread.sleep(5000);
+	  
+	  switcWindow();
+	  Thread.sleep(5000);
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Test Bing search:
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']")));
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Bing US']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Bing US']")).click();
+	  Thread.sleep(3000);
+	  
+	  switcWindow();
+	  Thread.sleep(3000);
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Test Yahoo search:
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='View results']")));
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Yahoo!']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='data-table menu']//div[text()='See results on Yahoo!']")).click();
+	  Thread.sleep(3000);
+	  
+	  switcWindow();
+	  Thread.sleep(5000);
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Remove cc1 & cc2:
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")));
+	  driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")).click();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  Thread.sleep(3000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).perform();
+	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")));
+	  driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")).click();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
   }
 	  
   //@Test
