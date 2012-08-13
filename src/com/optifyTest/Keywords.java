@@ -32,6 +32,8 @@ public class Keywords extends TestCase {
   String userName="your username";
   String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
+  String keyWord="";
+  String keyWordUrl="";
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -172,7 +174,8 @@ public class Keywords extends TestCase {
 	  String getId="";
 	  
 	  //Set cc1:
-	  driver.findElement(By.xpath("//button[@id='add_keywords_open']")).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 	  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc1");
 	  Thread.sleep(3000);
@@ -197,9 +200,54 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
   }
   
+  @Test 
+  public void getSuggestions() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  //Open Get Suggestion:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
+	  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
+	  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
+	  
+	  //Save suggested keyword:
+	  keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
+	  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
+	  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+	  Thread.sleep(3000);
+	  
+	  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
+	  Thread.sleep(3000);
+	  
+	  //Open Get Suggestion:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='suggest-type']/input[2]"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("www.optify.net");
+	  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
+	  getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
+	  
+	  //Save suggested Url keyword:
+	  keyWordUrl=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
+	  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
+	  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+	  Thread.sleep(3000);
+	  builder.release(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span")));
+	  
+	  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
+  }
+  
+  
  @Test
  public void tableSearch() throws Exception{
 	  goBase();
+	  Thread.sleep(3000);
 	  
 	  //Save cc2 to test group.
 	  driver.findElement(By.xpath("//div[@class='data-text-filter data-filter-off']/input")).sendKeys("cc2");
@@ -305,36 +353,142 @@ public class Keywords extends TestCase {
 	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
 	  
-	  //Remove cc1 & cc2:
-	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
-	  Thread.sleep(3000);
-	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).perform();
-	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")));
-	  driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")).click();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
-	  Thread.sleep(3000);
-	  
-	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
-	  Thread.sleep(3000);
-	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).perform();
-	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")));
-	  driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")).click();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+	  //Remove:
+	  while(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span")).getText()==""){
+		  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
+		  Thread.sleep(3000);
+		  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
+		  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).perform();
+		  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")));
+		  driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")).click();
+		  Thread.sleep(3000);
+		  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+		  Thread.sleep(3000);
+	  }
   }
 	  
-  //@Test
-  public void removeKeywords() throws Exception{
+  @Test
+  public void needHelp() throws Exception{
+	  goBase();
+	  String winHandleBefore = driver.getWindowHandle();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-  
-  }
-  
-  //@Test 
-  public void getSuggestions() throws Exception{
-	  driver.findElement(By.xpath("//button[@id='keyword-open-suggest']"));
+	  //Open need help:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']")));
+	  driver.findElement(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a")).click();
+	  Thread.sleep(3000);
+	  
+	  String help1=('"'+"Keywords"+'"'+" is where you'll manage your keyword strategy and track your ranking success. Let's get started!");
+	  assertEquals("help 1/9:",help1,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Open video:
+	  driver.findElement(By.xpath("//a[@class='launch-video']/img")).click();
+	  
+	  //Close video:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='video-close']")));
+	  driver.findElement(By.xpath("//div[@class='video-close']")).click();
+	  Thread.sleep(3000);
+	  
+	  //Learn more about Keywords:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li")).click();
+	  switcWindow();
+	  assertEquals("Learn more about Keywords:","Keywords application reference : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Go forward2:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help2=("The "+'"'+"Overview"+'"'+" gives you a summary of the value you're driving from organic (unpaid) searches on your target keywords.");
+	  assertEquals("help 2/9:",help2,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Watch a video on Keywords:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-actions']//a[text()='Watch a video on Keywords']")));
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']//a[text()='Watch a video on Keywords']")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='video-close']")));
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@class='ui-dialog ui-widget ui-widget-content ui-corner-all video-dialog ui-draggable']//div[@class='video-close']")).click();
+	  Thread.sleep(3000);
+	  
+	  //Learn more about Keywords:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']//a[text()='Learn more about Keywords']")).click();
+	  switcWindow();
+	  assertEquals("Learn more about Keywords:","Keywords application reference : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Optify Best Practices: Choosing Target keywords:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']//a[text()='Optify Best Practices: Choosing Target keywords']")).click();
+	  switcWindow();
+	  assertEquals("Optify Best Practices: Choosing Target keywords:","Optify best practices: Choosing target keywords : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Go forward3:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help3=("The Keyword List shows the target keywords you are tracking as well as helpful details to create a successful keyword strategy.");
+	  assertEquals("help 3/9:",help3,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward4:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help4=("Use the Add Keywords button when you know what keywords you want to track. A good starting point is to add words or phrases that describe your product or company.");
+	  assertEquals("help 4/9:",help4,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward5:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help5=("Great job! Now, keyword research is also key to find relevant search terms that can drive quality traffic to your site. Enter a term, phrase or URL and we'll suggest the keywords!");
+	  assertEquals("help 5/9:",help5,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward6:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help6=("There are several actions you can take at the keyword level to stay organized and manage your SEO efforts and campaigns.");
+	  assertEquals("help 6/9:",help6,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward7:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help7=("Assigning keywords to lists helps you focus your SEO efforts. You can use these lists to associate keywords with a campaign, or assign keywords to various projects.");
+	  assertEquals("help 7/9:",help7,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward8:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help8=("We offer several "+'"'+"views"+'"'+" of your keyword data to help with decision making across all stages of your keyword selection, optimization, and performance tracking.");
+	  assertEquals("help 8/9:",help8,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Go forward9:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-paginator-forward']/a")).click();
+	  
+	  String help9=("And, that's it! If you have additional questions, check out our help pages, send us an email or give us a call at 1-877-2-OPTIFY");
+	  assertEquals("help 9/9:",help9,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  Thread.sleep(3000);
+	  
+	  //Test help:
+	  driver.findElement(By.xpath("//div[@class='trainer-text']/a")).click();
+	  switcWindow();
+	  assertEquals("Help:","Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  Thread.sleep(3000);
+	  
+	  //Next: Take the Pages Tour
+	  driver.findElement(By.xpath("//div[@class='trainer-next-actions']/a")).click();
+	  assertEquals("Next: Take the Pages Tour:","Pages | Optify",driver.getTitle());
+	  driver.navigate().back();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-buttons']/a")));
+	  driver.findElement(By.xpath("//div[@class='trainer-buttons']/a")).click();
   }
   
   //===============================================================================================
