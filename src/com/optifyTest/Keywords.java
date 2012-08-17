@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -28,7 +29,7 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net";
+  String homeAddress="http://dashboard.optify.net/";
   String userName="your username";
   String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -70,10 +71,11 @@ public class Keywords extends TestCase {
   
   @Test
   public void helpWithThisPage() throws Exception{
+	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  String winHandleBefore = driver.getWindowHandle();
-	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']"))).click();
 	  Thread.sleep(3000);
 	  switcWindow();
 	  assertEquals("Help with this page","Keywords application reference : Help and Support",driver.getTitle());
@@ -168,6 +170,72 @@ public class Keywords extends TestCase {
   }
   
   @Test
+  public void testView() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='keyword_view_selection']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='keyword_view_selection']/option[2]"))).click();
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  
+	  Thread.sleep(5000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='keyword_view_selection']/option[3]"))).click();
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  
+	  Thread.sleep(5000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='keyword_view_selection']/option"))).click();
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='keyword_view_selection']"))).perform();
+	  
+	  builder.release(driver.findElement(By.xpath("//select[@id='keyword_view_selection']")));
+  }
+  
+  @Test
+  public void editKeywordsReport() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']"))).click();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[6]/input")).click();
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[7]/input")).click();
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[8]/input")).click();
+      Thread.sleep(2000); 
+	  driver.findElement(By.xpath("//html/body/div[9]/div[3]/div/button")).click();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Min CPC']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Max CPC']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Ranking URL']")));
+  }
+  
+  @Test
+  public void testRanks() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@id='handle_rank_slider_min']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']"))).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_RIGHT).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_RIGHT).perform();
+	  
+	  Thread.sleep(2000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']"))).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_LEFT).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_LEFT).perform();
+	  
+	  Thread.sleep(3000);
+	  
+	  driver.findElement(By.xpath("//table[@class='data-table active']/tbody/tr/td[2]/span/a/span")).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword_rank_ok']"))).click();
+  }
+  
+  @Test
   public void addKeyword() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -182,7 +250,6 @@ public class Keywords extends TestCase {
 	  getId=driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//html/body/div[8]/div[2]/div[2]/div/div/div"))).perform();
 	  Thread.sleep(3000);
-	  System.out.print(getId);
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")));
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")).sendKeys("test");
 	  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
@@ -247,9 +314,9 @@ public class Keywords extends TestCase {
  @Test
  public void tableSearch() throws Exception{
 	  goBase();
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  
-	  //Save cc2 to test group.
+	  //Search fro cc2.
 	  driver.findElement(By.xpath("//div[@class='data-text-filter data-filter-off']/input")).sendKeys("cc2");
 	  Thread.sleep(5000);
 	  assertEquals("get cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span/span")).getText());
@@ -261,7 +328,7 @@ public class Keywords extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	 
-	  //Save cc1 into test group:
+	  //Save cc2 into test group:
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
 	  Thread.sleep(3000);
@@ -269,7 +336,9 @@ public class Keywords extends TestCase {
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']"))).perform();
 	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']")));
 	  Thread.sleep(3000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']"))).perform();
+	  builder.sendKeys(Keys.PAGE_DOWN);
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']/div/ul//span[text()='test']"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']")).click();
 	  Thread.sleep(5000);
@@ -279,8 +348,8 @@ public class Keywords extends TestCase {
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//span[@class='filter_selection tags']//a[text()='test']")).click();
 	  Thread.sleep(3000);
-	  assertEquals("Equale cc1","cc1",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr[2]/td/span")).getText());
-	  assertEquals("Equale cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span")).getText());
+	  //assertEquals("Equale cc1","cc1",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody//span[text()='cc1']")).getText());
+	  //assertEquals("Equale cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody//span[text()='cc2']")).getText());
 	  
 	  //Test view results:
 	  
@@ -354,7 +423,7 @@ public class Keywords extends TestCase {
 	  driver.switchTo().window(winHandleBefore);
 	  
 	  //Remove:
-	  while(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span")).getText()==""){
+	  while(!driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")).getText().equals("Your search has returned no results. Clear search box or adjust your search query.")){
 		  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
 		  Thread.sleep(3000);
 		  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
@@ -365,6 +434,27 @@ public class Keywords extends TestCase {
 		  driver.findElement(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 		  Thread.sleep(3000);
 	  }
+  }
+ 
+  @Test
+  public void searchEngines() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='search_engine_select']"))).perform();
+	  Thread.sleep(2000);
+	  driver.findElement(By.xpath("//select[@id='search_engine_select']//option[text()='US, Bing']")).click();
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='search_engine_select']"))).perform();
+	  Thread.sleep(5000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='search_engine_select']"))).perform();
+	  Thread.sleep(2000);
+	  driver.findElement(By.xpath("//select[@id='search_engine_select']//option[text()='US, Google']")).click();
+	  builder.release(driver.findElement(By.xpath("//select[@id='search_engine_select']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='search_engine_select']"))).perform();
+	  
+	  builder.release(driver.findElement(By.xpath("//select[@id='search_engine_select']")));
   }
 	  
   @Test

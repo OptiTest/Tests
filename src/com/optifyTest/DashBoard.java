@@ -29,7 +29,7 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://staging.optifyit.com/";
+  String homeAddress="http://dashboard.optify.net/";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -388,7 +388,7 @@ public class DashBoard extends TestCase {
 	  driver.get(homeAddress);
     
 	  //Test displaying graph:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='chartMessage']")));
+	  wait.until(presenceOfElementLocated(By.linkText("Keyword trends")));
 	  try{assertEquals("Displaying graph","There are no results matching your filter settings",driver.findElement(By.xpath("//div[@class='chartMessage']")).getText());
     	throw new Exception("Graph can't be display");        
 	  }
