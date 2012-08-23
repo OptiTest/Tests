@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.interactions.Actions;
@@ -69,32 +70,152 @@ public class Pages extends TestCase {
 	  assertEquals("Pages page","Pages | Optify",driver.getTitle());
   }
   
-  @Test
+  //@Test
   public void addPages() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  String winHandleBefore = driver.getWindowHandle();
 	  
+	  //Add page & save to test:
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.walla.co.il");
 	  Thread.sleep(3000);
 	  String getId=driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div/div/div/div/span[2]"))).perform();
-	  builder.release();
+	  builder.release(driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div/div/div/div/span[2]")));
+
 	  Thread.sleep(2000);
 	  
-	  System.out.print("//div[@id='"+getId+"-pulldown']");
-	  Thread.sleep(3000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul")));
-	  Thread.sleep(2000);
-	  driver.switchTo().activeElement();
-	  scrollPage(driver.findElement(By.xpath("//html/body/div[9]/ul")));
-	  driver.findElement(By.xpath("//input[@class='add-link-input']")).click();
-	  Thread.sleep(2000);
-	  driver.findElement(By.xpath("//input[@class='add-link-input']")).sendKeys("test");
-	  Thread.sleep(2000);
-	  driver.switchTo().window(winHandleBefore);
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']//input")).sendKeys("test");
 	  driver.findElement(By.xpath("//button[@id='add_pages']")).click();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div")));
+	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("//html/body/div[2]/div[2]/div[3]/div")).getText());
+	  
+	  Thread.sleep(2000);
+	  
+	  //Add page without adding to group:
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.ynet.co.il");
+	  
+	  Thread.sleep(3000);
+	
+	  driver.findElement(By.xpath("//button[@id='add_pages']")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div")));
+	  
+	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/div")).getText());
+  }
+  
+  @Test
+  public void sortTable() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  //Test title sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-title first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")));
+	  
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='first sorted-desc']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@class='th-inner tip-title first last']")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")));
+	  
+	  try{if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td/a")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  	
+	  //Check up down sort:
+	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-title first last']")).click();
+	 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td/a")).getText())==-1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+	  
+	  //Test Optify score sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-optifyScore first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")));
+	  
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='align-right sorted-desc']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")));
+	  
+	  try{if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[2]/div")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  
+	  //Check up down sort:
+	      driver.findElement(By.xpath("//div[@class='th-inner tip-optifyScore first last']")).click();
+	      wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[2]/div")).getText())==-1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+	  
+	  //Test Views sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-pageviewsRaw first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")));
+	  
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='align-right sorted-desc']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@class='th-inner tip-pageviewsRaw first last']")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")));
+	  
+	  try{if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[3]/div")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  	
+	  //Check up down sort:
+	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-pageviewsRaw first last']")).click();
+	 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[3]/div")).getText())==-1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+	  
+	//Test Links sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]")));
+	  
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='align-right sorted-desc']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/a")));
+	  
+	  try{if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[4]/a")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  	
+	  //Check up down sort:
+	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']")).click();
+	 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/div")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/a")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[4]/a")).getText())==-1)
+	  			;
+  		  
+	  }
+	  catch(WebDriverException ex){
+		  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[4]/div")).getText())==-1)
+		  throw new Exception("Sort up abnormal");
+	  }
   }
   
 

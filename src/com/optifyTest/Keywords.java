@@ -29,9 +29,9 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net/";
-  String userName="your username";
-  String password="your password";
+  String homeAddress="https://staging2.optifyit.com/";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   String keyWord="";
   String keyWordUrl="";
@@ -147,16 +147,23 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//a[@id='import_keywords_open']")).click();
 	                  //We can add some files to upload & equal with the keywords table data base.
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[2]/div[2]/a")));
-	  driver.findElement(By.xpath("//html/body/div[10]/div[2]/div[2]/a")).click();
+	  wait.until(presenceOfElementLocated(By.linkText("How to format your file"))).click();
+	 
 	  Thread.sleep(3000);
+	  
 	  switcWindow();
+	  
 	  assertEquals("How to format your file","Importing and exporting keywords : Help and Support",driver.getTitle());
 	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[3]/div/button[2]")));
-	  driver.findElement(By.xpath("//html/body/div[10]/div[3]/div/button[2]")).click();
+	  Thread.sleep(3000);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
+	  builder.moveToElement(driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).perform();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']"));
+	  Thread.sleep(10000);
   }
   
   @Test

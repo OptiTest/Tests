@@ -29,7 +29,7 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net/";
+  String homeAddress="https://staging2.optifyit.com/";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -319,6 +319,30 @@ public class DashBoard extends TestCase {
 	  assertEquals("page optimization","Pages | Optify",driver.getTitle());
 	  driver.get(homeAddress);
 	  
+	  //Test list:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
+	  String getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div")).getAttribute("id");
+	  
+	  System.out.print("//div[@id='"+getId+"-pulldown']");	
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
+	  builder.release();
+	  
+	  Thread.sleep(2000);
+	  
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]"));
+	  
+	  Thread.sleep(5000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
+	  builder.release();
+	  
+	  Thread.sleep(2000);
+	  
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li"));
+	  
+	  Thread.sleep(5000);
+	  
 	  //Test widget bar:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all page widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/div/div/div")));
       numerator=driver.findElement(By.xpath("//span[@class='numerator']")).getText();
@@ -388,7 +412,7 @@ public class DashBoard extends TestCase {
 	  driver.get(homeAddress);
     
 	  //Test displaying graph:
-	  wait.until(presenceOfElementLocated(By.linkText("Keyword trends")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='chartMessage']")));
 	  try{assertEquals("Displaying graph","There are no results matching your filter settings",driver.findElement(By.xpath("//div[@class='chartMessage']")).getText());
     	throw new Exception("Graph can't be display");        
 	  }
