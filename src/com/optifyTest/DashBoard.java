@@ -29,7 +29,7 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging2.optifyit.com/";
+  String homeAddress="https://dashboard.optify.net/";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -542,6 +542,7 @@ public class DashBoard extends TestCase {
   public void welcomeToolbar() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 15);
 	  String winHandleBefore = driver.getWindowHandle();
+	  String getId="";
 	  goBase();
 	  
 	  //Test Collapse/Expand:
@@ -601,9 +602,11 @@ public class DashBoard extends TestCase {
 	  
 	  //Add keywords:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")));
+	  getId=driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]")).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span"))).perform();
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div[7]/ul/li[2]")).click();
+	  
+	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='Add Keywords']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());

@@ -471,8 +471,7 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  //Open need help:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']")));
-	  driver.findElement(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a"))).click();
 	  Thread.sleep(3000);
 	  
 	  String help1=('"'+"Keywords"+'"'+" is where you'll manage your keyword strategy and track your ranking success. Let's get started!");
