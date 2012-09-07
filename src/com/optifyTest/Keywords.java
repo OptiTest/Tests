@@ -13,6 +13,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.interactions.Actions;
@@ -29,7 +30,7 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging2.optifyit.com/";
+  String homeAddress="http://dashboard.optify.net/";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -157,12 +158,7 @@ public class Keywords extends TestCase {
 	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
 	  
-	  Thread.sleep(3000);
-	  
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
-	  builder.moveToElement(driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']"));
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[11]/div[3]/div/button[2]/span"))).click();
 	  Thread.sleep(10000);
   }
   
@@ -211,12 +207,18 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[6]/input")).click();
 	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[7]/input")).click();
 	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[8]/input")).click();
-      Thread.sleep(2000); 
-	  driver.findElement(By.xpath("//html/body/div[9]/div[3]/div/button")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[3]/div/button/span"))).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Min CPC']")));
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Max CPC']")));
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//div[text()='Ranking URL']")));
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']"))).click();
+	  Thread.sleep(3000);
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[6]/input")).click();
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[7]/input")).click();
+	  driver.findElement(By.xpath("//div[@id='keywords_edit_dialog']/dl/dd[8]/input")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[3]/div/button/span"))).click();
   }
   
   @Test
@@ -255,15 +257,15 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc1");
 	  Thread.sleep(3000);
 	  getId=driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div")).getAttribute("id");
-	  builder.clickAndHold(driver.findElement(By.xpath("//html/body/div[8]/div[2]/div[2]/div/div/div"))).perform();
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@id='"+getId+"']/div/span[2]"))).perform();
 	  Thread.sleep(3000);
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")));
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li/input")).sendKeys("test");
 	  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
-	  
+	
 	  //Wait for the add success message:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='success_message hidden-none clear-both']")));
-	  builder.release(driver.findElement(By.xpath("//html/body/div[8]/div[2]/div[2]/div/div/div")));
+	  builder.release().perform();
 	  
 	  //Set cc2:
 	  Thread.sleep(3000);
@@ -279,42 +281,48 @@ public class Keywords extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  //Open Get Suggestion:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
-	  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
-	  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
-	  
-	  //Save suggested keyword:
-	  keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
-	  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
-	  Thread.sleep(3000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
-	  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
-	  Thread.sleep(3000);
-	  
-	  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
-	  Thread.sleep(3000);
-	  
-	  //Open Get Suggestion:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='suggest-type']/input[2]"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("www.optify.net");
-	  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
-	  getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
-	  
-	  //Save suggested Url keyword:
-	  keyWordUrl=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
-	  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
-	  Thread.sleep(3000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
-	  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
-	  Thread.sleep(3000);
-	  builder.release(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span")));
-	  
-	  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
+	  try{
+		  //Open Get Suggestion:
+		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
+		  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
+		  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
+		  
+		  //Save suggested keyword:
+		  keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
+		  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
+		  Thread.sleep(3000);
+		  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
+		  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+		  Thread.sleep(3000);
+		  
+		  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
+		  Thread.sleep(3000);
+		  
+		  //Open Get Suggestion:
+		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='suggest-type']/input[2]"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("www.optify.net");
+		  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
+		  getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
+		  
+		  //Save suggested Url keyword:
+		  keyWordUrl=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
+		  driver.findElement(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input")).click();
+		  Thread.sleep(3000);
+		  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))).perform();
+		  System.out.print("//div[@id='"+getId+"-pulldown']//li[text()='test']");
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+		  Thread.sleep(3000);
+		  builder.release(driver.findElement(By.xpath("//div[@class='add-to-list-box']/div/div/div/span")));
+		  
+		  driver.findElement(By.xpath("//button[@id='suggest-keywords-save']")).click();
+	  }
+	  catch(WebDriverException ex){
+		  wait.until(presenceOfElementLocated(By.xpath("//*[@id='keyword_suggestions']/div[5]/button[1]/span"))).click();
+		  throw ex;
+	  }
   }
   
   
@@ -574,7 +582,7 @@ public class Keywords extends TestCase {
 	  //Test help:
 	  driver.findElement(By.xpath("//div[@class='trainer-text']/a")).click();
 	  switcWindow();
-	  assertEquals("Help:","Help and Support",driver.getTitle());
+	  assertEquals("Help:","Help and Support : Using Optify",driver.getTitle());
 	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
 	  Thread.sleep(3000);
