@@ -29,9 +29,9 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://master.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  String homeAddress="http://staging.optifyit.com/";
+  String userName="Your username";
+  String password="Your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -465,7 +465,7 @@ public class DashBoard extends TestCase {
 	  }
   }
   
-  @Test
+  //@Test
   public void alertsWidget() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
@@ -548,27 +548,26 @@ public class DashBoard extends TestCase {
 	  Thread.sleep(5000);
 	  
 	  //Add check change value element when collapse.
-	  
 	  driver.findElement(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")).click();
 	  Thread.sleep(3000);
 	  
 	  //Test Add Keywords:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 	  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
 	  driver.get(homeAddress);
 	  
 	  //Test Send an email:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='send_email email-required orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")));
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='send_email email-required orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span")));
 	      //Do something.
 	  
 	  //Test View Traffic:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='view_traffic orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span"))).click();
 	  assertEquals("View Traffic","Lead Intelligence | Optify",driver.getTitle());
 	  driver.get(homeAddress);
 	  
 	  //Test Create a report:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='create_report orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span"))).click();
 	  assertEquals("Create a report","Report | Optify",driver.getTitle());
 	  driver.get(homeAddress);
 	  

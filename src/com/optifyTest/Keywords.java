@@ -30,9 +30,9 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net/";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  String homeAddress="http://staging.optifyit.com/";
+  String userName="Your username";
+  String password="Your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   String keyWord="";
   String keyWordUrl="";
@@ -239,6 +239,18 @@ public class Keywords extends TestCase {
 	  
 	  Thread.sleep(3000);
 	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']"))).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_LEFT).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_LEFT).perform();
+	  
+	  Thread.sleep(2000);
+	  
+	  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']"))).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_RIGHT).perform();
+	  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_RIGHT).perform();
+	  
+	  Thread.sleep(3000);
+	  
 	  driver.findElement(By.xpath("//table[@class='data-table active']/tbody/tr/td[2]/span/a/span")).click();
 	  Thread.sleep(3000);
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword_rank_ok']"))).click();
@@ -269,7 +281,7 @@ public class Keywords extends TestCase {
 	  
 	  //Set cc2:
 	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//button[@id='add_keywords_open']")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 	  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc2");
 	  Thread.sleep(3000);
@@ -331,7 +343,7 @@ public class Keywords extends TestCase {
 	  goBase();
 	  Thread.sleep(5000);
 	  
-	  //Search fro cc2.
+	  //Search for cc2.
 	  driver.findElement(By.xpath("//div[@class='data-text-filter data-filter-off']/input")).sendKeys("cc2");
 	  Thread.sleep(5000);
 	  assertEquals("get cc2","cc2",driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span/span")).getText());
@@ -343,16 +355,23 @@ public class Keywords extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	 
+	  builder.sendKeys(Keys.PAGE_DOWN).perform();
+	  Thread.sleep(1000);
+	  builder.sendKeys(Keys.PAGE_DOWN).perform();
+	  Thread.sleep(1000);
+	  builder.sendKeys(Keys.PAGE_DOWN).perform();
+	  Thread.sleep(2000);
+	  
 	  //Save cc2 into test group:
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr"))).perform();
 	  Thread.sleep(3000);
+	 
 	  builder.release(driver.findElement(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']"))).perform();
 	  builder.release(driver.findElement(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Assign to list']")));
 	  Thread.sleep(3000);
-	  builder.sendKeys(Keys.PAGE_DOWN);
-	  Thread.sleep(3000);
+	  
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='data-table menu']/div/ul//span[text()='test']"))).perform();
 	  Thread.sleep(3000);
 	  driver.findElement(By.xpath("//div[@class='data-table menu']//span[text()='test']")).click();

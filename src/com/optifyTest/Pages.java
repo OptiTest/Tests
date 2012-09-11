@@ -32,8 +32,8 @@ public class Pages extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   String homeAddress="http://dashboard.optify.net/";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  String userName="Your username";
+  String password="Your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -70,8 +70,8 @@ public class Pages extends TestCase {
 	  assertEquals("Pages page","Pages | Optify",driver.getTitle());
   }
   
-  //@Test
-  public void addPages() throws Exception{
+  @Test
+  public void addPages3() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -105,7 +105,7 @@ public class Pages extends TestCase {
 	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/div")).getText());
   }
   
-  //@Test
+  @Test
   public void sortTable() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -218,7 +218,7 @@ public class Pages extends TestCase {
 	  }
   }
   
-  //@Test
+  @Test
   public void inboundsLink() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -252,7 +252,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
   
-  //@Test
+  @Test
   public void needHelp() throws Exception{
 	  goBase();
 	  String winHandleBefore = driver.getWindowHandle();
@@ -337,7 +337,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='done']"))).click();
   }
   
-  //@Test
+  @Test
   public void showLinks() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -364,7 +364,7 @@ public class Pages extends TestCase {
 	  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
   }
   
-  //@Test
+  @Test
   public void nextAndPrev() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -377,7 +377,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous']"))).click();
   }
   
-  //@Test
+  @Test
   public void pagesTableActions3() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -435,71 +435,69 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
 
-  //@Test
+  @Test
   public void sortIssuesTable4() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  //Load issues table:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
-	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
-	//Test title sort:=======================================================
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-title first last']"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")));
-	  
-	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='first sorted-desc']"));
+	//Test Issues sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='jqgh_rule']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='issue_list']tbody/tr[2]/td/div/a")));
+
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//img[@src='/js/ext/jqGrid/themes/optify/images/sort_desc.gif']"));
 	  		
 	  }catch(WebDriverException ex){
-		  driver.findElement(By.xpath("//div[@class='th-inner tip-title first last']")).click();
+		  driver.findElement(By.xpath("//div[@id='jqgh_rule']")).click();
 	  }
 	  
 	  //Check down up sort:
-	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody/tr/td/a")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='issue_list']tbody/tr[2]/td/div/a")));
 	  
-	  try{if(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr/td/a")).getText().compareTo(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr[2]/td/a")).getText())==1)
+	  try{if(driver.findElement(By.xpath("//div[@id='issue_list']tbody/tr[2]/td/div/a")).getText().compareTo(driver.findElement(By.xpath("//div[@id='issue_list']tbody/tr[3]/td/div/a")).getText())!=-1)
 		  	throw new Exception("Sort down abnormal");
 	  	
 	  //Check up down sort:
-	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-title first last']")).click();
-	 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a")));
+	 	  driver.findElement(By.xpath("//div[@id='jqgh_rule']")).click();
+	 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='issue_list']tbody/tr[2]/td/div/a")));
 	 	  
-	 	  if(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr/td/a")).getText().compareTo(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr[2]/td/a")).getText())==-1)
+	 	  if(driver.findElement(By.xpath("//div[@id='issue_list']tbody/tr[3]/td/div/a")).getText().compareTo(driver.findElement(By.xpath("//div[@id='issue_list']tbody/tr[3]/td[2]/div/a")).getText())!=1)
 	  			throw new Exception("Sort up abnormal");
   		  
 	  }
 	  finally{}
 	  
-	  //Test Optify Score sort:=======================================================
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-optifyScore first last']"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody/tr/td[2]/div")));
+	  //Test Impact sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//th[@class='jqgh_impact']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[2]/div")));
 	  
-	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//div[@class='sort-indicator first last']"));
+	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//img[@src='/js/ext/jqGrid/themes/optify/images/sort_desc.gif']"));
 	  		
 	  }catch(WebDriverException ex){
-		  driver.findElement(By.xpath("//div[@class='th-inner tip-optifyScore first last']")).click();
+		  driver.findElement(By.xpath("//th[@class='jqgh_impact']")).click();
 	  }
 	  
 	  //Check down up sort:
-	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody/tr/td[2]/div")));
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[2]/div")));
 	  
-	  try{if(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr[2]/td[2]/div")).getText())==1)
+	  try{if(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[3]/td[2]/div")).getText())==1)
 		  	throw new Exception("Sort down abnormal");
 	  
 	  //Check up down sort:
-	      driver.findElement(By.xpath("//div[@class='th-inner tip-optifyScore first last']")).click();
-	      wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody/tr/td[2]/div")));
+	      driver.findElement(By.xpath("//th[@class='jqgh_impact']")).click();
+	      wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[2]/div")));
 	 	  
-	 	  if(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='page_table']/tbody/tr[2]/td[2]/div")).getText())==-1)
+	 	  if(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[2]/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[3]/td[2]/div")).getText())==-1)
 	  			throw new Exception("Sort up abnormal");
   		  
 	  }
 	  finally{}
 	  
-	  //Test Views sort:=======================================================
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-pageviewsRaw first last']"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[3]/div")));
+	  //Test Category sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='jqgh_category']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/div")));
 	  
 	  try{driver.findElement(By.xpath("//div[@id='overview_tab']//th[@class='align-right sorted-desc']"));
 	  		
@@ -523,7 +521,7 @@ public class Pages extends TestCase {
 	  }
 	  finally{}
 	  
-	//Test Links sort:=======================================================
+	  //Test Links sort:=======================================================
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]")));
 	  
@@ -551,51 +549,6 @@ public class Pages extends TestCase {
 		  if(driver.findElement(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td[4]/div")).getText().compareTo(driver.findElement(By.xpath("//div[@class='ui-tabs ui-widget ui-widget-content ui-corner-all']/div/table/tbody/tr[2]/td[4]/div")).getText())==-1)
 		  throw new Exception("Sort up abnormal");
 	  }
-  }
-  
-  @Test
-  public void pageDetail() throws Exception{
-	  goBase();
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  
-	  //Get the page ...
-	  
-	  
-	  assertEquals("Page Detail:","Website Page | Optify",driver.getTitle());
-	  String winHandleBefore = driver.getWindowHandle();
-	  
-	  //Help with this page:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']"))).click();
-	  switcWindow();
-	  assertEquals("Page Detail : Help and Support:","Page Detail : Help and Support",driver.getTitle());
-	  driver.close();
-	  driver.switchTo().window(winHandleBefore);
-	  
-	  //Export
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='sharing_div']/a"))).click();
-	  
-	  //Test link:
-	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='quiet out']"))).click();
-	  assertEquals("link page","וואלה!",driver.getTitle());
-	  driver.close();
-	  driver.switchTo().window(winHandleBefore);
-	  
-	  //Test Social Share:
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable']/span")));
-	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='account-checkbox-172668869']/span"))).click();
-	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='share-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
-	  
-	  //Test Email Share:
-	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='ui-state-default ui-corner-top']"))).click();
-	  String getId=driver.findElement(By.xpath("//div[@id='emailTo']/div[2]/div")).getAttribute("id");
-	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul//label[text()='orasnin@gmail.com']")).click();
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='share-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
-	  
-	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='post-message success']")));
-	  assertEquals("Your email has been sent:","Your email has been sent.",driver.findElement(By.xpath("//span[@class='post-message success']")).getText());
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='close ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
   
   //===============================================================================================

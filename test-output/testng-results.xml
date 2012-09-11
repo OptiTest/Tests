@@ -1,11 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="0" passed="0">
+<testng-results skipped="16" failed="0" total="16" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="7" started-at="2012-06-27T16:00:01Z" finished-at="2012-06-27T16:00:01Z">
+  <suite name="Default suite" duration-ms="68" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="7" started-at="2012-06-27T16:00:01Z" finished-at="2012-06-27T16:00:01Z">
+    <test name="Default test" duration-ms="68" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+      <class name="com.optifyTest.PageDetailTest">
+        <test-method status="FAIL" signature="addPages3()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="addPages3" is-config="true" duration-ms="0" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+          <exception class="java.lang.RuntimeException">
+            <message>
+              <![CDATA[Test not implemented]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.RuntimeException: Test not implemented
+	at com.optifyTest.PageDetailTest.addPages3(PageDetailTest.java:40)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:80)
+	at org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:551)
+	at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:213)
+	at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:138)
+	at org.testng.internal.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:175)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:107)
+	at org.testng.TestRunner.privateRun(TestRunner.java:767)
+	at org.testng.TestRunner.run(TestRunner.java:617)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:334)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:329)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:291)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:240)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:53)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:87)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1197)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1122)
+	at org.testng.TestNG.run(TestNG.java:1030)
+	at org.testng.remote.RemoteTestNG.run(RemoteTestNG.java:111)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:204)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:175)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.RuntimeException -->
+        </test-method> <!-- addPages3 -->
+        <test-method status="SKIP" signature="addPages3()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="addPages3" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- addPages3 -->
+        <test-method status="SKIP" signature="dashboardLogIn1()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="dashboardLogIn1" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- dashboardLogIn1 -->
+        <test-method status="SKIP" signature="enterToPages2()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="enterToPages2" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- enterToPages2 -->
+        <test-method status="SKIP" signature="enterToPgaeDetail4()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="enterToPgaeDetail4" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- enterToPgaeDetail4 -->
+        <test-method status="SKIP" signature="export6()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="export6" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- export6 -->
+        <test-method status="SKIP" signature="getRowCount()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="getRowCount" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- getRowCount -->
+        <test-method status="SKIP" signature="goBase()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="goBase" duration-ms="0" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- goBase -->
+        <test-method status="SKIP" signature="helpWithThisPage5()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="helpWithThisPage5" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- helpWithThisPage5 -->
+        <test-method status="SKIP" signature="needHelp()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="needHelp" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- needHelp -->
+        <test-method status="SKIP" signature="pageLink7()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="pageLink7" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- pageLink7 -->
+        <test-method status="SKIP" signature="presenceOfElementLocated()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="presenceOfElementLocated" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- presenceOfElementLocated -->
+        <test-method status="SKIP" signature="scrollPage()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="scrollPage" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- scrollPage -->
+        <test-method status="SKIP" signature="socialShare8()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="socialShare8" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- socialShare8 -->
+        <test-method status="SKIP" signature="switcWindow()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="switcWindow" duration-ms="2" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- switcWindow -->
+        <test-method status="SKIP" signature="tableAction10()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="tableAction10" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- tableAction10 -->
+        <test-method status="SKIP" signature="tableSort9()[pri:0, instance:com.optifyTest.PageDetailTest@1bb688c0]" name="tableSort9" duration-ms="1" started-at="2012-09-11T09:33:38Z" finished-at="2012-09-11T09:33:38Z">
+        </test-method> <!-- tableSort9 -->
+      </class> <!-- com.optifyTest.PageDetailTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
