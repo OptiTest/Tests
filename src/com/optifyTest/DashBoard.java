@@ -29,9 +29,9 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://staging.optifyit.com/";
-  String userName="Your username";
-  String password="Your password";
+  String homeAddress="http://dashboard.optify.net/";
+  String userName="your username";
+  String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass

@@ -31,8 +31,8 @@ public class PageDetail extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   String homeAddress="http://dashboard.optify.net/";
-  String userName="Your username";
-  String password="Your password";
+  String userName="your username";
+  String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -374,6 +374,24 @@ public class PageDetail extends TestCase {
 	  driver.findElement(By.xpath("//div[@class='trainer-buttons']/a")).click();
   }
   
+  @Test
+  public void searchInOptimizeWith() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  String val=wait.until(presenceOfElementLocated(By.xpath("//ul[@id='keyword_list']/li"))).getText();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@placeholder='Search keywords']"))).sendKeys(val);
+	  Thread.sleep(3000);
+	  assertEquals("Search result",val,driver.findElement(By.xpath("//ul[@id='keyword_list']/li")).getText());
+  }
+  
+  @Test
+  public void manageKeywords() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='manage-keywords-link']"))).click();
+	  assertEquals("Manage keywords link:","Keywords | Optify",driver.getTitle());
+	  driver.navigate().back();
+  }
   //===============================================================================================
   private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
