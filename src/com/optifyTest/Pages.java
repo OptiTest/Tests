@@ -1,7 +1,6 @@
 package com.optifyTest;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -32,8 +30,8 @@ public class Pages extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   String homeAddress="http://dashboard.optify.net/";
-  String userName="your username";
-  String password="your password";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -70,7 +68,7 @@ public class Pages extends TestCase {
 	  assertEquals("Pages page","Pages | Optify",driver.getTitle());
   }
   
-  @Test
+  //@Test
   public void addPages3() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -105,7 +103,7 @@ public class Pages extends TestCase {
 	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/div")).getText());
   }
   
-  @Test
+  //@Test
   public void sortTable() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -218,7 +216,7 @@ public class Pages extends TestCase {
 	  }
   }
   
-  @Test
+  //@Test
   public void inboundsLink() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -252,7 +250,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
   
-  @Test
+  //@Test
   public void needHelp() throws Exception{
 	  goBase();
 	  String winHandleBefore = driver.getWindowHandle();
@@ -337,7 +335,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='done']"))).click();
   }
   
-  @Test
+  //@Test
   public void showLinks() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -364,7 +362,7 @@ public class Pages extends TestCase {
 	  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
   }
   
-  @Test
+  //@Test
   public void nextAndPrev() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -377,7 +375,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous']"))).click();
   }
   
-  @Test
+  //@Test
   public void pagesTableActions3() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -435,7 +433,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
 
-  @Test
+  //@Test
   public void sortIssuesTable4() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -554,7 +552,7 @@ public class Pages extends TestCase {
 	  }
   }
   
-  @Test
+  //@Test
   public void issuesAddNote() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -578,6 +576,109 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='stickynote']/a"))).click();
   }
   
+  //@Test
+  public void setIssueToGroup() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+	  wait = new WebDriverWait(driver, 350);
+	  String val=wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a[2]"))).getAttribute("href");
+	  wait = new WebDriverWait(driver, 10);
+	  
+	  builder.click(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[5]/span[2]/a"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='create_new input_wrapper']/input"))).sendKeys("test");
+	  Thread.sleep(2000);
+	  builder.sendKeys(Keys.ENTER).perform();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='filter_selection']//a[text()='test']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Check Issue to group:",val,driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a[2]")).getAttribute("href"));
+	  
+	  //Delete the test group:
+	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div[2]/div/div/span[6]/a[2]/span"))).click();
+	  Thread.sleep(2000);
+	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
+  }
+  
+  //@Test
+  public void issuesLinks() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String winHandleBefore = driver.getWindowHandle();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+	  wait = new WebDriverWait(driver, 350);
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  wait = new WebDriverWait(driver, 10);
+	  
+	  //Check havering qtip:
+	  builder.moveToElement(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a"))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='qtip qtip-cream']")));
+	  
+	  //Check links:
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a"))).click();
+	  assertEquals("Page Detail:","Website Page | Optify",driver.getTitle());
+	  driver.navigate().back();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+	  wait = new WebDriverWait(driver, 350);
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a[2]"))).click();
+	  switcWindow();
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+  }
+  
+  //@Test
+  public void issuesPrevNext() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+	  wait = new WebDriverWait(driver, 350);
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  wait = new WebDriverWait(driver, 10);
+	  
+	  //Get the sum of pages:
+	  String sumIssues=driver.findElement(By.xpath("//span[@class='page_status']")).getText().substring(10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next_page']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Check page num 2:","Page 2 of "+sumIssues,driver.findElement(By.xpath("//span[@class='page_status']")).getText());
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous_page hidden-none']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Check page num 1:","Page 1 of "+sumIssues,driver.findElement(By.xpath("//span[@class='page_status']")).getText());
+  }
+  
+  @Test
+  public void issuesShow() throws Exception{
+	  goBase();
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  int FIFNUM=51;
+	  int TFNUM=26;
+	  int TENNUM=11;
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+	  wait = new WebDriverWait(driver, 350);
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='show-50']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Count 50 results:",FIFNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='show-25']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Count 25 results:",TFNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='show-10']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
+	  assertEquals("Count 10 results:",TENNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
+  }
+  
   //===============================================================================================
   private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
@@ -597,20 +698,6 @@ public class Pages extends TestCase {
   private void switcWindow(){
 		  for(String winHandle : driver.getWindowHandles())
 			  driver.switchTo().window(winHandle);
-	}
-	
-  //==================================================================================================
-  private void scrollPage(WebElement webElementObject) throws Exception{
-		 ((JavascriptExecutor) driver).executeScript( 
-	             "arguments[0].scrollIntoView(true);", webElementObject); 
-		 
-		for (int second = 0;; second++) {
-	        if(second >=10){
-	            break;
-	        }
-	            ((JavascriptExecutor) driver).executeScript("window.open(href, windowname, 'width=400,height=150,scrollbars=yes');",webElementObject);
-	            Thread.sleep(1000);
-	        }
 	}
   
   //================================================================================================

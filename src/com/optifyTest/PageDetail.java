@@ -1,7 +1,6 @@
 package com.optifyTest;
 
 import java.io.File;
-import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -402,39 +400,11 @@ public class PageDetail extends TestCase {
 	}
 	
   //==================================================================================================
-  private void goBase(){
-		  if(!driver.getTitle().equals("Pages | Optify"))
-			  driver.get(homeAddress+"/page/overview");
-	}
-	
-  //==================================================================================================
   private void switcWindow(){
 		  for(String winHandle : driver.getWindowHandles())
 			  driver.switchTo().window(winHandle);
 	}
-	
-  //==================================================================================================
-  private void scrollPage(WebElement webElementObject) throws Exception{
-		 ((JavascriptExecutor) driver).executeScript( 
-	             "arguments[0].scrollIntoView(true);", webElementObject); 
-		 
-		for (int second = 0;; second++) {
-	        if(second >=10){
-	            break;
-	        }
-	            ((JavascriptExecutor) driver).executeScript("window.open(href, windowname, 'width=400,height=150,scrollbars=yes');",webElementObject);
-	            Thread.sleep(1000);
-	        }
-	}
   
   //================================================================================================
-  private int getRowCount(By by) throws Exception {
-      try { WebElement table = driver.findElement(by);
-            List<WebElement> rows = table.findElements(By.tagName("tr"));
-            return rows.size();
-      
-      } catch (Exception e) {
-          return -1;
-      }
-  }
+
  }
