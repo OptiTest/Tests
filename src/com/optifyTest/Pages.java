@@ -29,7 +29,7 @@ public class Pages extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net/";
+  String homeAddress="https://dashboard.optify.net";
   String userName="orasnin@gmail.com";
   String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -49,7 +49,7 @@ public class Pages extends TestCase {
   }
   
   @Test
-  public void dashboardLogIn1() {
+  public void dashboardLogIn() {
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
 	  driver.findElement(By.id("j_password")).sendKeys(password);
@@ -68,10 +68,12 @@ public class Pages extends TestCase {
 	  assertEquals("Pages page","Pages | Optify",driver.getTitle());
   }
   
-  //@Test
-  public void addPages3() throws Exception{
+  @Test
+  public void addPages() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
 	  //Add page & save to test:
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
@@ -81,7 +83,7 @@ public class Pages extends TestCase {
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div/div/div/div/span[2]"))).perform();
 	  builder.release(driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div/div/div/div/span[2]")));
 
-	  Thread.sleep(2000);
+	  Thread.sleep(3000);
 	  
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']//input")).sendKeys("test");
 	  driver.findElement(By.xpath("//button[@id='add_pages']")).click();
@@ -100,13 +102,18 @@ public class Pages extends TestCase {
 	  driver.findElement(By.xpath("//button[@id='add_pages']")).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div")));
 	  
-	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/div")).getText());
+	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("//html/body/div[2]/div[2]/div[3]/div")).getText());
+	  
+	  Thread.sleep(3000);
   }
   
-  //@Test
+  @Test
   public void sortTable() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
 	  //Test title sort:=======================================================
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-title first last']"))).click();
@@ -216,11 +223,13 @@ public class Pages extends TestCase {
 	  }
   }
   
-  //@Test
+  @Test
   public void inboundsLink() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String winHandleBefore = driver.getWindowHandle();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
 	  //Set up down sort for checking:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-numFollowedDomains first last']"))).click();
@@ -245,16 +254,19 @@ public class Pages extends TestCase {
 	  driver.switchTo().window(winHandleBefore);
 	  
 	  //Wait for data:
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[12]/div[2]/div[3]/table/tbody/tr/td/div/table/tbody/tr/td[2]/span/a")));
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='inner_table']/tbody/tr/td[2]/span/a")));
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='ui-dialog-titlebar-close ui-corner-all']/span"))).click();
   }
   
-  //@Test
+  @Test
   public void needHelp() throws Exception{
 	  goBase();
 	  String winHandleBefore = driver.getWindowHandle();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
 	  //Open need help:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a"))).click();
@@ -335,7 +347,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='done']"))).click();
   }
   
-  //@Test
+  @Test
   public void showLinks() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -343,29 +355,36 @@ public class Pages extends TestCase {
 	  int SUMTF=25;
 	  int SUMTH=10;
 	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
+	  Thread.sleep(3000);
 	  //show 50:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-50']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
 	  assertEquals("count 50:",SUMFIF,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
+	  Thread.sleep(3000);
 	  
 	  //show 25:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-25']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
 	  assertEquals("count 25:",SUMTF,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
+	  Thread.sleep(3000);
 	  
 	  //show 10:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-10']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
 	  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
+	  Thread.sleep(3000);
   }
   
-  //@Test
+  @Test
   public void nextAndPrev() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
@@ -375,13 +394,20 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous']"))).click();
   }
   
-  //@Test
-  public void pagesTableActions3() throws Exception{
+  @Test
+  public void tableAction() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String winHandleBefore = driver.getWindowHandle();
 	  
-	  //wait.until(presenceOfElementLocated(By.xpath("//div[@class='success_message']/a"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
+	  
+	  wait = new WebDriverWait(driver, 330);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='success_message']/a"))).click();
+	  
+	  wait = new WebDriverWait(driver, 10);
+	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter data-filter-off']/input"))).sendKeys("ynet");
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']//a[text()='ynet חדשות תוכן ועדכונים - ידיעות אחרונות']")));
 	  
@@ -418,7 +444,7 @@ public class Pages extends TestCase {
 	  //Remove pages:
 	  builder.moveToElement(driver.findElement(By.xpath("//table[@class='data-table active']/tbody/tr"))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[4]"))).click();
-	  Thread.sleep(2000);
+	  Thread.sleep(3000);
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 	  Thread.sleep(3000);
 	  
@@ -433,8 +459,8 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
 
-  //@Test
-  public void sortIssuesTable4() throws Exception{
+  @Test
+  public void sortIssuesTable() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -552,7 +578,7 @@ public class Pages extends TestCase {
 	  }
   }
   
-  //@Test
+  @Test
   public void issuesAddNote() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -563,7 +589,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
 	  wait = new WebDriverWait(driver, 10);
 	  
-	  builder.click(driver.findElement(By.xpath("//html/body/div[2]/div[2]/div[3]/div[2]/div[2]/div[4]/table/tbody/tr[2]/td[5]/span/a"))).perform();
+	  builder.click(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[5]/span/a"))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='add_note dropdown_action_links']")));
 	  builder.click(driver.findElement(By.xpath("//a[@class='add_note dropdown_action_links']"))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/span/div/textarea"))).sendKeys("test");
@@ -576,7 +602,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='stickynote']/a"))).click();
   }
   
-  //@Test
+  @Test
   public void setIssueToGroup() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -590,18 +616,19 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='create_new input_wrapper']/input"))).sendKeys("test");
 	  Thread.sleep(2000);
 	  builder.sendKeys(Keys.ENTER).perform();
+	  Thread.sleep(3000);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='filter_selection']//a[text()='test']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
 	  assertEquals("Check Issue to group:",val,driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a[2]")).getAttribute("href"));
 	  
 	  //Delete the test group:
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div[2]/div/div/span[6]/a[2]/span"))).click();
-	  Thread.sleep(2000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='filter_selection']/span[5]/a[2]/span"))).click();
+	  Thread.sleep(3000);
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
   }
   
-  //@Test
+  @Test
   public void issuesLinks() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -632,7 +659,7 @@ public class Pages extends TestCase {
 	  driver.switchTo().window(winHandleBefore);
   }
   
-  //@Test
+  @Test
   public void issuesPrevNext() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -643,7 +670,10 @@ public class Pages extends TestCase {
 	  wait = new WebDriverWait(driver, 10);
 	  
 	  //Get the sum of pages:
+	  Thread.sleep(2000);
 	  String sumIssues=driver.findElement(By.xpath("//span[@class='page_status']")).getText().substring(10);
+	  System.out.printf(sumIssues);
+	  Thread.sleep(2000);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next_page']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
