@@ -29,7 +29,7 @@ public class Pages extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://dashboard.optify.net";
+  String homeAddress="http://dashboard.optify.net";
   String userName="your username";
   String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
@@ -91,7 +91,7 @@ public class Pages extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div")));
 	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("//html/body/div[2]/div[2]/div[3]/div")).getText());
 	  
-	  Thread.sleep(2000);
+	  Thread.sleep(3000);
 	  
 	  //Add page without adding to group:
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
@@ -435,7 +435,7 @@ public class Pages extends TestCase {
 	  driver.close();
 	  driver.switchTo().window(winHandleBefore);
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']/tbody/tr/td/a[2]"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='וואלה!']"))).click();
 	  switcWindow();
 	  assertEquals("link page","וואלה!",driver.getTitle());
 	  driver.close();
@@ -673,7 +673,7 @@ public class Pages extends TestCase {
 	  Thread.sleep(2000);
 	  String sumIssues=driver.findElement(By.xpath("//span[@class='page_status']")).getText().substring(10);
 	  System.out.printf(sumIssues);
-	  Thread.sleep(2000);
+	  Thread.sleep(3000);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next_page']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
