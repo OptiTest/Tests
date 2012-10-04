@@ -29,9 +29,9 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://master.optifyit.com";
-  String userName="your username";
-  String password="your password";
+  String homeAddress="https://staging.optifyit.com";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -368,11 +368,11 @@ public class DashBoard extends TestCase {
 	  Thread.sleep(5000);
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
 	  Thread.sleep(5000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='report view minitable']/div/span[2]/div/div/span[2]"))).perform();
 	  Thread.sleep(5000);
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[1]")).click();
 	  Thread.sleep(5000);
-	  builder.release(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='report view minitable']/div/span[2]/div/div/span[2]"))).perform();
 	  
 	  //Test drop down list:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));

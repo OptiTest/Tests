@@ -29,9 +29,9 @@ public class Links extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://dashboard.optify.net";
-  String userName="your username";
-  String password="your password";
+  String homeAddress="https://staging.optifyit.com";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -440,7 +440,7 @@ public class Links extends TestCase {
 	  Thread.sleep(3000);
   }
   
-  @Test
+  //@Test
   public void getSuggestions() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -449,7 +449,7 @@ public class Links extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='suggest-links-input']"))).sendKeys("photograph");
 	  Thread.sleep(2000);
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='suggest-url-popup']/div/button"))).click();
-	  wait = new WebDriverWait(driver, 30);
+	  wait = new WebDriverWait(driver, 100);
 	  String getUrl=wait.until(presenceOfElementLocated(By.xpath("//table[@class='inner_table']/tbody/tr/td/span/a"))).getText();
 	  wait = new WebDriverWait(driver, 10);
 	  Thread.sleep(2000);

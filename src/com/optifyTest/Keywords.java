@@ -30,9 +30,9 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://master.optifyit.com";
-  String userName="your username";
-  String password="your password";
+  String homeAddress="https://staging.optifyit.com";
+  String userName="orasnin@gmail.com";
+  String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   String keyWord="";
   String keyWordUrl="";
@@ -614,6 +614,8 @@ public class Keywords extends TestCase {
 	  driver.findElement(By.xpath("//div[@class='trainer-buttons']/a")).click();
   }
   
+ 
+  
   //===============================================================================================
   private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 	    return new Function<WebDriver, WebElement>() {
@@ -646,4 +648,5 @@ public class Keywords extends TestCase {
 	}
   
   //==================================================================================================
+  
 }
