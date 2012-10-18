@@ -29,9 +29,9 @@ public class Links extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="your username";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -46,11 +46,13 @@ public class Links extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	enterToLinks();
   }
   
-  @Test
-  public void enterToLinks1() throws Exception{
+  public static void enterToLinks() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
 	  
 		  //Log in Optify:
 		  driver.get(homeAddress+"/login");
@@ -487,7 +489,7 @@ public class Links extends TestCase {
   }
   
   //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
 		        public WebElement apply(WebDriver driver) {
 		            return driver.findElement(locator);
@@ -496,7 +498,7 @@ public class Links extends TestCase {
 	}
 	
   //==================================================================================================
-  private void switcWindow(){
+  public void switcWindow(){
 		  for(String winHandle : driver.getWindowHandles())
 			  driver.switchTo().window(winHandle);
 	}

@@ -29,9 +29,9 @@ public class Pages extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="your username";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -46,20 +46,19 @@ public class Pages extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	enterToPages();
   }
   
-  @Test
-  public void dashboardLogIn() {
+  public static void enterToPages() throws Throwable{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
+	  
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
 	  driver.findElement(By.id("j_password")).sendKeys(password);
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
-  }
-  
-  @Test
-  public void enterToPages2() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
@@ -108,7 +107,7 @@ public class Pages extends TestCase {
   }
   
   @Test
-  public void sortTable() throws Exception{
+  public void tableSort() throws Exception{
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -710,7 +709,7 @@ public class Pages extends TestCase {
   }
   
   //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
 		        public WebElement apply(WebDriver driver) {
 		            return driver.findElement(locator);

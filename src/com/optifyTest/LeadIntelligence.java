@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeGroups;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import com.google.common.base.Function;
 
@@ -30,9 +35,9 @@ public class LeadIntelligence extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="http://dashboard.optify.net";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://dashboard.optify.net";
+  static String userName="your username";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -47,11 +52,13 @@ public class LeadIntelligence extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	enterToLeadIntelligence();
   }
   
-  @Test
-  public void enterToLeadIntelligence() throws Exception{
+  public static void enterToLeadIntelligence() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
 	  
 		  //Log in Optify:
 		  driver.get(homeAddress+"/login");
@@ -69,7 +76,7 @@ public class LeadIntelligence extends TestCase {
 		  Thread.sleep(3000);
   }
   
-  //@Test
+  @Test
   public void helpWithThisPage() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -84,13 +91,16 @@ public class LeadIntelligence extends TestCase {
 	  Thread.sleep(3000);
   } 
   
-  //@Test
+  @Test
   public void showResults() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  int SUMFIF=50;
 	  int SUMTF=25;
 	  int SUMTH=10;
+	  
+	  //Check all Visitors for full testing
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
 	  //show 50:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select")));
@@ -100,7 +110,14 @@ public class LeadIntelligence extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody")));
 	  Thread.sleep(3000);
-	  assertEquals("count 50:",SUMFIF,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[@class='next']")));
+	  	  assertEquals("Showing 50:",SUMFIF,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  }
+	  catch(Exception ex){ if(getRowCount(By.xpath("//table[@id='lead_table']/tbody"))>SUMFIF)
+	  		throw new Exception("Showing more than 50 rows!");
+	  }
+	  
 	  Thread.sleep(3000);
 	  
 	  //show 25:
@@ -111,7 +128,13 @@ public class LeadIntelligence extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody")));
 	  Thread.sleep(3000);
-	  assertEquals("count 25:",SUMTF,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[@class='next']")));
+  	  assertEquals("Showing 25:",SUMTF,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  }
+	  catch(Exception ex){ if(getRowCount(By.xpath("//table[@id='lead_table']/tbody"))>SUMTF)
+	  		throw new Exception("Showing more than 25 rows!");
+	  }
+	  
 	  Thread.sleep(3000);
 	  
 	  //show 10:
@@ -122,13 +145,31 @@ public class LeadIntelligence extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody")));
 	  Thread.sleep(3000);
-	  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[@class='next']")));
+  	  assertEquals("Showing 10:",SUMTH,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
+	  }
+	  catch(Exception ex){ if(getRowCount(By.xpath("//table[@id='lead_table']/tbody"))>SUMTH)
+	  		throw new Exception("Showing more than 10 rows!");
+	  }
+	  
 	  Thread.sleep(3000);
   }
   
-  //@Test
+  @Test
   public void nextAndPrev() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	  
+	  //Prepare test:
+	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+		 catch(Exception e){
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+	  
+	  if(isChecked)
+			 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[text()='2']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td")));
@@ -144,6 +185,8 @@ public class LeadIntelligence extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td")));
 	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='active number']")));
 	  assertEquals("Pgae active number:","2",driver.findElement(By.xpath("//span[@class='active number']")).getText()); 
+	  
+	  Thread.sleep(3000);
   }
   
   @Test
@@ -169,7 +212,6 @@ public class LeadIntelligence extends TestCase {
 	  Thread.sleep(3000);
 	  assertEquals("7d day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)+1),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
 	  assertEquals("7d month",todayDate.get(Calendar.MONTH),returnMonthInt(driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText()));
-	  System.out.print(todayDate.get(Calendar.YEAR));
 	  assertEquals("7d year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
 	  
 	  //Test 90d dates:
@@ -210,10 +252,336 @@ public class LeadIntelligence extends TestCase {
 	  assertEquals("24h day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
 	  assertEquals("24h month",todayDate.get(Calendar.MONTH),returnMonthInt(driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText()));
 	  assertEquals("24h year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+	  driver.findElement(By.xpath("//div[@class='interval_date_picker']/button/span")).click();
+	  Thread.sleep(3000);
+	  
+	  driver.findElement(By.xpath("//a[@class='interval_change_link interval-90d']")).click();
   }
   
+  @Test
+  public void needHelp() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String winHandleBefore = driver.getWindowHandle();
+	 	  
+	  //Open need help:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a"))).click();
+	  Thread.sleep(3000);
+	  
+	  String help1=("Lead intelligence is critical to optimizing your site and closing more deals. Let's get started on the path to higher conversion rates!");
+	  assertEquals("help 1/6:",help1,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  
+	  //Learn more about Lead Intelligence:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li/a")).click();
+	  switcWindow();
+	  assertEquals("Learn more about Lead Intelligence:","Lead Intelligence overview : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Lunch video:
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='launch-video']/img"))).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='video-close']/a/img"))).click();
+	  
+	  //Go forward2:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
+	  
+	  String help=("The "+'"'+"Overview"+'"'+" provides an at-a-glance perspective of the number and quality of visitors and leads hitting your site.");
+	  assertEquals("help 2/6:",help,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Check qtip-tip:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These values highlight how well you’re attracting visitors and converting leads.']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Ideally, you want to see more yellow (visitors with high scores) and less blue (visitors with low scores).']")));
+	  
+	  //Learn more about Lead Intelligence:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li/a")).click();
+	  switcWindow();
+	  assertEquals("Learn more about Lead Intelligence:","Lead Intelligence overview : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Lunch video:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li[2]/a")).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@style='display: block; width: auto; min-height: 0px; height: 393px; ']/div/a/img"))).click();
+	  
+	  //Go forward3:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
+	  
+	  help=("Assigning lead scores is an easy way to filter and prioritize your visitors based on the characteristics that matter most to your business.");
+	  assertEquals("help 3/6:",help,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Check qtip-tip:
+	  String qtipStr='"'+"Active Visitors"+'"'+" is our default score set, but you'll want to create your own custom score sets later.";
+	  Thread.sleep(3000);
+	  assertEquals("Qtip:",qtipStr,driver.findElement(By.xpath("//html/body/div[17]/div[2]/div/div")).getText());
+	  
+	  //Learn more about Lead Scoring:
+	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li[2]/a")).click();
+	  switcWindow();
+	  assertEquals("Learn more about Lead Scoring:","Lead Scoring and Exclusion overview : Help and Support",driver.getTitle());
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  //Go forward4:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
+	  
+	  help=("These are your recent visitors and leads. You'll see details on where they came from, how often they visited, and any profile details we've captured.");
+	  assertEquals("help 4/6:",help,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Check qtip-tip:
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Leads will appear with name and company details.']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='You can find a particular person or company using the search box.']")));
+	  
+	  //Go forward5:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
+	  
+	  help=("Before we dive into a specific lead, there are a few other actions that will help you organize your leads.");
+	  assertEquals("help 5/6:",help,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Check qtip-tip: 
+	  qtipStr="You can sort by any column, depending on what's most important to you.";
+	  Thread.sleep(3000);
+	  assertEquals("Qtip:",qtipStr,driver.findElement(By.xpath("//html/body/div[17]/div[2]/div/div")).getText());
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Click the down arrow to:']")));
+	  
+	  //Go forward6:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
+	  
+	  help=("The time has come to learn even more about the leads that most interest you. Click on a lead now!");
+	  assertEquals("help 6/6:",help,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
+	  
+	  //Check qtip-tip:
+	  qtipStr="You can click on the lead's name to get more details, or...";
+	  Thread.sleep(3000);
+	  assertEquals("Qtip:",qtipStr,driver.findElement(By.xpath("//html/body/div[17]/div[2]/div/div")).getText());
+	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='...you can click on the magnifying glass to get more details.']")));
+	  
+	  driver.findElement(By.xpath("//div[@class='trainer-hide']")).click();
+	  Thread.sleep(3000);
+  }
+  
+  @Test
+  public void overview() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+		 catch(Exception e){
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+	
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[text()='1']"))).click();
+	  }
+	  catch(Exception ex){}
+	  
+	  //Check all Visitors for full testing
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  //Test total visitors qtip:
+	  wait.until(presenceOfElementLocated(By.xpath("//h5[@class='tip-total-visitors']/span/span"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='qtip-content qtip-content']//*[text()=' shows the number of visitors to your website within the time frame selected. To change the time frame, use the ']")));
+	  
+	  //Test Apply score set qtip:
+	  wait.until(presenceOfElementLocated(By.xpath("//h5[@class='tip-apply-score-set']/span/span"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='qtip-content qtip-content']//*[text()=' applies the rules of a score set (a collection of rules for evaluating leads) to the lead data shown on this page. You can create as many score sets as you want.']")));
+	  
+	  //Test drop down list:
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='lead_rule_set']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='lead_rule_set']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='lead_rule_set']/option[2]"))).click();
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//select[@id='lead_rule_set']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='lead_rule_set']/option"))).click();
+	  Thread.sleep(3000);
+	  
+	  //Test Total Visitors:
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr")));
+	  int rowNum=getRowsNum(By.xpath("//table[@id='lead_table']/tbody"));
+	  assertEquals("Total Visitors number:",driver.findElement(By.xpath("//big[@id='total_visitors']")).getText(),Integer.toString(rowNum));
+	  
+	  //Test Total Leads:
+	  //Set Check for leads:
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_leads']"))).click();
+	  if(!wait.until(presenceOfElementLocated(By.xpath("//td[@class='first last']"))).getText().equals("No results.")){
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr")));
+		  rowNum=getRowsNum(By.xpath("//table[@id='lead_table']/tbody"));
+		  assertEquals("Total Leads number:",driver.findElement(By.xpath("//big[@id='total_leads']")).getText(),Integer.toString(rowNum));
+	  }
+	  
+	  Thread.sleep(3000);
+	  
+	  //Set Check all Visitors
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+  }
+  
+  @Test
+  public void editLeadsReport() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='phone']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='email']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='city']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='state']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='zip']"))).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog-buttonpane ui-widget-content ui-helper-clearfix']/div/button/span"))).click();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-phone first last']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-email first last']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-city first last']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-state first last']")));
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-zip first last']")));
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='phone']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='email']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='city']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='state']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='zip']"))).click();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog-buttonpane ui-widget-content ui-helper-clearfix']/div/button/span"))).click();
+  }
+  
+  @Test
+  public void tableSort() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  Thread.sleep(3000);
+	  
+	  //Check all Visitors for full testing
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+		 catch(Exception e){
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
+			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+		 }
+	  
+	  System.out.print("Hide Isps:"+driver.findElement(By.xpath("//*[@id='leads_report']/div/div[2]/span[3]/script")).getAttribute("value"));
+	  
+	  //Test Last Visit Date:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-date first last']"))).click();
+	  try{wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td/div")));
+	  }
+	  catch(WebDriverException ex){wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  }
+	  
+	  try{driver.findElement(By.xpath("//div[@class='sort-indicator first last']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@class='th-inner tip-date first last']")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td/div")));
+	  
+	  Thread.sleep(3000);
+
+	  try{if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td/div")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  
+	  	
+	  //Check up down sort:
+	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-date first last']")).click();
+	 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td/div")));
+	 	  Thread.sleep(3000);
+	 	  
+	 	  if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td/div")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td/div")).getText())==-1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+	  
+	  //Test name sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-name first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[2]/a")));
+	  
+	  try{driver.findElement(By.xpath("//div[@class='sort-indicator first last']"));
+	  		
+	  }catch(WebDriverException ex){
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-name first last']"))).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[2]/a")));
+	  
+	  try{if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td[2]/a")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td[2]/a")).getText())==-1)
+		  	throw new Exception("Sort down abnormal");
+	  
+	  	  //Check up down sort:
+	  	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-name first last']"))).click();
+	      wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[2]/a")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td[2]/a")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td[2]/a")).getText())==1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+	  
+	  //Test Company sort:=======================================================
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='th-inner tip-company first last']"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]")));
+	  
+	  try{driver.findElement(By.xpath("//div[@class='sort-indicator first last']"));
+	  		
+	  }catch(WebDriverException ex){
+		  driver.findElement(By.xpath("//div[@class='th-inner tip-company first last']")).click();
+	  }
+	  
+	  //Check down up sort:
+	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]")));
+	  
+	  try{if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td[3]")).getText())==1)
+		  	throw new Exception("Sort down abnormal");
+	  	
+	  	  //Check up down sort:
+	 	  driver.findElement(By.xpath("//div[@class='th-inner tip-company first last']")).click();
+	 	 wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]")));
+	 	  
+	 	  if(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]")).getText().compareTo(driver.findElement(By.xpath("//table[@id='lead_table']/tbody/tr[2]/td[3]")).getText())==-1)
+	  			throw new Exception("Sort up abnormal");
+  		  
+	  }
+	  finally{}
+  }
+  
+  @Test
+  public void serch()throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	//Set Check all Visitors
+	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	 
+	 //Prepare data table for testing:
+	 boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	 if(!isChecked)
+		 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	 try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	 }
+	 catch(Exception e){
+		 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
+		 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	 }
+	 
+	 //Get name of company to examine:
+	 String companyName=wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]"))).getText();
+	 
+	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='search']"))).sendKeys(companyName);
+	 Thread.sleep(3000);
+	 
+	 assertEquals("Search results:",companyName,wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]"))).getText());
+	 
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter-clear']"))).click();
+  }
   //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
 		        public WebElement apply(WebDriver driver) {
 		            return driver.findElement(locator);
@@ -229,6 +597,7 @@ public class LeadIntelligence extends TestCase {
   
   //================================================================================================
   private int getRowCount(By by) throws Exception {
+	  Thread.sleep(3000);
       try { WebElement table = driver.findElement(by);
             List<WebElement> rows = table.findElements(By.tagName("tr"));
             return rows.size();
@@ -251,5 +620,26 @@ public class LeadIntelligence extends TestCase {
 
 	  return -1;
   }
+  
+  //================================================================================================
+  private int getRowsNum(By by) throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  int num=0;
+	  int sum=0;
+	  
+	  while(true){
+		  wait.until(presenceOfElementLocated(by));
+		  num=getRowCount(by);
+		  sum+=num;
+		  
+		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']"))).click();
+		  }
+		  catch (Exception e) {
+	          return sum;
+	      }
+	  }
+	   
+  }
+  
 }
   

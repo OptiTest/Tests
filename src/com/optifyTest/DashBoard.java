@@ -1,6 +1,7 @@
 package com.optifyTest;
 
 import java.io.File;
+import java.sql.Driver;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -29,9 +30,9 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="your username";
+  static String password="your passwords";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -46,10 +47,11 @@ public class DashBoard extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	dashboardLogIn(driver);
   }
   
-  @Test
-  public void dashboardLogIn() {
+  public static void dashboardLogIn(WebDriver driver) throws Throwable{
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
 	  driver.findElement(By.id("j_password")).sendKeys(password);

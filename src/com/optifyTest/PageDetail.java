@@ -28,9 +28,9 @@ public class PageDetail extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="your username";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -45,11 +45,13 @@ public class PageDetail extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	enterToPgaeDetail();
   }
   
-  @Test
-  public void enterToPgaeDetail1() throws Exception{
+  public static void enterToPgaeDetail() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
 	  
 	  //Log in Optify
 	  driver.get(homeAddress+"/login");
@@ -391,7 +393,7 @@ public class PageDetail extends TestCase {
 	  driver.navigate().back();
   }
   //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
 		        public WebElement apply(WebDriver driver) {
 		            return driver.findElement(locator);
@@ -400,7 +402,7 @@ public class PageDetail extends TestCase {
 	}
 	
   //==================================================================================================
-  private void switcWindow(){
+  private static void switcWindow(){
 		  for(String winHandle : driver.getWindowHandles())
 			  driver.switchTo().window(winHandle);
 	}

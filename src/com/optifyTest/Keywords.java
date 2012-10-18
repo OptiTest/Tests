@@ -30,9 +30,9 @@ public class Keywords extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  String homeAddress="https://staging.optifyit.com";
-  String userName="orasnin@gmail.com";
-  String password="wrwmfy9m";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="your username";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   String keyWord="";
   String keyWordUrl="";
@@ -49,19 +49,19 @@ public class Keywords extends TestCase {
 	String[] listCapability={"--start-maximized","--disable-extensions","--disable-translate"};
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+	
+	enterToKeywords();
   }
   
-  @Test
-  public void dashboardLogIn() {
+  public static void enterToKeywords() throws Throwable{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
+	  
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
 	  driver.findElement(By.id("j_password")).sendKeys(password);
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
-  }
-  @Test
-  public void enterToKeywords() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
@@ -617,7 +617,7 @@ public class Keywords extends TestCase {
  
   
   //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
+  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 	    return new Function<WebDriver, WebElement>() {
 	        public WebElement apply(WebDriver driver) {
 	            return driver.findElement(locator);
