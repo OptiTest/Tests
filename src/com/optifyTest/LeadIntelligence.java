@@ -6,13 +6,11 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -21,10 +19,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.BeforeGroups;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 
 import com.google.common.base.Function;
 
@@ -157,7 +151,7 @@ public class LeadIntelligence extends TestCase {
   
   @Test
   public void nextAndPrev() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  WebDriverWait wait = new WebDriverWait(driver, 15);
 	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
 	  
 	  //Prepare test:
@@ -256,6 +250,8 @@ public class LeadIntelligence extends TestCase {
 	  Thread.sleep(3000);
 	  
 	  driver.findElement(By.xpath("//a[@class='interval_change_link interval-90d']")).click();
+	  
+	  Thread.sleep(3000);
   }
   
   @Test
@@ -377,7 +373,13 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception ex){}
 	  
-	  //Check all Visitors for full testing
+	  //Prepare data table for testing:
+	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	  if(!isChecked)
+		  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	  //Set Check all Visitors
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
 	  //Test total visitors qtip:
@@ -415,6 +417,8 @@ public class LeadIntelligence extends TestCase {
 	  
 	  //Set Check all Visitors
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  Thread.sleep(3000);
   }
   
   @Test
@@ -444,15 +448,21 @@ public class LeadIntelligence extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@name='zip']"))).click();
 	  Thread.sleep(3000);
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog-buttonpane ui-widget-content ui-helper-clearfix']/div/button/span"))).click();
+	  
+	  Thread.sleep(3000);
   }
   
   @Test
   public void tableSort() throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  WebDriverWait wait = new WebDriverWait(driver, 15);
 	  
-	  Thread.sleep(3000);
-	  
-	  //Check all Visitors for full testing
+	  //Prepare data table for testing:
+	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	  if(!isChecked)
+		  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	  //Set Check all Visitors
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
 	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
@@ -548,13 +558,15 @@ public class LeadIntelligence extends TestCase {
   		  
 	  }
 	  finally{}
+	  
+	  Thread.sleep(3000);
   }
   
   @Test
   public void serch()throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	//Set Check all Visitors
+	 //Set Check all Visitors
 	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	 
 	 //Prepare data table for testing:
@@ -579,6 +591,153 @@ public class LeadIntelligence extends TestCase {
 	 assertEquals("Search results:",companyName,wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]"))).getText());
 	 
 	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter-clear']"))).click();
+	 
+	 Thread.sleep(3000);
+  }
+  
+  @Test 
+  public void showMoreFromThisCompany() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	 //Prepare data table for testing:
+	 boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	 if(!isChecked)
+		 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	 //Set Check all Visitors
+	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	 
+	 String name=wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr/td[3]"))).getText();
+	 
+	 //Test show more from this company:
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
+	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-see-more-company button-action']"))).click();
+	 
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr/td[3]")));
+	 
+	 int rowsNum=getRowsNum(By.xpath("//*[@id='lead_table']/tbody"));
+	 
+	 for(int i=1;i<=rowsNum;i++)
+		 assertEquals("Show more from this company:",name,driver.findElement(By.xpath("//*[@id='lead_table']/tbody/tr["+i+"]/td[3]")).getText());
+	 
+	 //Clear the search box.
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter-clear']"))).click();
+	 
+	 Thread.sleep(3000);
+  }
+  
+  @Test
+  public void unwatchWatch() throws Exception{
+	 WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	 //Prepare data table for testing:
+	 boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	 if(!isChecked)
+		 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	 //Set Check all Visitors
+	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	
+	 builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr")))).perform();
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
+	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
+	 
+	 try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-watch button-action']"))).click();
+	 }
+	 catch(Exception ex){
+		 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-unwatch button-action']"))).click();
+	 }
+	 
+	 Thread.sleep(3000);
+	 
+	 //Test edit settings:
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr[2]/td/div/a/strong"))).click();
+	
+	 assertEquals("Edit settings:","Alerts | Optify",driver.getTitle());
+	 driver.navigate().back();
+	 
+	 //Return to unwatch:
+	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
+	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
+	 try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-unwatch button-action']"))).click();
+	 }
+	 catch(Exception ex){
+		 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-watch button-action']"))).click();
+	 }
+	 
+	 Thread.sleep(3000);
+  }
+  
+  @Test
+  public void help() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  //Prepare data table for testing:
+	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	  if(!isChecked)
+		  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	  //Set Check all Visitors
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr")))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
+	 
+	  Thread.sleep(2000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-hide button-action']"))).click();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr[2]/td/div/span/a"))).click();
+	  
+	  Thread.sleep(3000);
+  }
+  
+  @Test
+  public void leadDetail() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  //Prepare data table for testing:
+	  boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
+	 
+	  if(!isChecked)
+		  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	 
+	  String winHandleBefore = driver.getWindowHandle();
+	  
+	  //Set Check all Visitors
+	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-view button-action']"))).click();
+	  
+	  switcWindow();
+	  assertEquals("Lead Detail:","Lead Detail | Optify",driver.getTitle());
+	  
+	  String winHandlePageDetail = driver.getWindowHandle();
+	  
+	  //Test Help with this page (Lead Detail page):
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='page-help']/a"))).click();
+	  switcWindow();
+	  assertEquals("Lead Detail overview:","Lead Detail overview : Help and Support",driver.getTitle());
+	  
+	  driver.close();
+	  driver.switchTo().window(winHandlePageDetail);
+	  
+	  //Test Search in Salesforce:
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='salesforce_search']/a"))).click();
+	  switcWindow();
+	  assertEquals("Salesforce:","salesforce.com - Customer Secure Login Page",driver.getTitle());
+	  
+	  driver.close();
+	  driver.switchTo().window(winHandlePageDetail);
+	  
+	  driver.close();
+	  driver.switchTo().window(winHandleBefore);
+	  
+	  Thread.sleep(3000);
   }
   //===============================================================================================
   private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
