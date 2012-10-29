@@ -88,7 +88,7 @@ public class Pages extends TestCase {
 	  driver.findElement(By.xpath("//button[@id='add_pages']")).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[2]/div[2]/div[3]/div")));
-	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",driver.findElement(By.xpath("//html/body/div[2]/div[2]/div[3]/div")).getText());
+	  assertEquals("Newly added pages","Optify is gathering data for your newly added pages. We'll let you know as soon as we are finished.",wait.until(presenceOfElementLocated(By.xpath("//div[@class='info_message']"))).getText());
 	  
 	  Thread.sleep(3000);
 	  
@@ -359,21 +359,21 @@ public class Pages extends TestCase {
 	  //show 50:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-50']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  assertEquals("count 50:",SUMFIF,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
 	  
 	  //show 25:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-25']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  assertEquals("count 25:",SUMTF,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
 	  
 	  //show 10:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-10']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
 	  Thread.sleep(3000);
   }
@@ -383,7 +383,11 @@ public class Pages extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
+	  //Preparation for test:
+	  //Set to pages:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
+	  //Set minimum display rows (for max next rate):
+	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-10']"))).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
@@ -583,13 +587,21 @@ public class Pages extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  //Add the note test:
+	  //Go to Issues:
       wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
 	  wait = new WebDriverWait(driver, 350);
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
 	  wait = new WebDriverWait(driver, 10);
 	  
 	  builder.click(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[5]/span/a"))).perform();
-	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='add_note dropdown_action_links']")));
+	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='add_note dropdown_action_links']")));
+	  }
+	  catch(Exception ex){wait.until(presenceOfElementLocated(By.xpath("//*[@id='1']/td[1]/span/div/a/img"))).click();
+	  		Thread.sleep(3000);
+	  		builder.click(driver.findElement(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td[5]/span/a"))).perform();
+	  		wait.until(presenceOfElementLocated(By.xpath("//a[@class='add_note dropdown_action_links']")));
+	  }
+	  
 	  builder.click(driver.findElement(By.xpath("//a[@class='add_note dropdown_action_links']"))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/span/div/textarea"))).sendKeys("test");
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='sticky_save']/a"))).click();
@@ -663,10 +675,17 @@ public class Pages extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
+	  //Test preparations:
+	  //Set to Issues:
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
 	  wait = new WebDriverWait(driver, 350);
+	  //Wait for table to be loaded:
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
 	  wait = new WebDriverWait(driver, 10);
+	  //Set minimum display rows (for max next rate) 
+	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='show-10']"))).click();
+	  }
+	  catch(Exception ex){}
 	  
 	  //Get the sum of pages:
 	  Thread.sleep(2000);

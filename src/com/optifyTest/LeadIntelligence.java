@@ -96,6 +96,11 @@ public class LeadIntelligence extends TestCase {
 	  //Check all Visitors for full testing
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
+	  //Select 90 days:
+	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	  }
+	  catch(Exception ex){}
+	  
 	  //show 50:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='results_count_pager']/span/select"))).perform();
@@ -157,13 +162,13 @@ public class LeadIntelligence extends TestCase {
 	  //Prepare test:
 	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
 		 }
-		 catch(Exception e){
-			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
-			 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
-		 }
+		 catch(Exception e){}
 	  
 	  if(isChecked)
 			 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+	  
+	 //Set Check all Visitors
+     wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[text()='2']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td")));
@@ -195,10 +200,8 @@ public class LeadIntelligence extends TestCase {
 	  todayDate.add(Calendar.DAY_OF_MONTH,SEVEN);
 	  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']"))).click();
 	  }
-	  catch(Exception e){
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']"))).click();
-	  }
+	  catch(Exception e){}
+	  
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr")));
 	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d selected']")));
 	  
@@ -577,10 +580,7 @@ public class LeadIntelligence extends TestCase {
 	 
 	 try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
 	 }
-	 catch(Exception e){
-		 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
-		 wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
-	 }
+	 catch(Exception e){}
 	 
 	 //Get name of company to examine:
 	 String companyName=wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr/td[3]"))).getText();
@@ -607,6 +607,11 @@ public class LeadIntelligence extends TestCase {
 	 
 	 //Set Check all Visitors
 	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	 
+	 //Select 90 days:
+	 try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	 }
+	 catch(Exception ex){}
 	 
 	 String name=wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr/td[3]"))).getText();
 	 
@@ -641,6 +646,11 @@ public class LeadIntelligence extends TestCase {
 	 //Set Check all Visitors
 	 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	
+	 //Select 90 days:
+	 try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	 }
+	 catch(Exception ex){}
+	 
 	 builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr")))).perform();
 	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
 	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
@@ -660,6 +670,8 @@ public class LeadIntelligence extends TestCase {
 	 driver.navigate().back();
 	 
 	 //Return to unwatch:
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tr/td")));
+	 builder.moveToElement(driver.findElement(By.xpath("//*[@id='lead_table']/tr/td"))).perform();
 	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
 	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
 	 try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-unwatch button-action']"))).click();
@@ -672,7 +684,7 @@ public class LeadIntelligence extends TestCase {
   }
   
   @Test
-  public void help() throws Exception{
+  public void hideUndo() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  //Prepare data table for testing:
@@ -684,6 +696,11 @@ public class LeadIntelligence extends TestCase {
 	  //Set Check all Visitors
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
 	  
+	  //Select 90 days:
+	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	  }
+	  catch(Exception ex){}
+	  
 	  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr")))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
@@ -691,8 +708,8 @@ public class LeadIntelligence extends TestCase {
 	  Thread.sleep(2000);
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-hide button-action']"))).click();
 	  
-	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr[2]/td/div/span/a"))).click();
-	  
+	  wait.until(presenceOfElementLocated(By.xpath("//span[@class='undo']/a"))).click();
+	
 	  Thread.sleep(3000);
   }
   
@@ -710,6 +727,11 @@ public class LeadIntelligence extends TestCase {
 	  
 	  //Set Check all Visitors
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+	  
+	  //Select 90 days:
+	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
+	  }
+	  catch(Exception ex){}
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-view button-action']"))).click();
 	  

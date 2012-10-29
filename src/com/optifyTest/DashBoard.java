@@ -1,7 +1,6 @@
 package com.optifyTest;
 
 import java.io.File;
-import java.sql.Driver;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -30,9 +29,9 @@ public class DashBoard extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  static String homeAddress="https://staging.optifyit.com";
+  static String homeAddress="http://staging.optifyit.com";
   static String userName="your username";
-  static String password="your passwords";
+  static String password="your password";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -364,28 +363,29 @@ public class DashBoard extends TestCase {
 	  driver.get(homeAddress);
 	  
 	  //Test drop down view:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")));
-	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div")).getAttribute("id");
+	  getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div"))).getAttribute("id");
+	  
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']//li[@class='list_item']")));
+	  
+	  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")))).perform();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='"+getId+"-pulldown']/ul/li[2]"))).click();
+	  Thread.sleep(3000);
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
-	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
-	  Thread.sleep(5000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='report view minitable']/div/span[2]/div/div/span[2]"))).perform();
-	  Thread.sleep(5000);
-	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[1]")).click();
-	  Thread.sleep(5000);
-	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='report view minitable']/div/span[2]/div/div/span[2]"))).perform();
+	  Thread.sleep(3000);
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li"))).click();
+	  Thread.sleep(3000);
+	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]"))).perform();
 	  
 	  //Test drop down list:
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
-	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div")).getAttribute("id");
+	  getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div"))).getAttribute("id");
 	  builder.clickAndHold(driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]"))).perform();
 	  Thread.sleep(5000);
 	  driver.findElement(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")).click();
 	  Thread.sleep(5000);
 	  
 	  //Test Add more URLs:
-	  driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/ul/li[2]/a")).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div[2]/ul/li//a[text()='Add more URLs']"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")));
 	  driver.findElement(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
 	  assertEquals("Link opportunities","Links | Optify",driver.getTitle());
