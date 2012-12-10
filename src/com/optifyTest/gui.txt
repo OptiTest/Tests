@@ -1,0 +1,16 @@
+OATS - Optify Automation Test System 
+
+creating tool bar with - run, file, settings:
+
+settings - 1. can change browser type.
+              2. can change system check.
+              3. can set user name & password account
+              3. can change report attributes.
+
+File - 1. Can save report.
+        2. Can Exit.
+
+Run - 1. run test.
+
+Main screen - 1. table with tree of test to run.
+                     

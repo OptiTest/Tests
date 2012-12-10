@@ -28,9 +28,9 @@ public class TwitterForBusiness extends TestCase  {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  static String homeAddress="https://dashboard.optify.net";
-  static String userName="your username";
-  static String password="your password";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="orasnin@gmail.com";
+  static String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -371,6 +371,42 @@ public class TwitterForBusiness extends TestCase  {
 	  
 	  Thread.sleep(3000);
   }
+  
+  @Test
+  public void addAccount() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']")))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']//option[text()='Add a Twitter Account...']"))).click();
+	  Thread.sleep(3000);
+	  assertEquals("Add account:","טוויטר / אישור יישום", driver.getTitle());
+	  
+	  driver.navigate().back();
+	  
+	  Thread.sleep(3000);
+  }
+  
+  @Test 
+  public void switchAccount() throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']")))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']/option[2]"))).click();
+	  Thread.sleep(3000);
+	  
+	  try{assertEquals("Check account name:",wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']//option[@selected='true']"))).getText(), wait.until(presenceOfElementLocated(By.xpath("//div[@id='tweet_control_me']/div"))).getText());
+	  }
+	  catch(Exception e){
+		  driver.get(homeAddress+"/twitter/overview");
+		  throw e;
+	  }
+	  
+	  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']")))).perform();
+	  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']/option[3]"))).click();
+	  
+	  Thread.sleep(3000);
+  }
+  
   //===================================================================================================
   private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
 		    return new Function<WebDriver, WebElement>() {
@@ -389,12 +425,12 @@ public class TwitterForBusiness extends TestCase  {
   //==================================================================================================
   private int returnMonthInt(String month){
 	  final int SUM_MONTH=12;
-	  final int MONTH_NUM[]={0,1,2,3,4,5,6,7,8,9,10,11};
 	  final String MONTH_STR[]={"January","February","March","April","May","June","July","August",
 			  "September","October","November","December"};
+	  
 	  for(int i=0;i<SUM_MONTH;i++){
 		 if(month.equals(MONTH_STR[i]))
-			 return MONTH_NUM[i];
+			 return i;
 	  }
 
 	  return -1;

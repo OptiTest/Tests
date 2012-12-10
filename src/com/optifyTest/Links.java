@@ -30,8 +30,8 @@ public class Links extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   static String homeAddress="https://staging.optifyit.com";
-  static String userName="your username";
-  static String password="your password";
+  static String userName="orasnin@gmail.com";
+  static String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -140,7 +140,7 @@ public class Links extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  //Add url into new list:
-	  String value=driver.findElement(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a")).getAttribute("title");
+	  String value=wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a"))).getAttribute("title");
 	  
 	  builder.moveToElement(driver.findElement(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a"))).perform();
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action button-action action-tags']")));
@@ -417,7 +417,7 @@ public class Links extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select/option[3]"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select"))).click();
 	  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody")));
-	  Thread.sleep(3000);
+	  Thread.sleep(5000);
 	  assertEquals("count 50:",SUMFIF,getRowCount(By.xpath("//table[@id='links-table']/tbody")));
 	  Thread.sleep(3000);
 	  

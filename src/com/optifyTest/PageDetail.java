@@ -29,8 +29,8 @@ public class PageDetail extends TestCase {
   private static WebDriver driver;
   Actions builder = new Actions(driver);
   static String homeAddress="https://staging.optifyit.com";
-  static String userName="your username";
-  static String password="your password";
+  static String userName="orasnin@gmail.com";
+  static String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -71,7 +71,25 @@ public class PageDetail extends TestCase {
 	  //Get the page detail...
 	  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("walla");
 	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a"))).click();
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a"))).click();
+	  }
+	  catch(Exception e){
+		//Add page & save to test:
+		  System.out.println("Level One");
+		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.walla.co.il");
+		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_pages']"))).click();
+
+		  Thread.sleep(3000);
+		  
+		  System.out.println("Level Two");
+		   //Try to get the page detail second time...
+		  Thread.sleep(2000);
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("walla");
+		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a"))).click();
+	  }
 	  Thread.sleep(2000);
 	  switcWindow();
 	  

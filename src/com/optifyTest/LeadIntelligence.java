@@ -29,9 +29,9 @@ public class LeadIntelligence extends TestCase {
   private static ChromeDriverService service;
   private static WebDriver driver;
   Actions builder = new Actions(driver);
-  static String homeAddress="https://dashboard.optify.net";
-  static String userName="your username";
-  static String password="your password";
+  static String homeAddress="https://staging.optifyit.com";
+  static String userName="orasnin@gmail.com";
+  static String password="wrwmfy9m";
   static String setPath="D:\\selenium-2.23.1\\chromedriver.exe";
   
   @BeforeClass
@@ -302,7 +302,8 @@ public class LeadIntelligence extends TestCase {
 	  //Lunch video:
 	  driver.findElement(By.xpath("//div[@class='trainer-actions']/ul/li[2]/a")).click();
 	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@style='display: block; width: auto; min-height: 0px; height: 393px; ']/div/a/img"))).click();
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@style='display: block; width: auto; min-height: 0px; height: 393px;']/div/a"))).click();
+	  Thread.sleep(2000);
 	  
 	  //Go forward3:
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-forward']/a"))).click();
@@ -566,7 +567,7 @@ public class LeadIntelligence extends TestCase {
   }
   
   @Test
-  public void serch()throws Exception{
+  public void serch() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	 //Set Check all Visitors
@@ -670,8 +671,8 @@ public class LeadIntelligence extends TestCase {
 	 driver.navigate().back();
 	 
 	 //Return to unwatch:
-	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tr/td")));
-	 builder.moveToElement(driver.findElement(By.xpath("//*[@id='lead_table']/tr/td"))).perform();
+	 wait.until(presenceOfElementLocated(By.xpath("//*[@id='lead_table']/tbody/tr/td")));
+	 builder.moveToElement(driver.findElement(By.xpath("//*[@id='lead_table']/tbody/tr/td"))).perform();
 	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-menu button-action']")));
 	 builder.clickAndHold(driver.findElement(By.xpath("//div[@class='action action-menu button-action']"))).perform();
 	 try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-unwatch button-action']"))).click();
