@@ -183,7 +183,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunTestActionPerformed
-        boolean select[]={true,true,true,false,false};
+        boolean select[]={true,false,false,false,false};
     	Thread thread1 = new Thread(new MainTest(select));
     	thread1.start();
        

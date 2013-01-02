@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,12 +50,11 @@ public class Pages extends TestCase {
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
 	
-	enterToPages();
+	enterToDashBoard();
   }
   
-  public static void enterToPages() throws Throwable{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  Actions builder = new Actions(driver);
+  public static void enterToDashBoard() throws Throwable{
+	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.print("\nLogin to Optify.");
 	  
@@ -67,14 +67,9 @@ public class Pages extends TestCase {
 	  System.out.println(" v");
 	  
 	  System.out.print("\n\nEntering to Pages page.");
-	  
-	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
-	  Thread.sleep(3000);
-	  driver.findElement(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li[2]/a")).click();
-	  assertEquals("Pages page","Pages | Optify",driver.getTitle());
-	  
+	  enterToPages(numTry);
 	  System.out.println(" v");
+	  
 	  Thread.sleep(3000);
   }
   
@@ -163,7 +158,7 @@ public class Pages extends TestCase {
 	  needHelp_forwardPagesTab(numTry);
 	  System.out.println(" v");
 	  System.out.print("Testing minimize need help.");
-	  needHelp_minimizeNeedHelp(numTry);
+	  needHelp_done(numTry);
 	  System.out.println(" v");
 	 
 	  Thread.sleep(3000);
@@ -321,6 +316,11 @@ public class Pages extends TestCase {
 	  System.out.println(" v");
 	  
 	  Thread.sleep(3000);
+  }
+  
+  @AfterClass
+  public static void summary(){
+	  printSummary();
   }
   
   //===============================================================================================
@@ -843,7 +843,7 @@ public class Pages extends TestCase {
   }
   
   //=========================================================================================================
-  private void needHelp_minimizeNeedHelp(int numTry)throws Exception {
+  private void needHelp_done(int numTry)throws Exception {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	 
@@ -859,7 +859,7 @@ public class Pages extends TestCase {
 			  throw e;
 		
 		 	numTry++;
-		 	needHelp_minimizeNeedHelp(numTry);
+		 	needHelp_done(numTry);
 	  }
   }
   
@@ -1553,6 +1553,35 @@ public class Pages extends TestCase {
 			 	numTry++;
 			 	issuesShow_ten(numTry);
 	  }
+  }
+  
+  //=========================================================================================================
+  private static void enterToPages(int numTry)throws Exception {	 
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  Actions builder = new Actions(driver);
+	  
+	  try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
+		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")))).perform();
+		  
+		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li[2]/a"))).click();
+		  assertEquals("Pages page","Pages | Optify",driver.getTitle());
+	  }
+	  catch(Exception e){
+		 	if(numTry>3)
+				  throw e;
+			
+			 	numTry++;
+			 	enterToPages(numTry);
+	  }
+  }
+  
+  //=========================================================================================================
+  private static void printSummary(){
+	  System.out.println("\n\n");
+	  System.out.println("=========================================================");
+	  System.out.println("                          Summary");
+	  System.out.println("=========================================================\n");
   }
   
   //=========================================================================================================

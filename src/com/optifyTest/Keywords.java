@@ -38,8 +38,7 @@ public class Keywords extends TestCase {
     static String setPath="selenium\\chromedriver.exe";
     String keyWord="";
     String keyWordUrl="";
-    int sumEx=0; 			//Counting the number of exceptions.
-    final int MAX=3;      //Max number of Exceptions.
+    
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -152,7 +151,7 @@ public class Keywords extends TestCase {
 	  Thread.sleep(3000);
   }
   
-  @Test
+  //@Test
   public void exportKeywordList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	 
@@ -398,16 +397,18 @@ public class Keywords extends TestCase {
 	  goBase();
 	  
 	  try{todayDate.add(Calendar.DAY_OF_YEAR,SEVEN);
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']")));
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
+		  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d']"))).click();
+		  }
+		  catch(Exception e){}
+		 
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-7d selected']")));
   
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='interval_date_picker']/button/span"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("7d day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
-		  assertEquals("7d month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-		  assertEquals("7d year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+		  assertEquals("7d day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)+1),wait.until(presenceOfElementLocated(By.xpath("//a[@class='ui-state-default ui-state-active']"))).getText());
+		  assertEquals("7d month",todayDate.get(Calendar.MONTH),returnMonthInt(wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-datepicker-month']"))).getText()));
+		  assertEquals("7d year",Integer.toString(todayDate.get(Calendar.YEAR)),wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-datepicker-year']"))).getText());
 	  }
 	  catch(Exception e){
 			 if(numTry>3)
@@ -427,14 +428,14 @@ public class Keywords extends TestCase {
 	  try{todayDate=Calendar.getInstance();
 		  todayDate.add(Calendar.DAY_OF_YEAR,THIRTY);
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-30d']"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-30d selected']")));
 		  
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='interval_date_picker']/button/span"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("30d day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
-		  assertEquals("30d month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-		  assertEquals("30d year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+		  assertEquals("30d day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)+1),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
+		  assertEquals("30d month",todayDate.get(Calendar.MONTH),returnMonthInt(driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText()));
+		  assertEquals("30d year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
 	  }
 	  catch(Exception e){
 			 if(numTry>3)
@@ -452,14 +453,19 @@ public class Keywords extends TestCase {
 	  
 	  try{todayDate=Calendar.getInstance();
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h']"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//tr[@class='record hover-menu']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr")));
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-24h selected']")));
 		  
+		  todayDate.add(Calendar.DAY_OF_MONTH,-1);
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='interval_date_picker']/button/span"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("24h day",todayDate.get(Calendar.DAY_OF_MONTH),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
-		  assertEquals("24h month",todayDate.get(Calendar.MONTH),driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText());
-		  assertEquals("24h year",todayDate.get(Calendar.YEAR),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+		  assertEquals("24h day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
+		  assertEquals("24h month",todayDate.get(Calendar.MONTH),returnMonthInt(driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText()));
+		  assertEquals("24h year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
+	  
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='interval_date_picker']/button/span"))).click();
+		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-30d']"))).click();
 	  }
 	  catch(Exception e){
 			 if(numTry>3)
@@ -540,10 +546,12 @@ public class Keywords extends TestCase {
 	  goBase();
 	  
 	  try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-export']"))).click();
- 
- 
-                  //Some file check method.
+	  			Thread.sleep(3000);
+	  		driver.switchTo().frame("Save As");
+	  		Thread.sleep(3000);
+	  		builder.sendKeys(Keys.ENTER).perform();
 	  }
+	  
 	  catch(Exception e){
 			 if(numTry>3)
 				 throw e;
@@ -841,7 +849,7 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
 
-	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='suggest-type']/input[2]"))).click();
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("www.optify.net");
 		  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
@@ -1070,7 +1078,7 @@ public class Keywords extends TestCase {
 			  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']")))).perform();
 			  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']//div[text()='Remove']"))).click();
 			  Thread.sleep(3000);
-			  wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']/button"))).click();
+			  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']/button")))).perform();
 			  Thread.sleep(3000);
 		  }
 	  }
@@ -1469,5 +1477,19 @@ public class Keywords extends TestCase {
 	  System.out.println("=========================================================");
 	  System.out.println("                          Summary");
 	  System.out.println("=========================================================\n");
+  }
+  
+  //==================================================================================================
+  private int returnMonthInt(String month){
+	  final int SUM_MONTH=12;
+	  final int MONTH_NUM[]={0,1,2,3,4,5,6,7,8,9,10,11};
+	  final String MONTH_STR[]={"January","February","March","April","May","June","July","August",
+			  "September","October","November","December"};
+	  for(int i=0;i<SUM_MONTH;i++){
+		 if(month.equals(MONTH_STR[i]))
+			 return MONTH_NUM[i];
+	  }
+
+	  return -1;
   }
 }
