@@ -38,7 +38,7 @@ public class Pages extends TestCase {
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
-  static String setPath="selenium/Linux32/chromedriver";
+  static String setPath="selenium/Linux64/chromedriver";
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
