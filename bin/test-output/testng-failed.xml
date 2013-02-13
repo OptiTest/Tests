@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Default suite]">
+  <test name="Default test(failed)" preserve-order="true">
+    <classes>
+      <class name="com.optifyTest.PageDetailTest">
+        <methods>
+          <include name="scrollPage"/>
+          <include name="addPages3"/>
+          <include name="addPages3"/>
+          <include name="pageLink7"/>
+          <include name="tableSort9"/>
+          <include name="socialShare8"/>
+          <include name="needHelp"/>
+          <include name="presenceOfElementLocated"/>
+          <include name="enterToPages2"/>
+          <include name="goBase"/>
+          <include name="tableAction10"/>
+          <include name="switcWindow"/>
+          <include name="enterToPgaeDetail4"/>
+          <include name="helpWithThisPage5"/>
+          <include name="getRowCount"/>
+          <include name="export6"/>
+          <include name="dashboardLogIn1"/>
+        </methods>
+      </class> <!-- com.optifyTest.PageDetailTest -->
+    </classes>
+  </test> <!-- Default test(failed) -->
+</suite> <!-- Failed suite [Default suite] -->

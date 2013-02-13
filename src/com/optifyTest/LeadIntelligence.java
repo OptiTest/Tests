@@ -1,11 +1,15 @@
 package com.optifyTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +38,7 @@ public class LeadIntelligence extends TestCase {
 	 static String homeAddress=st.getServerUrl();
 	 static String userName=ts.getUserName();
 	 static String password=ts.getUserPassword();
-	 static String setPath="selenium\\chromedriver.exe";
+	 static String setPath="selenium/Linux32/chromedriver";
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -58,7 +62,7 @@ public class LeadIntelligence extends TestCase {
 	  
 	  System.out.println("\n\nStarting Lead Intelligence test:\n");
 	  
-	  System.out.print("\n\nLogin to Optify.");
+	  print("\n\nLogin to Optify.");
 	  
 	  //Log in Optify:
 	  driver.get(homeAddress+"/login");
@@ -69,7 +73,7 @@ public class LeadIntelligence extends TestCase {
 	  
 	  System.out.println(" v");
 	  
-	  System.out.print("\nEnter to Lead intelligence.");
+	  print("\nEnter to Lead intelligence.");
 	  
 	  //Enter to LeadIntelligence:
 	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='enable']/a/span")));
@@ -86,7 +90,7 @@ public class LeadIntelligence extends TestCase {
   public void helpWithThisPage() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting helpWithThisPage.");
+	  print("\n\nTesting helpWithThisPage.");
 	  helpWithThisPage_test(numTry);
 	  System.out.println(" v");
 	  
@@ -98,13 +102,13 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting show results:");
-	  System.out.print("Testing show fifty.");
+	  print("Testing show fifty.");
 	  showResults_fifty(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing show twentyfive.");
+	  print("Testing show twentyfive.");
 	  showResults_twentyfive(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing show ten.");
+	  print("Testing show ten.");
 	  showResults_ten(numTry);
 	  System.out.println(" v");
 	  
@@ -115,7 +119,7 @@ public class LeadIntelligence extends TestCase {
   public void nextAndPrev() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting next and prev:");
+	  print("\n\nTesting next and prev:");
 	  nextAndPrev_test(numTry);
 	  System.out.println(" v");
 	  
@@ -128,16 +132,16 @@ public class LeadIntelligence extends TestCase {
 	  Calendar todayDate=Calendar.getInstance();
 	  
 	  System.out.println("\n\nTesting Keywords page Calendar:");
-	  System.out.print("Testing 7d dates.");
+	  print("Testing 7d dates.");
 	  calendar_7d(numTry,todayDate);
 	  System.out.println(" v");
-	  System.out.print("Testing 30d dates.");
+	  print("Testing 30d dates.");
 	  calendar_30d(numTry,todayDate);
 	  System.out.println(" v");
-	  System.out.print("Testing 90d dates.");
+	  print("Testing 90d dates.");
 	  calendar_90d(numTry,todayDate);
 	  System.out.println(" v");
-	  System.out.print("Testing 24h dates.");
+	  print("Testing 24h dates.");
 	  calendar_24h(numTry,todayDate);
 	  System.out.println(" v");
 	  
@@ -150,31 +154,31 @@ public class LeadIntelligence extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	 	
 	  System.out.println("\n\nTesting need help:");
-	  System.out.print("Opening need help.");
+	  print("Opening need help.");
 	  needHelp_open(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Learn more about Lead Intelligence");
+	  print("Entering Learn more about Lead Intelligence");
 	  needHelp_learnMoreAboutLeadIntelligence(numTry,winHandleBefore);
 	  System.out.println(" v");
-	  System.out.print("Testing lunch video");
+	  print("Testing lunch video");
 	  needHelp_lunchVideo(numTry);
 	  System.out.println(" v");
-	  System.out.print("Going forward to overview.");
+	  print("Going forward to overview.");
 	  needHelp_goingForwardToOverview(numTry);
 	  System.out.println(" v");
-	  System.out.print("Going forward to Lead Scoring.");
+	  print("Going forward to Lead Scoring.");
 	  needHelp_goingForwardToLeadScoring(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Learn more about Lead Scoring");
+	  print("Entering Learn more about Lead Scoring");
 	  needHelp_learnMoreAboutLeadScoring(numTry,winHandleBefore);
 	  System.out.println(" v");
-	  System.out.print("Going forward to recent visitors and leads.");
+	  print("Going forward to recent visitors and leads.");
 	  needHelp_goingForwardToLeadRecentVisitAndLeads(numTry);
 	  System.out.println(" v");
-	  System.out.print("Going forward to actions.");
+	  print("Going forward to actions.");
 	  needHelp_goingForwardToActions(numTry);
 	  System.out.println(" v");
-	  System.out.print("Going forward to end.");
+	  print("Going forward to end.");
 	  needHelp_goingForwardToEnd(numTry);
 	  System.out.println(" v");
 	 
@@ -186,16 +190,16 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Overview:");
-	  System.out.print("Testing qtips.");
+	  print("Testing qtips.");
 	  overview_qtip(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing drop down list.");
+	  print("Testing drop down list.");
 	  overview_dropDownList(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing total visitors.");
+	  print("Testing total visitors.");
 	  overview_totalVisitors(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing total Leads.");
+	  print("Testing total Leads.");
 	  overview_totaleads(numTry);
 	  System.out.println(" v");
 	  
@@ -206,7 +210,7 @@ public class LeadIntelligence extends TestCase {
   public void editLeadsReport() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting edit leads report:");
+	  print("\n\nTesting edit leads report:");
 	  overview_editLeadsReport(numTry);
 	  System.out.println(" v");
 	  
@@ -218,13 +222,13 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table sort:");
-	  System.out.print("Testing Last Visit Date sort.");
+	  print("Testing Last Visit Date sort.");
 	  tableSort_lastVisitDate(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing name sort.");
+	  print("Testing name sort.");
 	  tableSort_name(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing company sort.");
+	  print("Testing company sort.");
 	  tableSort_company(numTry);
 	  System.out.println(" v");
 	  
@@ -235,7 +239,7 @@ public class LeadIntelligence extends TestCase {
   public void serch() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting search.");
+	  print("\n\nTesting search.");
 	  serch_test(numTry);
 	  System.out.println(" v");
 	  
@@ -246,7 +250,7 @@ public class LeadIntelligence extends TestCase {
   public void showMoreFromThisCompany() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting show more from this company.");
+	  print("\n\nTesting show more from this company.");
 	  showMoreFromThisCompany_test(numTry);
 	  System.out.println(" v");
 	  
@@ -258,10 +262,10 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 
 	  System.out.println("\n\nTesting unwatch watch:");
-	  System.out.print("Testing watch.");
+	  print("Testing watch.");
 	  unwatchWatch_setWatch(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing unwatch.");
+	  print("Testing unwatch.");
 	  unwatchWatch_setUnwatch(numTry);
 	  System.out.println(" v");
 	
@@ -273,10 +277,10 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting hide undo:");
-	  System.out.print("Testing hide.");
+	  print("Testing hide.");
 	  hideUndo_setHide(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing undo.");
+	  print("Testing undo.");
 	  hideUndo_setUndo(numTry);
 	  System.out.println(" v");
 	 
@@ -288,14 +292,19 @@ public class LeadIntelligence extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Lead detail:");
-	  System.out.print("Test Help with this page (Lead Detail page).");
+	  print("Test Help with this page (Lead Detail page).");
 	  String winHandleBefore=leadDetail_helpWithThisPage(numTry);
 	  System.out.println(" v");
-	  System.out.print("Test Search in Salesforce.");
+	  print("Test Search in Salesforce.");
 	  leadDetail_searchInSalesForce(numTry,winHandleBefore);
 	  System.out.println(" v");
 	 
 	  Thread.sleep(3000);
+  }
+  
+  @AfterClass
+  public static void summary(){
+	  driver.close();
   }
   //===============================================================================================
   private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
@@ -735,7 +744,7 @@ public class LeadIntelligence extends TestCase {
 		  assertEquals("help 2/6:",help,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 		  
 		  //Check qtip-tip:
-		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These values highlight how well you’re attracting visitors and converting leads.']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These values highlight how well youï¿½re attracting visitors and converting leads.']")));
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Ideally, you want to see more yellow (visitors with high scores) and less blue (visitors with low scores).']")));
 	  }
 	  catch(Exception e){
@@ -1426,7 +1435,7 @@ public class LeadIntelligence extends TestCase {
 		 	
 		 	 //Restart test
 		 	 numTry++;
-		 	leadDetail_helpWithThisPage(numTry);
+		 	return leadDetail_helpWithThisPage(numTry);
 	  }
 	  
 	  return winHandleBefore;
@@ -1458,7 +1467,25 @@ public class LeadIntelligence extends TestCase {
 	  } 
   }
   
-  //=========================================================================================================
+  //==========================================================================================================
+  private static void print(String action){
+	  FileWriter fstreamWrite=null;
+	  
+	  System.out.print(action);
+	  
+	  try{fstreamWrite = new FileWriter("data/actionStram");
+		 }catch(IOException e) {
+		 	// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 
+		BufferedWriter out = new BufferedWriter(fstreamWrite);
+		try {out.write(action);
+			 out.close();
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+  }
 }
   
   

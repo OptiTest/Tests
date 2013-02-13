@@ -1,6 +1,10 @@
 package com.optifyTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -23,21 +27,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
 
-@RunWith(BlockJUnit4ClassRunner.class)
-public class DashBoard extends TestCase {
-   public static MainMenu ts=new MainMenu();
-   public static Settings st=new Settings();
-
+  @RunWith(BlockJUnit4ClassRunner.class)
+  public class DashBoard extends TestCase {
+  public static MainMenu ts=new MainMenu();
+  public static Settings st=new Settings();
+  
+  
+  
   //Set test parameters:
   public static ChromeDriverService service;
   public static WebDriver driver;
   Actions builder = new Actions(driver);
   
-  //static String homeAddress=ts.getHomeServer();
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
+  static String setPath="selenium/Linux64/chromedriver";
   static String password=ts.getUserPassword();
-  static String setPath="selenium\\chromedriver.exe";
 
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -58,7 +63,7 @@ public class DashBoard extends TestCase {
   }
   
   public static void dashboardLogIn(WebDriver driver) throws Throwable{
-	  System.out.print("Login to Optify.");
+	  print("Login to Optify.");
 	  
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
@@ -74,13 +79,13 @@ public class DashBoard extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting SEO performance widget:");
-	  System.out.print("Entering Average score.");
+	  print("Entering Average score.");
 	  seoWidget_EnteringAverageScore(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Homepage score.");
+	  print("Entering Homepage score.");
 	  seoWidget_EnteringHomepageScore(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Estimated click value.");
+	  print("Entering Estimated click value.");
 	  seoWidget_EnteringEstimatedClickValue(numTry);
 	  System.out.println(" v");
 	  
@@ -92,28 +97,28 @@ public class DashBoard extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Getting started widget:");
-	  System.out.print("Entering 1.Create your target keywords list.");
+	  print("Entering 1.Create your target keywords list.");
 	  gettingStartedWidget_CreateYourTargetKeywords(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 1.Create your target keywords list LEARN MORE.");
+	  print("Entering 1.Create your target keywords list LEARN MORE.");
 	  gettingStartedWidget_CreateYourTargetKeywords_LEARN_MORE(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 2.Optimize your website pages.");
+	  print("Entering 2.Optimize your website pages.");
 	  gettingStartedWidget_OptimizeYourWebsitPages(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 2.Optimize your website pages LEARN MORE.");
+	  print("Entering 2.Optimize your website pages LEARN MORE.");
 	  gettingStartedWidget_OptimizeYourWebsitPages_LEARN_MORE(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 3.View and manage your leads.");
+	  print("Entering 3.View and manage your leads.");
 	  gettingStartedWidget_ViewAndManageYourLeads(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 3.View and manage your leads LEARN MORE.");
+	  print("Entering 3.View and manage your leads LEARN MORE.");
 	  gettingStartedWidget_ViewAndManageYourLeads_LEARN_MORE(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 4.Create a Twitter campaign.");
+	  print("Entering 4.Create a Twitter campaign.");
 	  gettingStartedWidget_CreateATwitterCampaign(numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering 4.Create a Twitter campaign LEARN MORE.");
+	  print("Entering 4.Create a Twitter campaign LEARN MORE.");
 	  gettingStartedWidget_CreateATwitterCampaign_LEARN_MORE(numTry);
 	  System.out.println(" v");
 	  
@@ -129,16 +134,16 @@ public class DashBoard extends TestCase {
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 	  
 	  System.out.println("\n\nTesting Twitter for Business widget:");
-	  System.out.print("Entering title link.");
+	  print("Entering title link.");
 	  twitterForBusinessWidget_titleLink(numTry);
 	  System.out.println(" v");	  
-	  System.out.print("Sending twitt.");
+	  print("Sending twitt.");
 	  twitterForBusinessWidget_sendingTwitt(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Social monitor.");
+	  print("Testing Social monitor.");
 	  twitterForBusinessWidget_socialMonitor(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing drop down list.");
+	  print("Testing drop down list.");
 	  twitterForBusinessWidget_dropDownList(numTry);
 	  System.out.println(" v");
 	  
@@ -154,19 +159,19 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nTesting Keyword Performance widget:");
 	  
-	  System.out.print("Entering title link.");
+	  print("Entering title link.");
 	  keywordPerformanceWidget_EnteringTitleLink(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing rank1 label.");
+	  print("Testing rank1 label.");
 	  keywordPerformanceWidget_rank1(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing rank2 label.");
+	  print("Testing rank2 label.");
 	  keywordPerformanceWidget_rank2(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing drop down list (search engine).");
+	  print("Testing drop down list (search engine).");
 	  keywordPerformanceWidget_searchEngineDropDawn(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing drop down list (Lists).");
+	  print("Testing drop down list (Lists).");
 	  keywordPerformanceWidget_dropDownList(numTry);
 	  System.out.println(" v");
 	  
@@ -180,16 +185,16 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nPage Optimization widget:");
 	  
-	  System.out.print("Entering title link.");
+	  print("Entering title link.");
 	  pageOptimizationWidget_enteringTitleLink(numTry);
 	  System.out.println(" v"); 
-	  System.out.print("Entering Optify page score link.");
+	  print("Entering Optify page score link.");
 	  pageOptimizationWidget_enteringPageScoreLink(numTry);
 	  System.out.println(" v");  
-	  System.out.print("Testing drop down list.");
+	  print("Testing drop down list.");
 	  pageOptimizationWidget_dropDownList(numTry);
 	  System.out.println(" v");  
-	  System.out.print("Testing score bar.");
+	  print("Testing score bar.");
 	  pageOptimizationWidget_testingScoreBar(numTry);
 	  System.out.println(" v");
 	  
@@ -204,16 +209,16 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nLink Opportunities widget:");
 	  
-	  System.out.print("Entering title link.");
+	  print("Entering title link.");
 	  linkOpportunitiesWidget_enteringTitleLink(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing drop down list (View).");
+	  print("Testing drop down list (View).");
 	  linkOpportunitiesWidget_dropDownListView(numTry);
 	  System.out.println(" v"); 
-	  System.out.print("Testing drop down list (List).");
+	  print("Testing drop down list (List).");
 	  linkOpportunitiesWidget_dropDownList(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Add more URLs.");
+	  print("Testing Add more URLs.");
 	  linkOpportunitiesWidget_addMoreURLs(numTry);
 	  System.out.println(" v");
 	  
@@ -232,10 +237,10 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nLink Opportunities widget:");
 	  
-	  System.out.print("Entering title link.");
+	  print("Entering title link.");
 	  keywordTrendsWidget_enteringTitleLink(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing display graph.");
+	  print("Testing display graph.");
 	  keywordTrendsWidget_testingDisplayGraph(numTry);
 	  System.out.println(" v");
 	  
@@ -250,17 +255,16 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nWebsite Feed widget:");
 	  
-	  System.out.print("Testing drop down list (Score set used).");
+	  print("Testing drop down list (Score set used).");
 	  websiteFeedWidget_dropDownListScore(numTry);
 	  System.out.println(" v");
 	  
-	  //Test record:
-		try{  if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li"))).getText().equals("No website activity at the moment but we'll keep you posted.")){
-			  
-			  System.out.print("Testing lead detail link.");
+	  //Test record:  
+	  try{if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/strong"))).getText().equals("No website activity at the moment but we'll keep you posted.")){
+			  print("Testing lead detail link.");
 			  websiteFeedWidget_leadDetailLink(numTry);
 			  System.out.println(" v");
-		      System.out.print("Testing Watch button.");
+		      print("Testing Watch button.");
 		      websiteFeedWidget_watchButton(numTry);
 		      System.out.println(" v");
 		  }
@@ -268,28 +272,28 @@ public class DashBoard extends TestCase {
 	  catch(Exception ex){
 		  throw ex;
 	  }
+	  
+	  if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/strong"))).getText().equals("No website activity at the moment but we'll keep you posted.")){
 		      try{wait.until(presenceOfElementLocated(By.linkText("WATCH"))).click();
 		      }
 		      catch(Exception ex){
-		    	  try{wait.until(presenceOfElementLocated(By.linkText("UNWATCH"))).click();
-			    	  Thread.sleep(3000);
-				      wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[3]/span[2]/a"))).click();
-				      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());
-				      driver.get(homeAddress);
-			      
-				      System.out.print("Testing hide button.");
-				      websiteFeedWidget_hideButton(numTry);
-				      System.out.println(" v");
-				      System.out.print("Testing Unwatch button.");
-				      websiteFeedWidget_hideButtonUnwatchButton(numTry);
-				      System.out.println(" v");
-		    	  }
-		    	  catch(Exception e){
-		    			  assertEquals("Website feed:","No website activity at the moment but we'll keep you posted.",wait.until(presenceOfElementLocated(By.xpath("//ul[@class='content website_feed data-feed data-list']/li"))).getText());
-		    	  }
-	      }
+		    	  wait.until(presenceOfElementLocated(By.linkText("UNWATCH"))).click();
+		    	  Thread.sleep(3000);
+			      builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[3]/span[2]/a")))).perform();
+			      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());
+			      driver.get(homeAddress);
 		      
-		  Thread.sleep(3000);
+			      print("Testing hide button.");
+			      websiteFeedWidget_hideButton(numTry);
+			      System.out.println(" v");
+			      print("Testing Unwatch button.");
+			      websiteFeedWidget_hideButtonUnwatchButton(numTry);
+			      System.out.println(" v");
+	      }
+
+	  }
+	
+	  Thread.sleep(3000);
   }
   
   @Test
@@ -298,13 +302,13 @@ public class DashBoard extends TestCase {
 	  goBase();
 	  
 	  System.out.println("\n\nWebsite Feed widget:");
-	  System.out.print("Testing keywrods check box.");
+	  print("Testing keywrods check box.");
 	  alertsWidget_keywrodsCheckBox(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Leads check box.");
+	  print("Testing Leads check box.");
 	  alertsWidget_leadsCheckBox(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing records.");
+	  print("Testing records.");
 	  alertsWidget_records(numTry);
 	  System.out.println(" v");
 	  
@@ -323,16 +327,16 @@ public class DashBoard extends TestCase {
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']")));
 	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]")).getAttribute("id");
 	
-	  System.out.print("Testing removing widget.");
+	  print("Testing removing widget.");
 	  addWidgets_removingWidget(getId,numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing add widget.");
+	  print("Testing add widget.");
 	  addWidgets_removingWidget_addWidget(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing menu widget feature collapse.");
+	  print("Testing menu widget feature collapse.");
 	  getId=addWidgets_menuWidgetFeatureCollapse(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing menu widget feature edit.");
+	  print("Testing menu widget feature edit.");
 	  addWidgets_menuWidgetFeatureEdit(getId,numTry);
 	  System.out.println(" v");
 	  
@@ -347,61 +351,61 @@ public class DashBoard extends TestCase {
 	  
 	  System.out.println("\n\nWelcome toolbar:");
 	  
-	  System.out.print("Testing Collapse/Expand.");
+	  print("Testing Collapse/Expand.");
 	  welcomeToolbar_collapseExpand(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Add Keywords.");
+	  print("Testing Add Keywords.");
 	  welcomeToolbar_addKeywords(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Send an email.");
+	  print("Testing Send an email.");
 	  welcomeToolbar_sendAnEmail(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing View Traffic.");
+	  print("Testing View Traffic.");
 	  welcomeToolbar_viewTraffic(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Create a report.");
+	  print("Testing Create a report.");
 	  welcomeToolbar_createAReport(numTry);
 	  System.out.println(" v");
 	  
 	  //Test links:
-	  System.out.print("Entering Take me to the Help home page link.");
+	  print("Entering Take me to the Help home page link.");
 	  welcomeToolbar_takeMeToTheHelHomePageLink(winHandleBefore,numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Help me customize my dashboard link.");
+	  print("Entering Help me customize my dashboard link.");
 	  welcomeToolbar_HelpMeCustomizeMyDashboardLink(winHandleBefore,numTry);
 	  System.out.println(" v");
-	  System.out.print("Entering Submit a support ticket link.");
+	  print("Entering Submit a support ticket link.");
 	  welcomeToolbar_SubmitASupportTicketLink(winHandleBefore,numTry);
 	  System.out.println(" v");
 	  
 	  //Test see more actions:
-	  System.out.print("Testing Add keywords.");
+	  print("Testing Add keywords.");
 	  welcomeToolbar_moreAddKeywords(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Add pages.");
+	  print("Testing Add pages.");
 	  welcomeToolbar_moreAddPages(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Add Urls.");
+	  print("Testing Add Urls.");
 	  welcomeToolbar_moreAddUrls(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Import Contacts.");
+	  print("Testing Import Contacts.");
 	  welcomeToolbar_moreImportContacts(numTry);
 	  System.out.println(" v");
 	  //Create an Email:
 	  //Send an email:
-	  System.out.print("Testing Create a Landing Page.");
+	  print("Testing Create a Landing Page.");
 	  welcomeToolbar_moreCreateALandingPage(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Create a Lead Score.");
+	  print("Testing Create a Lead Score.");
 	  welcomeToolbar_moreCreateALeadScore(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing View your Traffic.");
+	  print("Testing View your Traffic.");
 	  welcomeToolbar_moreViewYourTraffic(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Create an alert.");
+	  print("Testing Create an alert.");
 	  welcomeToolbar_moreCreateAnAlert(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Create a report.");
+	  print("Testing Create a report.");
 	  welcomeToolbar_moreCreateAReport(numTry);
 	  System.out.println(" v");
 	  
@@ -410,7 +414,8 @@ public class DashBoard extends TestCase {
   
   @AfterClass
   public static void summary(){
-	  printSummary();
+	 driver.close();
+	 driver.quit();
   }
   
   //===============================================================================================
@@ -514,7 +519,7 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.linkText("1. Create your target keywords list"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.linkText("1. Create your target keywords list")))).perform();
 		  assertEquals("1. Create your target keywords list","Keywords | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -648,7 +653,7 @@ public class DashBoard extends TestCase {
   }
   
   //=========================================================================================================
-  private void gettingStartedWidget_CreateATwitterCampaign(int numTry){
+  private void gettingStartedWidget_CreateATwitterCampaign(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -656,12 +661,12 @@ public class DashBoard extends TestCase {
 		  assertEquals("4. Create a Twitter campaign","Twitter for Business | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
-	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+	  catch(Exception ex){
+		 if(numTry>3)
+			 	throw ex;
 			 
-			 numTry++;
-			 gettingStartedWidget_CreateATwitterCampaign(numTry);
+		 numTry++;
+		 gettingStartedWidget_CreateATwitterCampaign(numTry);
 	  }
   }
   
@@ -670,8 +675,7 @@ public class DashBoard extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{wait.until(presenceOfElementLocated(By.linkText("Average score")));
-	  wait.until(presenceOfElementLocated(By.linkText("Average score"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.linkText("Average score")))).perform();
 		  assertEquals("Average score","Pages | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -728,7 +732,7 @@ public class DashBoard extends TestCase {
 	  goBase();
 	  Thread.sleep(5000);
 	  
-	  try{wait.until(presenceOfElementLocated(By.className("keyword_widget_title"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.className("keyword_widget_title")))).perform();
 		  assertEquals("Keyword performance","Keywords | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -846,8 +850,7 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.linkText("Page optimization")));
-		  driver.findElement(By.linkText("Page optimization")).click();
+	  try{builder.click(driver.findElement(By.linkText("Page optimization"))).perform();
 		  assertEquals("page optimization","Pages | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -934,8 +937,7 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.linkText("Link opportunities")));
-		  wait.until(presenceOfElementLocated(By.linkText("Link opportunities"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.linkText("Link opportunities")))).perform();
 		  assertEquals("Link opportunities","Links | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -1020,7 +1022,7 @@ public class DashBoard extends TestCase {
 	  goBase();
 	  
 	  try{wait.until(presenceOfElementLocated(By.linkText("Keyword trends")));
-		  wait.until(presenceOfElementLocated(By.linkText("Keyword trends"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.linkText("Keyword trends")))).perform();
 		  assertEquals("Keyword trends","Keyword Reports | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -1038,11 +1040,11 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='chartMessage']")));
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='body ui-corner-bottom']")));
 		  try{assertEquals("Displaying graph","There are no results matching your filter settings",driver.findElement(By.xpath("//div[@class='chartMessage']")).getText());
 			throw new Exception("Graph can't be display");        
 		  }
-		  finally{}
+		  catch(Exception e){}
 	  }
 	  catch(Exception e){
 			 if(numTry>3)
@@ -1061,7 +1063,7 @@ public class DashBoard extends TestCase {
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div/div/span[2]")))).perform();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]")))).perform();
 		  Thread.sleep(5000);
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[4]/div/div/span[2]")))).perform();
 		  Thread.sleep(3000);
@@ -1100,8 +1102,7 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")));
-	  	  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")))).perform();
+	  try{builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")))).perform();
 	  }
   	  catch(Exception e){
 		 if(numTry>3)
@@ -1182,10 +1183,8 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-widget-widget']/a/span")));
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-widget-widget']/a/span"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//button[@value='0']")));
-		  wait.until(presenceOfElementLocated(By.xpath("//button[@value='0']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-widget-widget']/a/span")))).perform();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@value='0']")))).perform();
 	  }
 	  catch(Exception e){
 		 if(numTry>3)
@@ -1221,10 +1220,8 @@ public class DashBoard extends TestCase {
 				 throw e;
 			 
 			 numTry++;
-			 addWidgets_menuWidgetFeatureCollapse(numTry);
+			 return addWidgets_menuWidgetFeatureCollapse(numTry);
 	  }
-	  
-	  return getId;
   }
   
   //=========================================================================================================
@@ -1257,10 +1254,10 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")))).perform();
 		  Thread.sleep(5000); 
 		  //Add check change value element when collapse.
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='fluidwrapper']/div[2]/div/div/span")))).perform();
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
@@ -1277,8 +1274,8 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='add_keywords orange track button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only expanded']/span")))).perform();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
 		  assertEquals("Add keywords","Keywords | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -1510,7 +1507,7 @@ public class DashBoard extends TestCase {
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[9]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='Create a Landing Page']")))).perform();
 		  assertEquals("Create a Landing Page","Create Landing Page | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 		  Thread.sleep(3000);
@@ -1531,8 +1528,8 @@ public class DashBoard extends TestCase {
 	  
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
-		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[10]"))).click();
+		  Thread.sleep(2000);
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='Create a Lead Score']")))).perform();
 		  assertEquals("Create a Lead Score","Lead Scoring | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 		  Thread.sleep(3000);
@@ -1554,7 +1551,7 @@ public class DashBoard extends TestCase {
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[12]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='View your Traffic']")))).perform();
 		  assertEquals("View your Traffic","Lead Intelligence | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 		  Thread.sleep(3000);
@@ -1577,7 +1574,7 @@ public class DashBoard extends TestCase {
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[13]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='Create an Alert']")))).perform();
 		  assertEquals("Create an alert","Alerts | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 		  Thread.sleep(3000);
@@ -1599,7 +1596,7 @@ public class DashBoard extends TestCase {
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[15]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='Create a Report']")))).perform();
 		  assertEquals("Create a report","Report | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -1617,7 +1614,7 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.linkText("Twitter for Business"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")))).perform();
 		  assertEquals("Twitter for Business","Twitter for Business | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
@@ -1811,7 +1808,13 @@ public class DashBoard extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);	
 	  goBase();
 	  
-	  try{if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/div/ul/li/strong"))).getText().equals("No alerts now but we'll keep you posted."));
+	  try{try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='list_item alert_row lead_alert']/div/a"))).click();
+	  		  assertEquals("Lead detail:","Lead Detail | Optify",driver.getTitle());
+	  		  driver.get(homeAddress);
+	  		  Thread.sleep(3000);
+	 	  }
+		  catch(Exception e){wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/div/ul/li/strong"))).getText().equals("No alerts now but we'll keep you posted.");
+		  }
 			//Do some test.
 		}
 		catch(Exception e){
@@ -1821,14 +1824,26 @@ public class DashBoard extends TestCase {
 			 numTry++;
 			 alertsWidget_records(numTry);
 		}
- }
+  }
   
-  //=========================================================================================================
-  private static void printSummary(){
-	  System.out.println("\n\n");
-	  System.out.println("=========================================================");
-	  System.out.println("                          Summary");
-	  System.out.println("=========================================================\n");
+  //==========================================================================================================
+  private static void print(String action){
+	  FileWriter fstreamWrite=null;
+	  
+	  System.out.print(action);
+	  
+	  try{fstreamWrite = new FileWriter("data/actionStram");
+		 }catch(IOException e) {
+		 	// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 
+		BufferedWriter out = new BufferedWriter(fstreamWrite);
+		try {out.write(action);
+			 out.close();
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
   }
 } 
 

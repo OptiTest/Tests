@@ -19,7 +19,7 @@ public class Data {
 	
 	//Data constructor:
 	public Data(){
-	    this.file=new File("data\\data.txt");
+	    this.file=new File("data/data");
 	    this.userName="";
 	    this.password="";
 	    this.url="";
@@ -29,8 +29,9 @@ public class Data {
 	public void saveUserInformation(){
 		String info=(this.userName+"\r\n"+this.password+"\r\n"+this.url);
 		Charset charset = Charset.forName("US-ASCII");
-		try (BufferedWriter writer = Files.newWriter(this.file, charset)) {
+		try{BufferedWriter writer = Files.newWriter(this.file, charset);
 		    writer.write(info, 0, info.length());
+		    writer.close();
 		} catch (IOException x) {
 			JOptionPane.showMessageDialog(null,"Failed to save your information:\n"+x.toString());
 	        System.err.format("IOException: %s%n", x);
@@ -47,7 +48,7 @@ public class Data {
 		int i=0;
         
 		Charset charset = Charset.forName("US-ASCII");
-		try (BufferedReader reader = Files.newReader(this.file, charset)){
+		try {BufferedReader reader = Files.newReader(this.file, charset);
 		     String line = null;
 	         while ((line = reader.readLine())!=null){
 	            info[i]=line.toString();i++; 

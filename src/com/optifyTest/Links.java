@@ -1,6 +1,9 @@
 package com.optifyTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class Links extends TestCase {
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
-  static String setPath="selenium\\chromedriver.exe";
+  static String setPath="selenium/Linux32/chromedriver";
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -58,7 +61,7 @@ public class Links extends TestCase {
 	  
 	  System.out.println("\nStarting Links test:\n");
 	  
-	  System.out.print("\nLogin to Optify.");
+	  print("\nLogin to Optify.");
 	  
 	  //Log in Optify:
 	  driver.get(homeAddress+"/login");
@@ -69,7 +72,7 @@ public class Links extends TestCase {
 	  
 	  System.out.println(" v");
 	  
-	  System.out.print("\n\nEntering Links.");
+	  print("\n\nEntering Links.");
 	  enterToLinks(numTry);
 	  System.out.println(" v");
   }
@@ -78,10 +81,10 @@ public class Links extends TestCase {
   public void addUrls() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting add Urls.");
+	  print("\n\nTesting add Urls.");
 	  addUrls_test(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing add Urls to group.");
+	  print("Testing add Urls to group.");
 	  addUrls_toGroup(numTry);
 	  System.out.println(" v");
 	  
@@ -93,13 +96,13 @@ public class Links extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting filters:");
-	  System.out.print("Add new filter.");
+	  print("Add new filter.");
 	  checkFilters_add(numTry);
 	  System.out.println(" v");
-	  System.out.print("Check received filter values.");
+	  print("Check received filter values.");
 	  checkFilters_checkReceivedValues(numTry);
 	  System.out.println(" v");
-	  System.out.print("Delete filters.");
+	  print("Delete filters.");
 	  checkFilters_delete(numTry);
 	  System.out.println(" v");
 	  Thread.sleep(3000);
@@ -109,7 +112,7 @@ public class Links extends TestCase {
   public void assignToList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting adding url into list:");
+	  print("\n\nTesting adding url into list:");
 	  assignToList_test(numTry);
 	  System.out.println(" v");
 	  
@@ -121,22 +124,22 @@ public class Links extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table sort:");
-	  System.out.print("Testing source sort.");
+	  print("Testing source sort.");
 	  tableSort_source(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing priority sort.");
+	  print("Testing priority sort.");
 	  tableSort_priority(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing Link to my site sort.");
+	  print("Testing Link to my site sort.");
 	  tableSort_linkToMySiteSort(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing link from my site sort.");
+	  print("Testing link from my site sort.");
 	  tableSort_linkFromMySiteSort(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing link to competitors sort.");
+	  print("Testing link to competitors sort.");
 	  tableSort_linkToCompetitorsSort(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing page rank sort.");
+	  print("Testing page rank sort.");
 	  tableSort_pageRank(numTry);
 	  System.out.println(" v");
 	  
@@ -147,7 +150,7 @@ public class Links extends TestCase {
   public void helpWithThisPage() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting helpWithThisPage.");
+	  print("\n\nTesting helpWithThisPage.");
 	  helpWithThisPage_test(numTry);
 	  System.out.println(" v");
 	 
@@ -158,7 +161,7 @@ public class Links extends TestCase {
   public void importLinks() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	 
-	  System.out.print("\n\nTesting import links.");
+	  print("\n\nTesting import links.");
 	  importLinks_test(numTry);
 	  System.out.println(" v");
 	  
@@ -169,7 +172,7 @@ public class Links extends TestCase {
   public void exportCSV() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting export CSV.");
+	  print("\n\nTesting export CSV.");
 	  exportCSV_test(numTry);
 	  System.out.println(" v");
 	 
@@ -180,7 +183,7 @@ public class Links extends TestCase {
   public void exportPDF() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting export PDF.");
+	  print("\n\nTesting export PDF.");
 	  exportPDF_test(numTry);
 	  System.out.println(" v");
 	  
@@ -191,7 +194,7 @@ public class Links extends TestCase {
   public void nextAndPrev() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting next and prev:");
+	  print("\n\nTesting next and prev:");
 	  nextAndPrev_test(numTry);
 	  System.out.println(" v");
 	 
@@ -203,13 +206,13 @@ public class Links extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting show results:");
-	  System.out.print("Testing show fifty.");
+	  print("Testing show fifty.");
 	  showResults_fifty(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing show twentyfive.");
+	  print("Testing show twentyfive.");
 	  showResults_twentyfivey(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing show ten.");
+	  print("Testing show ten.");
 	  showResults_ten(numTry);
 	  System.out.println(" v");
 	  
@@ -221,16 +224,16 @@ public class Links extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting get suggestions:");
-	  System.out.print("Testing Get url suggest.");
+	  print("Testing Get url suggest.");
 	  String getUrl=getSuggestions_getUrlSuggest(numTry);
 	  System.out.println(" v");
-	  System.out.print("Testing save url to test group.");
+	  print("Testing save url to test group.");
 	  getSuggestions_saveUrlToTestGroup(numTry);
 	  System.out.println(" v");
-	  System.out.print("check saved url and test group.");
+	  print("check saved url and test group.");
 	  getSuggestions_checkSaveUrlAndTestGroup(numTry,getUrl);
 	  System.out.println(" v");
-	  System.out.print("Testing delete url and group.");
+	  print("Testing delete url and group.");
 	  getSuggestions_deleteUrlAndGroup(numTry);
 	  System.out.println(" v");
 	  
@@ -239,7 +242,7 @@ public class Links extends TestCase {
   
   @AfterClass
   public static void summary(){
-	  printSummary();
+	  driver.close();
   }
   
   //===============================================================================================
@@ -780,7 +783,16 @@ public class Links extends TestCase {
   private void nextAndPrev_test(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-pager data-pager']//a[text()='2']"))).click();
+	  try{//Prepare for test:
+		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]")))).perform();
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']//label[text()='test']"))).click();
+		  Thread.sleep(2000);
+		  
+		  if(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).isSelected())
+			  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).click();	
+		  
+		  //Start test:
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-pager data-pager']//a[text()='2']"))).click();
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td/span")));
 		  assertEquals("Pgae active number:","2",wait.until(presenceOfElementLocated(By.xpath("//span[@class='active number']"))).getText()); 
 		  
@@ -914,7 +926,7 @@ public class Links extends TestCase {
 				  throw e;
 		 	
 		 	numTry++;
-		 	getSuggestions_getUrlSuggest(numTry);
+		 	return getSuggestions_getUrlSuggest(numTry);
 	  }
 	  
 	  return getUrl;
@@ -1000,14 +1012,23 @@ public class Links extends TestCase {
 	  }
   }
   
- //=========================================================================================================
-  private static void printSummary(){
-	  System.out.println("\n\n");
-	  System.out.println("=========================================================");
-	  System.out.println("                          Summary");
-	  System.out.println("=========================================================\n");
+  //==========================================================================================================
+  private static void print(String action){
+	  FileWriter fstreamWrite=null;
+	  
+	  System.out.print(action);
+	  
+	  try{fstreamWrite = new FileWriter("data/actionStram");
+		 }catch(IOException e) {
+		 	// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 
+		BufferedWriter out = new BufferedWriter(fstreamWrite);
+		try {out.write(action);
+			 out.close();
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
   }
-  
-  //=========================================================================================================
-
 }

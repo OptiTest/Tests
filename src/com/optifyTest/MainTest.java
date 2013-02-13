@@ -1,7 +1,12 @@
 package com.optifyTest;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.Console;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Calendar;
+import java.util.Scanner;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -10,81 +15,123 @@ import org.junit.runner.notification.RunListener;
 
 
 public class MainTest extends Thread{
-	private boolean case1;
-	private boolean case2;
-	private boolean case3;
-	private boolean case4;
-	private boolean case5;
+	//Main test attributes:
+	private boolean case1,  //Test cases.
+	 				case2,
+	 				case3,
+	 				case4,
+	 				case5;
 	
-	public MainTest(boolean select[]){
+	private Report report; //Report 
+	public String []headInformation; //Headline report information.
+	private String setReportSavePath;
+	private String serverPath;
+	private PrintStream oldoutps;
+	
+	//Main test constructor:
+	public MainTest(boolean select[], String serverPath){
+		final int SIZE=10;//Headline report information array size.
 		int i=0;
+		this.headInformation=new String[SIZE];
+		
+		
 		this.case1=select[i];i++;
 		this.case2=select[i];i++;
 		this.case3=select[i];i++;
 		this.case4=select[i];i++;
 		this.case5=select[i];i++;
+		
+		this.serverPath=serverPath;
+		this.oldoutps = System.out;
+		this.setReportSavePath="data/";
 	}
 	
     //=========================================================================
 	public void run(){
-		if(case1)
-			testDashBoard();
+		Result result1=null,result2=null,result3=null,result4=null,result5=null;
 		
-		if(case2)
-			testKeywords();
-		
-		if(case3)
-			testPages();
-		
-		if(case4)
-			testPageDetail();
-		
-		if(case5)
-			testLinks();
+		while(true){
+			setHeadInfo(serverPath);
+			this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
+			
+			if(case1){
+				result1=testDashBoard();
+			}
+			
+			if(case2){
+				result2=testKeywords();
+			}
+			
+			if(case3){
+				result3=testPages();
+			}
+			
+			if(case4){
+				result4=testPageDetail();
+			}
+			
+			if(case5){
+				result5=testLinks();
+			}
+
+			Result resultArr[]={result1,result2,result3,result4,result5};
+			writeReport(resultArr);
+		}
 	}
 		
     //=========================================================================
-	public void testDashBoard(){
+	public Result testDashBoard(){
 		JUnitCore core= new JUnitCore();
 		core.addListener(new TraceListener());
-		 core.run(DashBoard.class);
- 	     //for (Failure failure : result.getFailures()) {
- 	    	//writeReport(result);
- 	      //System.out.println(failure.toString()+"\n\n");
- 	    }
-	
+		
+		//Kill webDriver process
+		cleanTest();
+		
+		return core.run(DashBoard.class);
+    }
 	
 	//=========================================================================
-	public void testKeywords(){
-		 Result result = JUnitCore.runClasses(Keywords.class);
- 	     for (Failure failure : result.getFailures()) {
- 	    	writeReport(result);
- 	      //System.out.println(failure.toString()+"\n\n");
- 	    }
+	public Result testKeywords(){
+		 JUnitCore core= new JUnitCore();
+		 core.addListener(new TraceListener());
+		 
+		//Kill webDriver process
+	    cleanTest();
+		
+		 return core.run(Keywords.class);
 	}
 	
 	//=========================================================================
-	public void testPages(){
-		 Result result = JUnitCore.runClasses(Pages.class);
- 	     for (Failure failure : result.getFailures()) {
- 	      System.out.println(failure.toString()+"\n\n");
- 	    }
+	public Result testPages(){
+		 JUnitCore core= new JUnitCore();
+		 core.addListener(new TraceListener());
+		 
+		//Kill webDriver process
+	    cleanTest();
+		 
+		 return core.run(Pages.class);
 	}
 	
 	//=========================================================================
-	public void testPageDetail(){
-		 Result result = JUnitCore.runClasses(PageDetail.class);
- 	     for (Failure failure : result.getFailures()) {
- 	      System.out.println(failure.toString()+"\n\n");
- 	    }
+	public Result testPageDetail(){
+		 JUnitCore core= new JUnitCore();
+		 core.addListener(new TraceListener());
+		 
+		//Kill webDriver process
+		cleanTest();
+
+		 return core.run(PageDetail.class);
 	}
 	
 	//=========================================================================
-	public void testLinks(){
-		 Result result = JUnitCore.runClasses(Links.class);
- 	     for (Failure failure : result.getFailures()) {
- 	      System.out.println(failure.toString()+"\n\n");
- 	    }
+	public Result testLinks(){
+		 JUnitCore core= new JUnitCore();
+		 core.addListener(new TraceListener());
+		 
+		//Kill webDriver process
+		cleanTest();
+		
+		 return JUnitCore.runClasses(Links.class);
 	}
 	
 	//=========================================================================
@@ -113,54 +160,108 @@ public class MainTest extends Thread{
 	}
 	
 	//=========================================================================
-	private void writeReport(Result result){
-		Object[]failure = null;
-		failure=result.getFailures().toArray();
+	private void writeReport(Result result[]){
+		int numOfTest=0;
+		int numOfFailure=0;
+		double timeInSec=0;
 		
-		for(int i=0;i<failure.length;i++){
-			System.out.println(failure[i].toString()+"\n");
-		    System.out.println(result.getFailureCount()+"\n");
-		    System.out.println(result.getIgnoreCount()+"\n");
-		    System.out.println(result.getRunTime()+"\n");
-		    System.out.println(result.wasSuccessful()+"\n");
-		    System.out.println(result.getClass()+"\n");
+		final int SIZE=result.length;
+		
+		for(int i=0;i<SIZE;i++){
+			if(result[i]!=null){
+				numOfTest+=result[i].getRunCount();
+				numOfFailure+=result[i].getFailureCount();
+				timeInSec=result[i].getRunTime();
+			}
 		}
+		
+		int numOfSuccess=(numOfTest-numOfFailure);
+		
+		if(numOfTest!=0){
+			double rate=((double)numOfSuccess/(double)numOfTest);
+			this.headInformation[6]=Integer.toString((int)(rate*100))+"%";
+		}
+		else{this.headInformation[6]="N/A";
+		}
+		
+		this.headInformation[4]=Integer.toString(numOfTest);
+		this.headInformation[5]=Integer.toString(numOfFailure);
+		
+		//Set time results:
+		timeInSec/=3600;
+		int hour=(int)(timeInSec/3600);
+		int min=(int)(timeInSec/60);
+		int sec=(int)(timeInSec%60);
+		
+		this.headInformation[7]=hour+":"+min+":"+sec;
+		//Generate the report:
+		report.createReport();
+		System.setOut(this.oldoutps); 
+		
 	}
 	
 	//=========================================================================
 	public class TraceListener extends RunListener {
 	    public void testFailure(Failure failure) throws java.lang.Exception {
 	    	PrintStream oldoutps = System.out; //get the current output //stream
-
-	    	try {FileOutputStream outfos = new FileOutputStream("data\\Test.html"); //create new //output stream
-	    		 PrintStream newoutps = new PrintStream(outfos); //create new output stream
-	    		 System.setOut(newoutps); //set the output stream
-	    		 System.out.print("<html><head><title>HTML Online Editor Sample</title>"+
-	                              "</head><body><table border='1' cellpadding='1' cellspacing='1' dir='ltr' style='width: 477px; height: 107px;'>"+
-	    				          "<tbody><tr><td><span style='color: rgb(255, 255, 255);'><span style='background-color: rgb(173, 216, 230);'>Optify automatio suit report</span></span></td>" +
-	    				          "<td><span style='color: rgb(255, 255, 255);'><span style='background-color: rgb(173, 216, 230);'>&nbsp;</span></span></td>"+
-	    				          "</tr><tr><td>&nbsp;</td><td>"+failure.getTrace().toString()+"</td></tr><tr><td></td><td></td></tr><tr><td>&nbsp;</td><td>"+
-	    				          "</td></tr></tbody></table></body></html>");
-	    		 System.setOut(oldoutps); //for resetting the output stream
-	    	} 
-	    	catch (Exception e) {
-	    		System.out.println("some error");
-	    	}
 	    	
-	    	System.out.println("Test Header:");
-	    	System.out.println(failure.getTestHeader().toString()+"\n\n\n");
-	    	System.out.println("Get Message:");
-	    	System.out.println(failure.getMessage().toString()+"\n\n\n");
-	    	System.out.println("Get Class:");
-	    	System.out.println(failure.getClass().toString()+"\n\n\n");
-	    	System.out.println("Get discription:");
-	    	System.out.println(failure.getDescription().toString()+"\n\n\n");
-	    	System.out.println("Get excepion:");
-	    	System.out.println(failure.getException().toString()+"\n\n\n");
-	    	System.out.println("Get trace:");
-	    	System.out.println(failure.getTrace().toString()+"\n");
-	    	
+	    	report.addFailure(failure);
+	    	System.setOut(oldoutps); 
 	    }
 	 }
+	
+	//Generate today date======================================================
+	private String getTodayDate(){
+		Calendar todayDate=Calendar.getInstance();
+		
+		return Integer.toString(todayDate.get(Calendar.MONTH)+1)+"/"+
+			   Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH))+"/"+
+			   Integer.toString(todayDate.get(Calendar.YEAR));
+	}
+	
+	//Generate correct time======================================================
+	private String getTime(){
+		String min,hour="";
+		Calendar todayDate=Calendar.getInstance();
+		
+		if(todayDate.get(Calendar.MINUTE)<10)
+			min="0"+Integer.toString(todayDate.get(Calendar.MINUTE));
+		else
+			min=Integer.toString(todayDate.get(Calendar.MINUTE));
+					
+		if(todayDate.get(Calendar.HOUR_OF_DAY)<10)
+			hour="0"+Integer.toString(todayDate.get(Calendar.HOUR_OF_DAY));
+		else
+			hour=Integer.toString(todayDate.get(Calendar.HOUR_OF_DAY));
+		
+		return hour+":"+min;
+	}
+	//=========================================================================
+	private void setHeadInfo(String serverPath){
+		int i=0;
+		
+		//Fill Head line report information:
+		this.headInformation[i]=serverPath;i++;
+		this.headInformation[i]=getTodayDate();i++;
+		this.headInformation[i]=getTime();i++;
+		this.headInformation[i]="Google Chrome 23.0m";i++;
+		this.headInformation[i]="0";i++;
+		this.headInformation[i]="0";i++;
+		this.headInformation[i]="0";i++;
+		this.headInformation[i]="0";i++;
+		this.headInformation[i]="N/A";i++;
+		this.headInformation[i]="N/A";i++;
+		
+	}
+	
+	//Clean Finished test======================================================
+	private void cleanTest(){
+		 try {Runtime.getRuntime().exec("killall chromedriver");
+		  } 
+		  catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		  }
+	}
 }
 

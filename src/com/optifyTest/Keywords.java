@@ -1,6 +1,9 @@
 package com.optifyTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -35,14 +38,16 @@ public class Keywords extends TestCase {
     static String homeAddress=st.getServerUrl();
     static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
-    static String setPath="selenium\\chromedriver.exe";
+    static String setPath="selenium/Linux64/chromedriver";
     String keyWord="";
     String keyWordUrl="";
     
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
-    service = new ChromeDriverService.Builder()
+    int numTry=0;
+    
+	service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
         .build();
@@ -53,40 +58,48 @@ public class Keywords extends TestCase {
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
 	
-	enterToKeywords();
+	print("\nLogin to Optify.");
+	enterToKeywords(numTry);
   }
   
-  public static void enterToKeywords() throws Throwable{
+  public static void enterToKeywords(int numTry) throws Throwable{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
 	  
-	  System.out.print("\nLogin to Optify.");
-	  
-	  driver.get(homeAddress+"/login");
-	  driver.findElement(By.id("j_username")).sendKeys(userName);
-	  driver.findElement(By.id("j_password")).sendKeys(password);
-	  driver.findElement(By.id("login_button")).click();
-	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
-	  
-	  System.out.println(" v");
-	  
-	  System.out.print("\n\nEntering to Keywords page.");
-	  
-	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
-	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li/a"))).click();
-	  assertEquals("Keywords page","Keywords | Optify",driver.getTitle());
-	  
-	  System.out.println(" v");
-	  Thread.sleep(3000);
+	  try{driver.get(homeAddress+"/login");
+		  driver.findElement(By.id("j_username")).sendKeys(userName);
+		  driver.findElement(By.id("j_password")).sendKeys(password);
+		  driver.findElement(By.id("login_button")).click();
+		  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
+		  
+		  System.out.println(" v");
+		  
+		  print("\n\nEntering to Keywords page.");
+		  
+		  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
+		  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
+		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li/a"))).click();
+		  assertEquals("Keywords page","Keywords | Optify",driver.getTitle());
+		  
+		  System.out.println(" v");
+	  }
+	  catch(Exception e){
+		  if(numTry>3)
+			  throw e;
+ 
+		  numTry++;
+		  enterToKeywords(numTry);
+	  }
+		  
+		  Thread.sleep(3000);
   }
   
   @Test
   public void helpWithThisPage() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("Entering Help with this page.");
+	  print("Entering Help with this page.");
 	  helpWithThisPage_link(numTry);
 	  System.out.println(" v");
   }
@@ -97,13 +110,13 @@ public class Keywords extends TestCase {
 	  Calendar todayDate=Calendar.getInstance();
 	  
 	  System.out.println("\n\nTesting Keywords page Calendar:");
-	  System.out.print("Testing 7d dates.");
+	  print("Testing 7d dates.");
 	  calendar_7d(numTry,todayDate);
 	  System.out.println(" v");
-	  System.out.print("Testing 30d dates.");
+	  print("Testing 30d dates.");
 	  calendar_30d(numTry,todayDate);
 	  System.out.println(" v");
-	  System.out.print("Testing 24h dates.");
+	  print("Testing 24h dates.");
 	  calendar_24h(numTry,todayDate);
 	  System.out.println(" v");
 	  
@@ -115,10 +128,10 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Keywords page Overview:");
-	  System.out.print("Testing Visits from Keywords.");
+	  print("Testing Visits from Keywords.");
 	  overview_visitsFromKeywords(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing Estimated Click Value.");
+	  print("Testing Estimated Click Value.");
 	  overview_estimatedClickValue(numTry); 
 	  System.out.println(" v");
   }
@@ -127,13 +140,13 @@ public class Keywords extends TestCase {
   public void testView() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 		 
-	  System.out.print("\nTesting view summary.");
+	  print("\nTesting view summary.");
 	  testView_summary(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing view competitor.");
+	  print("Testing view competitor.");
 	  testView_competitor(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing view performance.");
+	  print("Testing view performance.");
 	  testView_performance(numTry); 
 	  System.out.println(" v");
 	  
@@ -144,7 +157,7 @@ public class Keywords extends TestCase {
   public void importKeywordList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\nTesting Import keyword list.");
+	  print("\nTesting Import keyword list.");
 	  importKeywordList_get(numTry); 
 	  System.out.println(" v");
 	  
@@ -155,7 +168,7 @@ public class Keywords extends TestCase {
   public void exportKeywordList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	 
-	  System.out.print("\nTesting export keyword list.");
+	  print("\nTesting export keyword list.");
 	  exportKeywordList_get(numTry); 
 	  System.out.println(" v");
   }
@@ -164,7 +177,7 @@ public class Keywords extends TestCase {
   public void editKeywordsReport() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 		 
-	  System.out.print("\nTesting edit keywords report.");
+	  print("\nTesting edit keywords report.");
 	  editKeywordsReport_set(numTry); 
 	  System.out.println(" v");
 	  
@@ -176,13 +189,13 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 		
 	  System.out.print("\n\nTesting ranks:\n");
-	  System.out.print("Testing left slider rank.");
+	  print("Testing left slider rank.");
 	  testRanks_setLeftSlide(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing Right slider rank.");
+	  print("Testing Right slider rank.");
 	  testRanks_setRightSlide(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing keyword rank.");
+	  print("Testing keyword rank.");
 	  testRanks_keyword(numTry); 
 	  System.out.println(" v");
 	    
@@ -194,10 +207,10 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Add Keywords:");
-	  System.out.print("Testing Add keyword & saving to test group.");
+	  print("Testing Add keyword & saving to test group.");
 	  addKeyword_addAndSaveToGroup(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing Add keyword.");
+	  print("Testing Add keyword.");
 	  addKeyword_add(numTry); 
 	  System.out.println(" v");
 	  
@@ -207,17 +220,25 @@ public class Keywords extends TestCase {
   @Test 
   public void getSuggestions() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  System.out.println("\n\nTesting Get suggestions:");
-	  System.out.print("Testing Get suggestion popup frame.");
-	  getSuggestions_popUp(numTry); 
-	  System.out.println(" v");
-	  System.out.print("Testing saveing suggested keyword.");
-	  getSuggestions_savingSuggestKeywords(numTry); 
-	  System.out.println(" v");
-	  System.out.print("Testing saveing suggested Url.");
-	  getSuggestions_savingSuggestUrl(numTry); 
-	  System.out.println(" v");
+	  try{System.out.println("\n\nTesting Get suggestions:");
+	      print("Testing Get suggestion popup frame.");
+		  getSuggestions_popUp(numTry); 
+		  System.out.println(" v");
+		  print("Testing saveing suggested keyword.");
+		  getSuggestions_savingSuggestKeywords(numTry); 
+		  System.out.println(" v");
+		  print("Testing saveing suggested Url.");
+		  getSuggestions_savingSuggestUrl(numTry); 
+		  System.out.println(" v");
+	  }
+	  catch(Exception e){
+		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@aria-labelledby='ui-dialog-title-keyword_suggestions']/div/a/span"))).click();
+		  }
+		  catch(Exception ex){}
+		  throw e;
+	  }
 	
 	  Thread.sleep(3000);
   }
@@ -227,7 +248,7 @@ public class Keywords extends TestCase {
  public void tableSearch() throws Exception{
 	 int numTry=0; //Counter the number of attempts.
 	 
-	 System.out.print("\n\nTesting table search...");
+	 print("\n\nTesting table search...");
 	 tableSearch_go(numTry); 
 	 System.out.println(" v");
 	  
@@ -240,19 +261,19 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 		 
 	  System.out.println("\n\nTesting table actions");
-	  System.out.print("Testing saving keywords to group.");
+	  print("Testing saving keywords to group.");
 	  tableActions_saveKeywordToGroup(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing Google view results.");
+	  print("Testing Google view results.");
 	  tableActions_googleViewResults(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Testing Twitter view results.");
+	  print("Testing Twitter view results.");
 	  tableActions_twitterViewResults(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Testing Bing view results.");
+	  print("Testing Bing view results.");
 	  tableActions_bingViewResults(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Testing Yahoo! view results.");
+	  print("Testing Yahoo! view results.");
 	  tableActions_yahooViewResults(numTry,winHandleBefore); 
 	  System.out.println(" v");
 	  
@@ -264,10 +285,10 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting search engines:");
-	  System.out.print("Testing search engines replacing.");
+	  print("Testing search engines replacing.");
 	  searchEngines_searchEngineReplacing(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing add more search engines.");
+	  print("Testing add more search engines.");
 	  searchEngines_addMoreSearchEngines(numTry); 
 	  System.out.println(" v");
 	  
@@ -280,52 +301,52 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting need help:");
-	  System.out.print("Testing opeaning need help.");
+	  print("Testing opeaning need help.");
 	  needHelp_openHelp(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing opeaning video.");
+	  print("Testing opeaning video.");
 	  needHelp_openVideo(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Entering Learn more about keywords.");
+	  print("Entering Learn more about keywords.");
 	  needHelp_learnMoreAboutKeywords(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to Overview.");
+	  print("Testing going forward to Overview.");
 	  needHelp_forwordOverview(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing watch a video on keywords.");
+	  print("Testing watch a video on keywords.");
 	  needHelp_watchAVideoOnKeywords(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Entering Learn more about keywords.");
+	  print("Entering Learn more about keywords.");
 	  needHelp_learnMoreAboutKeywords2(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Entering Optify Best Practices: Choosing Target keywords.");
+	  print("Entering Optify Best Practices: Choosing Target keywords.");
 	  needHelp_optifyBestPractices(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to Keyword list.");
+	  print("Testing going forward to Keyword list.");
 	  needHelp_forwordKeywordList(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to Add keyword.");
+	  print("Testing going forward to Add keyword.");
 	  needHelp_forwordAddKeyword(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to Get Suggestions.");
+	  print("Testing going forward to Get Suggestions.");
 	  needHelp_forwordGetSuggestions(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to table actions.");
+	  print("Testing going forward to table actions.");
 	  needHelp_forwordTableActions(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to keyword groups.");
+	  print("Testing going forward to keyword groups.");
 	  needHelp_forwordKeywordGroup(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to keyword View.");
+	  print("Testing going forward to keyword View.");
 	  needHelp_forwordKeywordView(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Testing going forward to final.");
+	  print("Testing going forward to final.");
 	  needHelp_forwordFinal(numTry); 
 	  System.out.println(" v");
-	  System.out.print("Entering Help.");
+	  print("Entering Help.");
 	  needHelp_enterHelp(numTry,winHandleBefore); 
 	  System.out.println(" v");
-	  System.out.print("Entering Next:  Take the Pages Tour.");
+	  print("Entering Next:  Take the Pages Tour.");
 	  needHelp_nextTakePageTour(numTry); 
 	  System.out.println(" v");
 	  
@@ -334,7 +355,8 @@ public class Keywords extends TestCase {
   
   @AfterClass
   public static void summary(){
-	  printSummary();
+	  driver.close();
+	  driver.quit();
   }
   
   //===============================================================================================
@@ -784,7 +806,7 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
   
-	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 		  driver.findElement(By.xpath("//textarea[@id='keyword_add_text']")).sendKeys("cc2");
 		  Thread.sleep(3000);
@@ -804,9 +826,8 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']"))).click();
-		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
-		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']")))).perform();
+		  
 	  }
 	  catch(Exception e){
 		  if(numTry>3)
@@ -822,24 +843,33 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
 
-	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
+	  try{wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
+	  	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
+	  
+		  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
 	  
 		  keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).click();
 		  
 		  Thread.sleep(3000);
-		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div/div/span")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div/div/span[2]")))).perform();
+		  Thread.sleep(3000);
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']")))).perform();
 		  
 		  Thread.sleep(3000);
 		  
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='suggest-keywords-save']"))).click();
+		  
+		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
 		  if(numTry>3)
 			  throw e;
-	 
-		  numTry++;
+	 	  
+ 		  if(wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).isSelected());
+			 wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).click();
+
+                  numTry++;
 		  getSuggestions_savingSuggestKeywords(numTry);
 	  }
   }
@@ -849,8 +879,12 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
 
-	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']")))).perform();
+	  try{getSuggestions_popUp(numTry);
+		  Thread.sleep(3000);
+		  
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword-open-suggest']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='suggest-type']/input[2]"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys(Keys.CLEAR);
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("www.optify.net");
 		  driver.findElement(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
 		  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
@@ -860,7 +894,8 @@ public class Keywords extends TestCase {
 		  
 		  Thread.sleep(3000);
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div/div/span")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']"))).click();
+		  Thread.sleep(2000);
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='test']")))).perform();
 		  
 		  Thread.sleep(3000);
 		  builder.release(wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div/div/span"))));
@@ -872,6 +907,9 @@ public class Keywords extends TestCase {
 			  throw e;
 	 
 		  numTry++;
+		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@aria-labelledby='ui-dialog-title-keyword_suggestions']/div/a/span"))).click();
+		  }
+		  catch(Exception ex){}
 		  getSuggestions_savingSuggestUrl(numTry);
 	  }
   }
@@ -887,7 +925,7 @@ public class Keywords extends TestCase {
   	  }catch(Exception e){}
   		  
 	  try{//Select show All:
-  		  wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']//a[text()='All']"))).click();
+  		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']//a[text()='All']")))).perform();
   		  
   		  //Check for rank slider full mode:
   		  //Set back slider left pin:
@@ -1099,14 +1137,14 @@ public class Keywords extends TestCase {
 	  try{builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']")))).perform();
 		  
 	  	  Thread.sleep(2000);
-		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']//option[text()='US, Bing']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']/option[2]"))).click();
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']")))).perform();
 		  Thread.sleep(5000);
 		  
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']")))).perform();
 		  
 		  Thread.sleep(2000);
-		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']//option[text()='US, Google']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']/option"))).click();
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='search_engine_select']")))).perform();
 		  
 		  Thread.sleep(3000);
@@ -1470,15 +1508,6 @@ public class Keywords extends TestCase {
   	  }
   }
   
-
-  //=========================================================================================================
-  private static void printSummary(){
-	  System.out.println("\n\n");
-	  System.out.println("=========================================================");
-	  System.out.println("                          Summary");
-	  System.out.println("=========================================================\n");
-  }
-  
   //==================================================================================================
   private int returnMonthInt(String month){
 	  final int SUM_MONTH=12;
@@ -1491,5 +1520,25 @@ public class Keywords extends TestCase {
 	  }
 
 	  return -1;
+  }
+  
+  //==========================================================================================================
+  private static void print(String action){
+	  FileWriter fstreamWrite=null;
+	  
+	  System.out.print(action);
+	  
+	  try{fstreamWrite = new FileWriter("data/actionStram");
+		 }catch(IOException e) {
+		 	// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 
+		BufferedWriter out = new BufferedWriter(fstreamWrite);
+		try {out.write(action);
+			 out.close();
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
   }
 }

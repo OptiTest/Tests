@@ -16,12 +16,13 @@ public class Settings extends javax.swing.JFrame {
     /**
      * Creates new form settings
      */
-	Data dat=new Data();
+	private Data dat;
 	
     public Settings() {
     	final int SIZE=2;
     	String []info;
         initComponents();
+        dat=new Data();
         info=dat.loadUserInformation();
         TextUserName.setText(info[0]);
         TextPassword.setText(info[1]);

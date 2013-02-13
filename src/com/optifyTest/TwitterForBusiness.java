@@ -1,10 +1,14 @@
 package com.optifyTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 
 import junit.framework.TestCase;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +37,7 @@ public class TwitterForBusiness extends TestCase  {
 	static String homeAddress=st.getServerUrl();
 	static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
-	static String setPath="selenium\\chromedriver.exe";
+	static String setPath="selenium/Linux32/chromedriver";
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -55,9 +59,9 @@ public class TwitterForBusiness extends TestCase  {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
 	  
-	  System.out.println("\n\nStarting Twitter for business:\n");
+	  print("\n\nStarting Twitter for business:\n");
 	  
-	  System.out.print("\n\nLogin to Optify.");
+	  print("\n\nLogin to Optify.");
 	  
 	  //Log in Optify:
 	  driver.get(homeAddress+"/login");
@@ -88,10 +92,10 @@ public class TwitterForBusiness extends TestCase  {
 	  String message = testMessage();
 	  
 	  System.out.println("\n\nTesting show results:");
-	  System.out.print("Testing send twitt.");
+	  print("Testing send twitt.");
 	  postTwitt_send(numTry,message);
 	  System.out.println(" v");
-	  System.out.print("Testing check twitt.");
+	  print("Checking sent twitt.");
 	  postTwitt_checkSend(numTry,message);
 	  System.out.println(" v");
 	  
@@ -102,7 +106,7 @@ public class TwitterForBusiness extends TestCase  {
   public void helpWithThisPage() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nHelp with this page.");
+	  print("\n\nHelp with this page.");
 	  helpWithThisPage_test(numTry);
 	  System.out.println(" v");
 	  
@@ -115,13 +119,13 @@ public class TwitterForBusiness extends TestCase  {
 	  String winHandleBefore = driver.getWindowHandle();
 	  
 	  System.out.println("\n\nTesting overview:");
-	  System.out.print("Testing Updates.");
+	  print("Testing Updates.");
 	  overview_updates(numTry,winHandleBefore);
 	  System.out.println(" v");
-	  System.out.print("Testing Followers.");
+	  print("Testing Followers.");
 	  overview_followers(numTry,winHandleBefore);
 	  System.out.println(" v");
-	  System.out.print("Testing Following.");
+	  print("Testing Following.");
 	  overview_Following(numTry,winHandleBefore);
 	  System.out.println(" v");
 	  
@@ -132,7 +136,7 @@ public class TwitterForBusiness extends TestCase  {
   public void calendar() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting calendar.");
+	  print("\n\nTesting calendar.");
 	  calendar_test(numTry);
 	  System.out.println(" v");
 	  
@@ -143,7 +147,7 @@ public class TwitterForBusiness extends TestCase  {
   public void pstList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting PST list.");
+	  print("\n\nTesting PST list.");
 	  pstList_test(numTry);
 	  System.out.println(" v");
 	  
@@ -154,7 +158,7 @@ public class TwitterForBusiness extends TestCase  {
   public void campaignList() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting Campaign list.");
+	  print("\n\nTesting Campaign list.");
 	  campaignList_test(numTry);
 	  System.out.println(" v");
 	  
@@ -165,7 +169,7 @@ public class TwitterForBusiness extends TestCase  {
   public void newCampaigns() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting New Campaigns.");
+	  print("\n\nTesting New Campaigns.");
 	  newCampaigns_test(numTry);
 	  System.out.println(" v");
 
@@ -176,7 +180,7 @@ public class TwitterForBusiness extends TestCase  {
   public void campaignsActions() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 
-	  System.out.print("\n\nTesting Campaigns actions.");
+	  print("\n\nTesting Campaigns actions.");
 	  campaignsActions_test(numTry);
 	  System.out.println(" v");
 	 
@@ -187,7 +191,7 @@ public class TwitterForBusiness extends TestCase  {
   public void userPopup() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting user popup.");
+	  print("\n\nTesting user popup.");
 	  userPopup_test(numTry);
 	  System.out.println(" v");
 	  
@@ -198,7 +202,7 @@ public class TwitterForBusiness extends TestCase  {
   public void nextAndPrev() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting Next and prev.");
+	  print("\n\nTesting Next and prev.");
 	  nextAndPrev_test(numTry);
 	  System.out.println(" v");
 	  
@@ -210,10 +214,10 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions manager list:");
-	  System.out.print("\n\nTesting creating new list.");
+	  print("\n\nTesting creating new list.");
 	  tableActionsManageList_creatNewList(numTry);
 	  System.out.println(" v");
-	  System.out.print("\n\nTesting delete new list.");
+	  print("\n\nTesting delete new list.");
 	  tableActionsManageList_deleteList(numTry);
 	  System.out.println(" v");
 	  
@@ -225,10 +229,10 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions replay:");
-	  System.out.print("\n\nTesting click replay.");
+	  print("\n\nTesting click replay.");
 	  String message=tableActionsReplay_click(numTry);
 	  System.out.println(" v");
-	  System.out.print("\n\nTesting replay message.");
+	  print("\n\nTesting replay message.");
 	  tableActionsReplay_message(numTry,message);
 	  System.out.println(" v");
 	 
@@ -240,10 +244,10 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions retweet:");
-	  System.out.print("\n\nTesting click retweet.");
+	  print("\n\nTesting click retweet.");
 	  tableActionsRetweet_click(numTry);
 	  System.out.println(" v");
-	  System.out.print("\n\nTesting replay output.");
+	  print("\n\nTesting replay output.");
 	  tableActionsRetweet_replayOutput(numTry);
 	  System.out.println(" v");
 	
@@ -255,13 +259,13 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting search:");
-	  System.out.print("\n\nTesting search for 'ad'.");
+	  print("\n\nTesting search for 'ad'.");
 	  search_searchForAd(numTry);
 	  System.out.println(" v");
-	  System.out.print("\n\nTesting save 'ad'.");
+	  print("\n\nTesting save 'ad'.");
 	  search_save(numTry);
 	  System.out.println(" v");
-	  System.out.print("\n\nTesting delete saved search object.");
+	  print("\n\nTesting delete saved search object.");
 	  search_deleteSavedObject(numTry);
 	  System.out.println(" v");
 	 
@@ -272,7 +276,7 @@ public class TwitterForBusiness extends TestCase  {
   public void campaignResults() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting campaign results.");
+	  print("\n\nTesting campaign results.");
 	  campaignResults_test(numTry);
 	  System.out.println(" v");
 	
@@ -283,7 +287,7 @@ public class TwitterForBusiness extends TestCase  {
   public void outBox() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting out box.");
+	  print("\n\nTesting out box.");
 	  outBox_test(numTry);
 	  System.out.println(" v");
 	  
@@ -294,7 +298,7 @@ public class TwitterForBusiness extends TestCase  {
   public void addAccount() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting add acount.");
+	  print("\n\nTesting add acount.");
 	  addAccount_test(numTry);
 	  System.out.println(" v");
 	  
@@ -305,11 +309,16 @@ public class TwitterForBusiness extends TestCase  {
   public void switchAccount() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.print("\n\nTesting switch acount.");
+	  print("\n\nTesting switch acount.");
 	  switchAccount_test(numTry);
 	  System.out.println(" v");
 	  
 	  Thread.sleep(3000);
+  }
+  
+  @AfterClass
+  public static void summary(){
+	  driver.close();
   }
   
   //===================================================================================================
@@ -913,7 +922,7 @@ public class TwitterForBusiness extends TestCase  {
 	  try{builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']//option[text()='Add a Twitter Account...']"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("Add account:","èååéèø / àéùåø ééùåí", driver.getTitle());
+		  assertEquals("Add account:","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½", driver.getTitle());
 		  
 		  driver.navigate().back();
 	  }
@@ -957,5 +966,23 @@ public class TwitterForBusiness extends TestCase  {
 	  }
   }
   
-  //=========================================================================================================
+  //==========================================================================================================
+  private static void print(String action){
+	  FileWriter fstreamWrite=null;
+	  
+	  System.out.print(action);
+	  
+	  try{fstreamWrite = new FileWriter("data/actionStram");
+		 }catch(IOException e) {
+		 	// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 
+		BufferedWriter out = new BufferedWriter(fstreamWrite);
+		try {out.write(action);
+			 out.close();
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+  }
 }
