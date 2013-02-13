@@ -209,7 +209,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) throws Exception{//GEN-FIRST:event_jButtonRunTestActionPerformed
-        boolean select[]={true,true,false,false,false};
+        boolean select[]={true,true,true,false,false};
     	this.thread2 = new Thread(new MainTest(select,set.getServerUrl()));
     	
     	this.thread2.start();
