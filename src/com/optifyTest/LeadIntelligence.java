@@ -38,7 +38,7 @@ public class LeadIntelligence extends TestCase {
 	 static String homeAddress=st.getServerUrl();
 	 static String userName=ts.getUserName();
 	 static String password=ts.getUserPassword();
-	 static String setPath="selenium/Linux32/chromedriver";
+	 static String setPath=st.getSeleniumBit();;
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -359,6 +359,8 @@ public class LeadIntelligence extends TestCase {
 		  sum+=num;
 		  
 		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']"))).click();
+		  	  Thread.sleep(3000);
+		  		
 		  }
 		  catch (Exception e) {
 	          return sum;
@@ -396,7 +398,9 @@ public class LeadIntelligence extends TestCase {
 	 
 	  try{//Check all Visitors for full testing
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
-		  
+		  if(wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected())
+			  builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']")))).perform();
+			  
 		  //Select 90 days:
 		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
 		  }
@@ -408,7 +412,7 @@ public class LeadIntelligence extends TestCase {
 		  Thread.sleep(2000);
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select"))).click();
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody")));
-		  Thread.sleep(3000);
+		  Thread.sleep(5000);
 		  
 		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='lead_pager']//a[@class='next']")));
 		  	  assertEquals("Showing 50:",SUMFIF,getRowCount(By.xpath("//table[@id='lead_table']/tbody")));
@@ -427,7 +431,7 @@ public class LeadIntelligence extends TestCase {
 		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select")))).perform();
 			wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select/option"))).click();
 		    Thread.sleep(2000);
-			wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select"))).click();
+			builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/span/select")))).perform();
 			wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody")));
 			Thread.sleep(3000);
 		 	numTry++;
@@ -519,7 +523,7 @@ public class LeadIntelligence extends TestCase {
 			 catch(Exception e){}
 		  
 		  if(isChecked)
-				 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
+				 builder.click(wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']")))).perform();
 		  
 		 //Set Check all Visitors
 		 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
@@ -679,12 +683,16 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 		 	if(numTry>3){
-		 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+		 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 		 		throw e;
 		 	}
 		 	
 		 	//Restart test
 		 	numTry++;
+		 	
+		 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+		 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+		 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
 		 	needHelp_open(numTry);
 	  }
   }
@@ -702,11 +710,15 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 	
 	 	//Restart test
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
 	 	numTry++;
 	 	needHelp_learnMoreAboutLeadIntelligence(numTry,winHandleBefore);
 	  }
@@ -723,12 +735,16 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 	
 	 	//Restart test
 	 	numTry++;
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
 	 	needHelp_lunchVideo(numTry);
 	  }
   }
@@ -744,16 +760,23 @@ public class LeadIntelligence extends TestCase {
 		  assertEquals("help 2/6:",help,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 		  
 		  //Check qtip-tip:
-		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These values highlight how well you�re attracting visitors and converting leads.']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These values highlight how well you’re attracting visitors and converting leads.']")));
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Ideally, you want to see more yellow (visitors with high scores) and less blue (visitors with low scores).']")));
 	  }
 	  catch(Exception e){
-	 	if(numTry>3)
+	 	if(numTry>3){
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
+	 	}
 	 	
 	 	//Restart test
 	 	numTry++;
-	 	wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a"))).click();
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+	 	
+	 	builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a")))).perform();
 	 	needHelp_goingForwardToOverview(numTry);
 	  }
   }
@@ -775,13 +798,17 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 		
 	 	//Restart test
 	 	numTry++;
-	 	wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a"))).click();
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+	 	
+	 	builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a")))).perform();
 	 	needHelp_goingForwardToLeadScoring(numTry);
 	  }
   }
@@ -799,12 +826,17 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 	
 	 	//Restart test
 	 	numTry++;
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+	 	
 	 	needHelp_learnMoreAboutLeadScoring(numTry,winHandleBefore);
 	  }
   }
@@ -826,13 +858,18 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 	
 	 	//Restart test
 	 	numTry++;
-	 	wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a"))).click();
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+	 	
+	 	builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a")))).perform();
 	 	needHelp_goingForwardToLeadRecentVisitAndLeads(numTry);
 	  }
   }
@@ -855,13 +892,18 @@ public class LeadIntelligence extends TestCase {
 	  }
 	  catch(Exception e){
 	 	if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		throw e;
 	 	}
 	 	
 	 	//Restart test
 	 	numTry++;
-	 	wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a"))).click();
+	 	
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+	 	
+	 	builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a")))).perform();
 	 	needHelp_goingForwardToActions(numTry);
 	  }
   }
@@ -886,13 +928,18 @@ public class LeadIntelligence extends TestCase {
   	  }
   	  catch(Exception e){
 	 	 if(numTry>3){
-	 		wait.until(presenceOfElementLocated(By.xpath("//a[@class='hide']"))).click();
+	 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-hide']/a")))).perform();
 	 		  throw e;
 	 	 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
-	 	 wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a"))).click();
+	 	 
+	 	//If "Are you sure you want to move on before finishing this Lead Intelligence tour?" message appear close it.
+	 	try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")))).perform();
+ 		builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover']/span")))).perform();}catch(Exception ex){}
+		 	
+	 	 builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-paginator-back']/a")))).perform();
 	 	 needHelp_goingForwardToActions(numTry);
   	  }
   }
@@ -935,6 +982,8 @@ public class LeadIntelligence extends TestCase {
 		 	
 		 	 //Restart test
 		 	 numTry++;
+		 	 
+		 	 
 		 	overview_qtip(numTry);
   	  }
   }
@@ -965,9 +1014,10 @@ public class LeadIntelligence extends TestCase {
   //=========================================================================================================
   private void overview_totalVisitors(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	
+	  Thread.sleep(8000);
 	  try{//Test Total Visitors:
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='lead_table']/tbody/tr")));
+		 
 		  int rowNum=getRowsNum(By.xpath("//table[@id='lead_table']/tbody"));
 		  assertEquals("Total Visitors number:",wait.until(presenceOfElementLocated(By.xpath("//big[@id='total_visitors']"))).getText(),Integer.toString(rowNum));
 	  }
@@ -1011,7 +1061,7 @@ public class LeadIntelligence extends TestCase {
   private void overview_editLeadsReport(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
-	  try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-cog white-icon']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@name='phone']"))).click();
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@name='email']"))).click();
 		  wait.until(presenceOfElementLocated(By.xpath("//input[@name='city']"))).click();
@@ -1056,7 +1106,7 @@ public class LeadIntelligence extends TestCase {
 			  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 		 
 		  //Set Check all Visitors
-		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		  
 		  try{ wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
 			 }
@@ -1195,7 +1245,7 @@ public class LeadIntelligence extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
 	 try{//Set Check all Visitors
-		 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		 builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		 
 		 //Prepare data table for testing:
 		 boolean isChecked=wait.until(presenceOfElementLocated(By.xpath("//input[@id='hideISP']"))).isSelected();
@@ -1238,7 +1288,7 @@ public class LeadIntelligence extends TestCase {
 			 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 		 
 		 //Set Check all Visitors
-		 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		 builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		 
 		 //Select 90 days:
 		 try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
@@ -1283,7 +1333,7 @@ public class LeadIntelligence extends TestCase {
 			 wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 		 
 		 //Set Check all Visitors
-		 wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		 builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		
 		 //Select 90 days:
 		 try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
@@ -1354,7 +1404,7 @@ public class LeadIntelligence extends TestCase {
 			  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 		 
 		  //Set Check all Visitors
-		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		  
 		  //Select 90 days:
 		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();
@@ -1407,7 +1457,7 @@ public class LeadIntelligence extends TestCase {
 			  wait.until(presenceOfElementLocated(By.xpath("//label[@id='hideISPLabel']"))).click();
 		  
 		  //Set Check all Visitors
-		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//input[@id='show_all']")))).perform();
 		  
 		  //Select 90 days:
 		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-90d']"))).click();

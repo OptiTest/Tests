@@ -38,7 +38,7 @@ public class Pages extends TestCase {
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
-  static String setPath="selenium/Linux64/chromedriver";
+  static String setPath=st.getSeleniumBit();
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -374,8 +374,8 @@ public class Pages extends TestCase {
 		 	if(numTry>3)
 			  throw e;
 		
-		 	//Close Add Pages dialog box & restaet test.
-		 wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
+		 //Close Add Pages dialog box & restaet test.
+		 builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']")))).perform();
 		 numTry++;
 		 addPages_enter(numTry);
   	  }
@@ -395,11 +395,18 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		//Close Add Pages dialog box & restaet test.
+	 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
+	 	}
+	 	catch(Exception ex){}
+		 	
+	 	if(numTry>3)
+		  throw e;
 		
-		 	numTry++;
-		 	addPages_save(numTry);
+		 	
+	 	numTry++;
+	 	addPages_enter(numTry);
+	 	addPages_save(numTry);
 	  }
   }
   
@@ -408,7 +415,7 @@ public class Pages extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 
-	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span")))).perform();
 	  	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 		  
 	  	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.walla.co.il");
@@ -426,15 +433,17 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
-		 	
-		 	//Close Add Pages dialog box & restaet test.
-		 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
-		 	}
-		 	catch(Exception ex){}
-		 	numTry++;
-		 	addPages_saveGroup(numTry);
+		//Close Add Pages dialog box & restaet test.
+	 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
+	 	}
+	 	catch(Exception ex){}
+	 	
+	 	if(numTry>3)
+		  throw e;
+	 	
+	 	
+	 	numTry++;
+	 	addPages_saveGroup(numTry);
 	  }
   }
   
@@ -671,7 +680,7 @@ public class Pages extends TestCase {
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span")))).perform();
 		  
 		  //Open need help:
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-dialog trainer-minimized']/div/div/div/a"))).click();
@@ -872,11 +881,14 @@ public class Pages extends TestCase {
   
 	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-pages']/span"))).click();
 		  Thread.sleep(3000);
+		  wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']/ul/li/a"))).click();
+		  Thread.sleep(3000);
+		  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter-clear']/span")))).perform();}catch(Exception e){}
 		  
 		  //show 50:
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-50']"))).click();
+		  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='numPages show-50']"))).click();}catch(Exception e){}
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
-		  Thread.sleep(5000);
+		  Thread.sleep(7000);
 		  assertEquals("count 50:",SUMFIF,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
 		  Thread.sleep(3000);
 	  }
@@ -1017,6 +1029,8 @@ public class Pages extends TestCase {
 		  Actions builder = new Actions(driver);
 		  builder.sendKeys(Keys.HOME).perform();
 		  Thread.sleep(2000);
+		  builder.sendKeys(Keys.PAGE_DOWN).perform();
+		  Thread.sleep(2000);
 		  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody/tr")))).perform();	  
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div")))).perform();;
 		  Thread.sleep(2000);
@@ -1043,7 +1057,6 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-text-filter-clear']"))).click();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='וואלה!']")));
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='ynet חדשות תוכן ועדכונים - ידיעות אחרונות']")));
 	  }
 	  catch(Exception e){
@@ -1067,9 +1080,9 @@ public class Pages extends TestCase {
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='http://www.walla.co.il/']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='http://www.ynet.co.il/home/0,7340,L-8,00.html']"))).click();
 		  switcWindow();
-		  assertEquals("link page","וואלה!",driver.getTitle());
+		  assertEquals("link page","ynet חדשות תוכן ועדכונים - ידיעות אחרונות",driver.getTitle());
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 		  
@@ -1090,7 +1103,8 @@ public class Pages extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
  
 	  try{builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']/tbody/tr")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[4]"))).click();
+		  Thread.sleep(2000);
+	  	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[4]"))).click();
 		  Thread.sleep(3000);
 		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']/button")))).perform();
 		  Thread.sleep(3000);
@@ -1443,7 +1457,7 @@ public class Pages extends TestCase {
 	  
 	  try{//Test preparations:
 		  //Set to Issues:
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-issues']/span")))).perform();
 		  wait = new WebDriverWait(driver, 350);
 		  //Wait for table to be loaded:
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a")));
@@ -1512,9 +1526,9 @@ public class Pages extends TestCase {
 		 	if(numTry>3)
 				  throw e;
 			
-			 	numTry++;
-			 	issuesShow_fifty(numTry);
-	  }
+		 	numTry++;
+		 	issuesShow_fifty(numTry);
+  }
   }
   
   //=========================================================================================================

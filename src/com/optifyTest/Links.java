@@ -38,7 +38,7 @@ public class Links extends TestCase {
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
-  static String setPath="selenium/Linux32/chromedriver";
+  static String setPath=st.getSeleniumBit();
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -243,6 +243,7 @@ public class Links extends TestCase {
   @AfterClass
   public static void summary(){
 	  driver.close();
+	  driver.quit();
   }
   
   //===============================================================================================
@@ -696,7 +697,7 @@ public class Links extends TestCase {
 	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")));
 		  String winHandleBefore = driver.getWindowHandle();
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")))).perform();
 		  switcWindow();
 		  assertEquals("Help with this page:","Links overview : Help and Support",driver.getTitle());
 		  driver.close();
@@ -785,11 +786,11 @@ public class Links extends TestCase {
 	  
 	  try{//Prepare for test:
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']//label[text()='test']"))).click();
+		  //wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']//label[text()='test']"))).click();
 		  Thread.sleep(2000);
 		  
-		  if(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).isSelected())
-			  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).click();	
+		  if(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']/ul/li/input"))).isSelected())
+			  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']/ul/li/input"))).click();	
 		  
 		  //Start test:
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-pager data-pager']//a[text()='2']"))).click();
@@ -840,7 +841,7 @@ public class Links extends TestCase {
 		 	//Restart test:
 		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
 		    wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select/option"))).click();
-		    wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select"))).click();
+		    builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
 		    wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody")));
 		 	numTry++;
 		 	showResults_fifty(numTry);
@@ -986,11 +987,11 @@ public class Links extends TestCase {
 	  
 	  try{//Delete url & group:
 		  while(!triger.equals(wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td"))).getText())){
-			  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr")))).perform();
+			  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td[3]")))).perform();
 			  Thread.sleep(2000);
 			  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[2]"))).click();
 			  Thread.sleep(2000);
-			  wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']"))).click();
+			  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']")))).perform();
 			  Thread.sleep(2000);
 		  }
 		  

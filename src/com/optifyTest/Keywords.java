@@ -38,7 +38,7 @@ public class Keywords extends TestCase {
     static String homeAddress=st.getServerUrl();
     static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
-    static String setPath="selenium/Linux64/chromedriver";
+    static String setPath=st.getSeleniumBit();
     String keyWord="";
     String keyWordUrl="";
     
@@ -396,7 +396,7 @@ public class Keywords extends TestCase {
 	  goBase();
   
 	  try{String winHandleBefore = driver.getWindowHandle();
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")))).perform();
 		  Thread.sleep(3000);
 		  switcWindow();
 		  assertEquals("Help with this page","Keywords application reference : Help and Support",driver.getTitle());
@@ -444,8 +444,7 @@ public class Keywords extends TestCase {
   //=========================================================================================================
   private void calendar_30d(int numTry, Calendar todayDate)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  final int THIRTY = -30;
-	  goBase();
+	  final int THIRTY = -29;
   
 	  try{todayDate=Calendar.getInstance();
 		  todayDate.add(Calendar.DAY_OF_YEAR,THIRTY);
@@ -455,7 +454,7 @@ public class Keywords extends TestCase {
 		  
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='interval_date_picker']/button/span"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("30d day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)+1),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
+		  assertEquals("30d day",Integer.toString(todayDate.get(Calendar.DAY_OF_MONTH)),driver.findElement(By.xpath("//a[@class='ui-state-default ui-state-active']")).getText());
 		  assertEquals("30d month",todayDate.get(Calendar.MONTH),returnMonthInt(driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText()));
 		  assertEquals("30d year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
 	  }
@@ -503,7 +502,7 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	 
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='first overview_statbox']/h5/span/span"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='first overview_statbox']/h5/span/span")))).perform();
 	  }
 	  catch(Exception e){
 			 if(numTry>3)
@@ -774,7 +773,7 @@ public class Keywords extends TestCase {
   	  goBase();
   
  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']"))).click();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_keywords_open']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']")));
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='keyword_add_text']"))).sendKeys("cc1");
 		  
@@ -1000,7 +999,7 @@ public class Keywords extends TestCase {
 			  throw e;
 	 
 		  numTry++;
-		  wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']//a[text()='test']"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']//a[text()='test']")))).perform();
 		  tableActions_saveKeywordToGroup(numTry);
 	  }
   }
@@ -1230,7 +1229,7 @@ public class Keywords extends TestCase {
   	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
   
-  	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-actions']/ul/li"))).click();
+  	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-actions']/ul/li")))).perform();
 		  switcWindow();
 		  assertEquals("Learn more about Keywords:","Keywords application reference : Help and Support",driver.getTitle());
 		  driver.close();

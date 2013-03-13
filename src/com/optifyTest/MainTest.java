@@ -16,147 +16,60 @@ import org.junit.runner.notification.RunListener;
 
 public class MainTest extends Thread{
 	//Main test attributes:
-	private boolean case1,  //Test cases.
-	 				case2,
-	 				case3,
-	 				case4,
-	 				case5;
-	
 	private Report report; //Report 
 	public String []headInformation; //Headline report information.
 	private String setReportSavePath;
 	private String serverPath;
 	private PrintStream oldoutps;
+	private boolean select[]; //Running test flag.
+	private Settings set;
 	
 	//Main test constructor:
-	public MainTest(boolean select[], String serverPath){
+	public MainTest(boolean select[]){
 		final int SIZE=10;//Headline report information array size.
 		int i=0;
+		this.set=new Settings();
 		this.headInformation=new String[SIZE];
-		
-		
-		this.case1=select[i];i++;
-		this.case2=select[i];i++;
-		this.case3=select[i];i++;
-		this.case4=select[i];i++;
-		this.case5=select[i];i++;
-		
-		this.serverPath=serverPath;
+		this.select=select;
+
+		this.serverPath=set.getServerUrl();
 		this.oldoutps = System.out;
 		this.setReportSavePath="data/";
 	}
 	
     //=========================================================================
 	public void run(){
-		Result result1=null,result2=null,result3=null,result4=null,result5=null;
-		
-		while(true){
-			setHeadInfo(serverPath);
-			this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
-			
-			if(case1){
-				result1=testDashBoard();
-			}
-			
-			if(case2){
-				result2=testKeywords();
-			}
-			
-			if(case3){
-				result3=testPages();
-			}
-			
-			if(case4){
-				result4=testPageDetail();
-			}
-			
-			if(case5){
-				result5=testLinks();
-			}
-
-			Result resultArr[]={result1,result2,result3,result4,result5};
-			writeReport(resultArr);
-		}
-	}
-		
-    //=========================================================================
-	public Result testDashBoard(){
+		String arrList[]=getTestList();
+		final int SIZE=arrList.length;
+		 
 		JUnitCore core= new JUnitCore();
 		core.addListener(new TraceListener());
 		
-		//Kill webDriver process
-		cleanTest();
+        Result result[]=new Result[SIZE];
 		
-		return core.run(DashBoard.class);
-    }
-	
-	//=========================================================================
-	public Result testKeywords(){
-		 JUnitCore core= new JUnitCore();
-		 core.addListener(new TraceListener());
-		 
-		//Kill webDriver process
-	    cleanTest();
-		
-		 return core.run(Keywords.class);
-	}
-	
-	//=========================================================================
-	public Result testPages(){
-		 JUnitCore core= new JUnitCore();
-		 core.addListener(new TraceListener());
-		 
-		//Kill webDriver process
-	    cleanTest();
-		 
-		 return core.run(Pages.class);
-	}
-	
-	//=========================================================================
-	public Result testPageDetail(){
-		 JUnitCore core= new JUnitCore();
-		 core.addListener(new TraceListener());
-		 
-		//Kill webDriver process
-		cleanTest();
+        while(true){
+        	setHeadInfo(serverPath);
+        	this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
+        	
+        	for(int i=0;i<SIZE;i++){
+        		if(this.select[i]){
+	        		result[i]=null;
+	        		
+	        		//Kill webDriver process
+	        		cleanTest();
+	        		
+	        		
+	        		 try {result[i]=core.run(Class.forName("com.optifyTest."+arrList[i]));
+	        		} catch (ClassNotFoundException e) {
+	        			System.out.println("Test class "+arrList[i]+" not found!");
+	        		}
 
-		 return core.run(PageDetail.class);
-	}
-	
-	//=========================================================================
-	public Result testLinks(){
-		 JUnitCore core= new JUnitCore();
-		 core.addListener(new TraceListener());
-		 
-		//Kill webDriver process
-		cleanTest();
-		
-		 return JUnitCore.runClasses(Links.class);
-	}
-	
-	//=========================================================================
-	public void setCase1(boolean set){
-		this.case1=set;
-	}
-	
-	//=========================================================================
-	public void setCase2(boolean set){
-		this.case2=set;
-	}
-	
-	//=========================================================================
-	public void setCase3(boolean set){
-		this.case3=set;
-	}
-	
-	//=========================================================================
-	public void setCase4(boolean set){
-		this.case4=set;
-	}
-	
-	//=========================================================================
-	public void setCase5(boolean set){
-		this.case5=set;
+        		}
+        	}
+        	
+        	//Create report.
+        	writeReport(result);
+        }
 	}
 	
 	//=========================================================================
@@ -171,7 +84,7 @@ public class MainTest extends Thread{
 			if(result[i]!=null){
 				numOfTest+=result[i].getRunCount();
 				numOfFailure+=result[i].getFailureCount();
-				timeInSec=result[i].getRunTime();
+				timeInSec+=result[i].getRunTime();
 			}
 		}
 		
@@ -251,7 +164,6 @@ public class MainTest extends Thread{
 		this.headInformation[i]="0";i++;
 		this.headInformation[i]="N/A";i++;
 		this.headInformation[i]="N/A";i++;
-		
 	}
 	
 	//Clean Finished test======================================================
@@ -262,6 +174,13 @@ public class MainTest extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		  }
+	}
+	
+	//Load test least==========================================================
+	private String[] getTestList(){
+		String arrList[]={"DashBoard","Keywords","Pages","PageDetail","Links","LeadIntelligence","TwitterForBusiness"};
+		
+		return arrList;
 	}
 }
 

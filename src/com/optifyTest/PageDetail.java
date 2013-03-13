@@ -38,7 +38,7 @@ public class PageDetail extends TestCase {
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
-  static String setPath="selenium/Linux32/chromedriver";
+  static String setPath=st.getSeleniumBit();
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -229,6 +229,7 @@ public class PageDetail extends TestCase {
   @AfterClass
   public static void summary(){
 	  driver.close();
+	  driver.quit();
   }
   
   //===============================================================================================
@@ -272,24 +273,23 @@ public class PageDetail extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
 	  try{//Get the page detail...
-		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("walla");
+		  Thread.sleep(5000);
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("microsoft");
 		  Thread.sleep(3000);
 		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a"))).click();
 		  }
 		  catch(Exception e){
 			  //Add page & save to test:
-			  System.out.println("Level One");
 			  wait.until(presenceOfElementLocated(By.xpath("//button[@class='add-pages-button medium orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
-			  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.walla.co.il");
+			  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='add_pages_textarea']"))).sendKeys("www.microsoft.com");
 			  Thread.sleep(3000);
 			  wait.until(presenceOfElementLocated(By.xpath("//button[@id='add_pages']"))).click();
 
 			  Thread.sleep(3000);
 			  
-			  System.out.println("Level Two");
 			   //Try to get the page detail second time...
 			  Thread.sleep(2000);
-			  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("walla");
+			  wait.until(presenceOfElementLocated(By.xpath("//input[@id='page-text-filter']"))).sendKeys("microsoft");
 			  Thread.sleep(3000);
 			  wait.until(presenceOfElementLocated(By.xpath("//div[@id='overview_tab']/div/table/tbody/tr/td/a"))).click();
 		  }
@@ -350,7 +350,7 @@ public class PageDetail extends TestCase {
   
 	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='quiet out']"))).click();
 		  switcWindow();
-		  assertEquals("link page","�����!",driver.getTitle());
+		  assertEquals("link page","Microsoft Home Page | Devices and Services",driver.getTitle());
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 	  }
@@ -384,6 +384,8 @@ public class PageDetail extends TestCase {
   //=========================================================================================================
   private void share_email(int numTry)throws Exception {	
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  
+	  try{wait.until(presenceOfElementLocated(By.xpath("//button[@class='close ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();}catch(Exception e){}
   
 	  try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='ui-state-default ui-corner-top']"))).click();
 		  String getId=driver.findElement(By.xpath("//div[@id='emailTo']/div")).getAttribute("id");
@@ -616,7 +618,7 @@ public class PageDetail extends TestCase {
 	      Thread.sleep(2000);
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='list']/tbody/tr/td")));
 		  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='list']/tbody/tr")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[2]"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[2]")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@class='edit-note']"))).sendKeys("test");
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='save-note ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 		  Thread.sleep(3000);
@@ -627,6 +629,7 @@ public class PageDetail extends TestCase {
 		 	if(numTry>3)
 				  throw e;
 			
+			  
 		 	numTry++;
 		 	tableAction_addNote(numTry);
 	  }
@@ -659,7 +662,9 @@ public class PageDetail extends TestCase {
  
 	  try{wait.until(presenceOfElementLocated(By.xpath("//table[@id='list']/tbody/tr/td")));
 		  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='list']/tbody/tr")))).perform();
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[3]"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='data-table on-hover-menu']/div[2]"))).click();
+		  Thread.sleep(2000);
+		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='transparent delete ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
 		  Thread.sleep(2000);
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 		  Thread.sleep(3000);

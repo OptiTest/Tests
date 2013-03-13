@@ -225,8 +225,7 @@ public class Report {
 	//Check for new failures===================================================
 	@SuppressWarnings("null")
 	private boolean newFailures(){
-		String line="";
-		String buffer="";
+		String line="",buffer="";
 		final int ARR_SIZE=this.listFailure.getFailuresNumber();
 		String[][]arr=new String[ARR_SIZE][];
 		NodeFailure p; //Pointer for the failure link list.
@@ -278,11 +277,11 @@ public class Report {
 	
 	//Send report by email=====================================================
 	private void sendReportByEMail(String text){
-		 String from="orasnin@gmail.com";
-	     String to="orasnin@gmail.com";
+		 String from="optifyautomation@gmail.com";
+	     String to[]={"orasnin@gmail.com","anthonyp@optify.net"};
 	     String subject="Optify automation report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
  
-	     this.email = new EMail(from, to, subject, text);
+	     this.email = new EMail(to,from,subject,text);
 	     email.send();
 	}
 	

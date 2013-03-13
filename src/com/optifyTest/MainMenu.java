@@ -62,6 +62,7 @@ public class MainMenu extends javax.swing.JFrame {
         setTitle("Optify Automation Suite 2.0");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusable(false);
+        setResizable(false);
 
         jButtonRunTest.setBackground(new java.awt.Color(255, 153, 0));
         jButtonRunTest.setText("Run Test");
@@ -209,8 +210,8 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) throws Exception{//GEN-FIRST:event_jButtonRunTestActionPerformed
-        boolean select[]={true,true,true,false,false};
-    	this.thread2 = new Thread(new MainTest(select,set.getServerUrl()));
+        boolean select[]={true,true,true,true,true,true,true};
+    	this.thread2 = new Thread(new MainTest(select));
     	
     	this.thread2.start();
     
@@ -254,6 +255,8 @@ public class MainMenu extends javax.swing.JFrame {
          */
     	
     	System.out.println("Starting Optify Automation Suite Version2.0...\n");
+    	
+    	ManageTests listF=new ManageTests();
     	
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

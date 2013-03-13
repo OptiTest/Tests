@@ -445,4 +445,12 @@ public class Settings extends javax.swing.JFrame {
     String getServerUrl(){
     	return jTextServerUrl.getText();
     }
+    
+    //Return Selenium by system 32 or 64 bit:==========================
+    String getSeleniumBit(){
+    	if("32".equals(System.getProperty("sun.arch.data.model")))
+    			return "selenium/Linux32/chromedriver";
+    	else
+    		return "selenium/Linux64/chromedriver";
+    }
 }

@@ -37,7 +37,7 @@ public class TwitterForBusiness extends TestCase  {
 	static String homeAddress=st.getServerUrl();
 	static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
-	static String setPath="selenium/Linux32/chromedriver";
+	static String setPath=st.getSeleniumBit();
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -691,8 +691,7 @@ public class TwitterForBusiness extends TestCase  {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String message="";
 	  
-	  try{String account = wait.until(presenceOfElementLocated(By.xpath("//*[@id='twitter_screenname']//option[@selected='true']"))).getText();
-		  message = "@"+account+"test";
+	  try{message = "test"+System.currentTimeMillis()%100;
 		  
 		  //Get into Inbox tab:
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='tip-inbox']/span"))).click();
@@ -718,7 +717,7 @@ public class TwitterForBusiness extends TestCase  {
   private void tableActionsReplay_message(int numTry,String message)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String account = wait.until(presenceOfElementLocated(By.xpath("//*[@id='twitter_screenname']//option[@selected='true']"))).getText();
-	  
+	 
 	  try{//Check replay output:
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='post_tweet_text']/textarea"))).sendKeys(message);
 		  Thread.sleep(2000);
@@ -727,7 +726,7 @@ public class TwitterForBusiness extends TestCase  {
 		  driver.navigate().refresh();
 		  
 		  String getMessage=wait.until(presenceOfElementLocated(By.className("inbox_tweet"))).getAttribute("textContent");
-		  assertEquals("Message",message,getMessage.substring(account.length()+1, (1+account.length()+message.length())));
+		  assertEquals("Message","@"+account+message,getMessage.substring(account.length()+1, (1+account.length()+("@"+account+message).length())));
 	  }
 	  
 	  catch(Exception e){
@@ -922,16 +921,23 @@ public class TwitterForBusiness extends TestCase  {
 	  try{builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']//option[text()='Add a Twitter Account...']"))).click();
 		  Thread.sleep(3000);
-		  assertEquals("Add account:","������ / ����� �����", driver.getTitle());
+		  assertEquals("Add account:","Twitter / Authorize an application", driver.getTitle());
 		  
 		  driver.navigate().back();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+	 	 if(numTry>3){
+	 		if(!driver.getTitle().equals("Twitter for Business | Optify"))
+	 			driver.navigate().back();
+	 		
+	 		throw e;
+	 	 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
+	 	 if(!driver.getTitle().equals("Twitter for Business | Optify"))
+	 		driver.navigate().back();
+	 	 
 	 	 Thread.sleep(2000);
 	 	 outBox_test(numTry);
 	  }

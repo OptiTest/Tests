@@ -41,7 +41,7 @@ import com.google.common.base.Function;
   
   static String homeAddress=st.getServerUrl();
   static String userName=ts.getUserName();
-  static String setPath="selenium/Linux64/chromedriver";
+  static String setPath=st.getSeleniumBit();
   static String password=ts.getUserPassword();
 
   @BeforeClass

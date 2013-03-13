@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 public class EMail {
 	
 	//EMail class attribues:
-	private String to;	     //Recipient's email ID needs to be mentioned.
+	private String to[];	     //Recipient's email ID needs to be mentioned.
 	private String from;     //Sender's email ID needs to be mentioned
 	private String subject;
 	private String text;                     //Message body.
@@ -27,7 +27,7 @@ public class EMail {
 	
 	
 	//EMail class constructor:
-	public EMail(String to,String from,String subject,String text){
+	public EMail(String to[],String from,String subject,String text){
 		this.to=to;
 		this.from=from;
 		this.subject=subject;
@@ -57,20 +57,22 @@ public class EMail {
 	
 	//EMail class methods:=====================================================
 	public void send(){
-		 Message message = new MimeMessage(this.session);
-		
+		Message message = new MimeMessage(this.session);
+		final int SIZE=this.to.length;
 		InternetAddress fromAddress = null;
-        InternetAddress toAddress = null;
+        InternetAddress toAddress[]=new InternetAddress[SIZE];
 		
 		try{fromAddress = new InternetAddress(this.from);
-			toAddress = new InternetAddress(this.to);
+			for(int i=0;i<SIZE;i++){
+				toAddress[i] = new InternetAddress(this.to[i]);
+			}
         }catch (AddressException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
  
         try{message.setFrom(fromAddress);
-        	message.setRecipient(RecipientType.TO, toAddress);
+        	message.addRecipients(RecipientType.TO, toAddress);
         	message.setSubject(this.subject);
         	message.setContent(this.text,"text/html; charset=utf-8");
         	
