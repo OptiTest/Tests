@@ -1,10 +1,15 @@
 package com.optifyTest;
 
+import static org.junit.Assume.assumeTrue;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -39,9 +44,12 @@ public class Links extends TestCase {
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
   static String setPath=st.getSeleniumBit();
+  static List<String>scripList; //Loads all enable script list.
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
+	scripList=getScriptList();
+	
     service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
@@ -79,6 +87,7 @@ public class Links extends TestCase {
   
   @Test
   public void addUrls() throws Exception{
+	  assumeTrue(enable("addUrls")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting add Urls.");
@@ -93,6 +102,7 @@ public class Links extends TestCase {
   
   @Test
   public void checkFilters() throws Exception{
+	  assumeTrue(enable("checkFilters")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting filters:");
@@ -110,6 +120,7 @@ public class Links extends TestCase {
   
   @Test
   public void assignToList() throws Exception{
+	  assumeTrue(enable("assignToList"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting adding url into list:");
@@ -121,6 +132,7 @@ public class Links extends TestCase {
   
   @Test
   public void tableSort() throws Exception{
+	  assumeTrue(enable("tableSort"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table sort:");
@@ -148,6 +160,7 @@ public class Links extends TestCase {
   
   @Test
   public void helpWithThisPage() throws Exception{
+	  assumeTrue(enable("helpWithThisPage"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting helpWithThisPage.");
@@ -159,6 +172,7 @@ public class Links extends TestCase {
   
   @Test
   public void importLinks() throws Exception{
+	  assumeTrue(enable("importLinks"));
 	  int numTry=0; //Counter the number of attempts.
 	 
 	  print("\n\nTesting import links.");
@@ -170,6 +184,7 @@ public class Links extends TestCase {
   
   @Test
   public void exportCSV() throws Exception{
+	  assumeTrue(enable("exportCSV"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting export CSV.");
@@ -181,6 +196,7 @@ public class Links extends TestCase {
   
   @Test
   public void exportPDF() throws Exception{
+	  assumeTrue(enable("exportPDF"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting export PDF.");
@@ -192,6 +208,7 @@ public class Links extends TestCase {
   
   @Test
   public void nextAndPrev() throws Exception{
+	  assumeTrue(enable("nextAndPrev"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting next and prev:");
@@ -203,6 +220,7 @@ public class Links extends TestCase {
   
   @Test
   public void showResults() throws Exception{
+	  assumeTrue(enable("showResults"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting show results:");
@@ -221,6 +239,7 @@ public class Links extends TestCase {
   
   @Test
   public void getSuggestions() throws Exception{
+	  assumeTrue(enable("getSuggestions"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting get suggestions:");
@@ -1031,5 +1050,42 @@ public class Links extends TestCase {
 		} catch (IOException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+  }
+  
+  //===========================================================================
+  public boolean enable(String name){
+     for(String elem:this.scripList)
+    	 if(elem!=null && elem.toString().equals(name))
+    		 return true;
+      
+    return false; 
+  }
+  
+  //===========================================================================
+  private static List<String> getScriptList(){
+	  	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		List<String> list=new ArrayList<String>();
+		String line="";
+		
+		try { FileReader fstreamRead=new FileReader(file);
+		  reader=new BufferedReader(fstreamRead);
+		  line = reader.readLine();
+		  
+		  while(line!=null){
+			  list.add(line);
+			  line = reader.readLine();
+		  }
+		  
+		  reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts list from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return list;
   }
 }

@@ -1,9 +1,14 @@
 package com.optifyTest;
 
+import static org.junit.Assume.assumeTrue;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,9 +48,11 @@ import com.google.common.base.Function;
   static String userName=ts.getUserName();
   static String setPath=st.getSeleniumBit();
   static String password=ts.getUserPassword();
+  static List<String>scripList; //Loads all enable script list.
 
   @BeforeClass
   public static void createAndStartService() throws Throwable {
+	scripList=getScriptList();
 	service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
@@ -76,6 +83,7 @@ import com.google.common.base.Function;
   
   @Test
   public void seoWidget() throws Exception{
+	  assumeTrue(enable("seoWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting SEO performance widget:");
@@ -94,6 +102,7 @@ import com.google.common.base.Function;
   
   @Test
   public void gettingStartedWidget() throws Exception{
+	  assumeTrue(enable("gettingStartedWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Getting started widget:");
@@ -127,6 +136,7 @@ import com.google.common.base.Function;
   
   @Test 
   public void twitterForBusinessWidget() throws Exception{
+	  assumeTrue(enable("twitterForBusinessWidget"));
 	  int numTry=0;	//Counter the number of attempts.
 	  goBase();
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -152,6 +162,7 @@ import com.google.common.base.Function;
   
   @Test
   public void keywordPerformanceWidget() throws Exception{
+	  assumeTrue(enable("keywordPerformanceWidget"));
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
@@ -180,6 +191,7 @@ import com.google.common.base.Function;
 	 
   @Test
   public void pageOptimizationWidget() throws Exception{
+	  assumeTrue(enable("pageOptimizationWidget"));
 	  goBase();
 	  int numTry=0; //Counter the number of attempts.
 	  
@@ -203,6 +215,7 @@ import com.google.common.base.Function;
   
   @Test
   public void linkOpportunitiesWidget() throws Exception{
+	  assumeTrue(enable("linkOpportunitiesWidget"));
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
@@ -232,6 +245,7 @@ import com.google.common.base.Function;
   
   @Test
   public void keywordTrendsWidget() throws Exception{
+	  assumeTrue(enable("keywordTrendsWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
@@ -249,6 +263,7 @@ import com.google.common.base.Function;
   
   @Test
   public void websiteFeedWidget() throws Exception{
+	  assumeTrue(enable("websiteFeedWidget"));
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
@@ -298,6 +313,7 @@ import com.google.common.base.Function;
   
   @Test
   public void alertsWidget() throws Exception{
+	  assumeTrue(enable("alertsWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
@@ -317,6 +333,7 @@ import com.google.common.base.Function;
   
   @Test
   public void addWidgets() throws Exception{
+	  assumeTrue(enable("addWidgets"));
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  int numTry=0; //Counter the number of attempts.
 	  String getId="";
@@ -345,6 +362,7 @@ import com.google.common.base.Function;
   
   @Test
   public void welcomeToolbar() throws Exception{
+	  assumeTrue(enable("welcomeToolbar"));
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
@@ -1844,6 +1862,43 @@ import com.google.common.base.Function;
 		} catch (IOException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+  }
+  
+//===========================================================================
+  public boolean enable(String name){
+     for(String elem:this.scripList)
+    	 if(elem!=null && elem.toString().equals(name))
+    		 return true;
+      
+    return false; 
+  }
+  
+  //===========================================================================
+  private static List<String> getScriptList(){
+	  	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		List<String> list=new ArrayList<String>();
+		String line="";
+		
+		try { FileReader fstreamRead=new FileReader(file);
+		  reader=new BufferedReader(fstreamRead);
+		  line = reader.readLine();
+		  
+		  while(line!=null){
+			  list.add(line);
+			  line = reader.readLine();
+		  }
+		  
+		  reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts list from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return list;
   }
 } 
 

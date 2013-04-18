@@ -1,9 +1,14 @@
 package com.optifyTest;
 
+import static org.junit.Assume.assumeTrue;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -39,10 +44,13 @@ public class Pages extends TestCase {
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
   static String setPath=st.getSeleniumBit();
+  static List<String>scripList; //Loads all enable script list.
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
-    service = new ChromeDriverService.Builder()
+	scripList=getScriptList();
+    
+	service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
         .build();
@@ -78,6 +86,7 @@ public class Pages extends TestCase {
   
   @Test
   public void addPages() throws Exception{
+	  assumeTrue(enable("addPages")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nEntering Add pages.");
@@ -95,6 +104,7 @@ public class Pages extends TestCase {
   
   @Test
   public void tableSort() throws Exception{
+	  assumeTrue(enable("tableSort")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting tabel sort:");
@@ -116,6 +126,7 @@ public class Pages extends TestCase {
   
   @Test
   public void inboundsLink() throws Exception{
+	  assumeTrue(enable("inboundsLink")); 
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
@@ -132,6 +143,7 @@ public class Pages extends TestCase {
   
   @Test
   public void needHelp() throws Exception{
+	  assumeTrue(enable("needHelp")); 
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
@@ -169,6 +181,7 @@ public class Pages extends TestCase {
   
   @Test
   public void showLinks() throws Exception{
+	  assumeTrue(enable("showLinks")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting show links:");
@@ -187,6 +200,7 @@ public class Pages extends TestCase {
   
   @Test
   public void nextAndPrev() throws Exception{
+	  assumeTrue(enable("nextAndPrev")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting next and prev:");
@@ -205,6 +219,7 @@ public class Pages extends TestCase {
   
   @Test
   public void tableAction() throws Exception{
+	  assumeTrue(enable("tableAction")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions:");
@@ -226,6 +241,7 @@ public class Pages extends TestCase {
 
   @Test
   public void sortIssuesTable() throws Exception{
+	  assumeTrue(enable("sortIssuesTable")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting sort issues table:");
@@ -247,6 +263,7 @@ public class Pages extends TestCase {
   
   @Test
   public void issuesNote() throws Exception{
+	  assumeTrue(enable("issuesNote")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting adding not:");
@@ -262,6 +279,7 @@ public class Pages extends TestCase {
   
   @Test
   public void setIssueToGroup() throws Exception{
+	  assumeTrue(enable("setIssueToGroup"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting add a issue to group.");
@@ -276,6 +294,7 @@ public class Pages extends TestCase {
   
   @Test
   public void issuesLinks() throws Exception{
+	  assumeTrue(enable("issuesLinks"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting issues links.");
@@ -290,6 +309,7 @@ public class Pages extends TestCase {
   
   @Test
   public void issuesPrevNext() throws Exception{
+	  assumeTrue(enable("issuesPrevNext"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting issues prev & next:");
@@ -305,6 +325,7 @@ public class Pages extends TestCase {
   
   @Test
   public void issuesShow() throws Exception{
+	  assumeTrue(enable("issuesShow"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting issues show:");
@@ -324,6 +345,7 @@ public class Pages extends TestCase {
   @AfterClass
   public static void summary(){
 	  driver.close();
+	  driver.quit();
   }
   
   //===============================================================================================
@@ -1608,6 +1630,43 @@ public class Pages extends TestCase {
 		} catch (IOException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+  }
+  
+  //===========================================================================
+  public boolean enable(String name){
+     for(String elem:this.scripList)
+    	 if(elem!=null && elem.toString().equals(name))
+    		 return true;
+      
+    return false; 
+  }
+  
+  //===========================================================================
+  private static List<String> getScriptList(){
+	  	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		List<String> list=new ArrayList<String>();
+		String line="";
+		
+		try { FileReader fstreamRead=new FileReader(file);
+		  reader=new BufferedReader(fstreamRead);
+		  line = reader.readLine();
+		  
+		  while(line!=null){
+			  list.add(line);
+			  line = reader.readLine();
+		  }
+		  
+		  reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts list from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return list;
   }
 }
 	  

@@ -1,13 +1,12 @@
 package com.optifyTest;
 
-import java.io.ByteArrayInputStream;
-import java.io.Console;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Calendar;
-import java.util.Scanner;
-
+import javax.swing.tree.DefaultMutableTreeNode;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -21,17 +20,15 @@ public class MainTest extends Thread{
 	private String setReportSavePath;
 	private String serverPath;
 	private PrintStream oldoutps;
-	private boolean select[]; //Running test flag.
 	private Settings set;
+	private DefaultMutableTreeNode root;
 	
 	//Main test constructor:
-	public MainTest(boolean select[]){
+	public MainTest(DefaultMutableTreeNode root){
 		final int SIZE=10;//Headline report information array size.
-		int i=0;
 		this.set=new Settings();
 		this.headInformation=new String[SIZE];
-		this.select=select;
-
+		this.root=root;
 		this.serverPath=set.getServerUrl();
 		this.oldoutps = System.out;
 		this.setReportSavePath="data/";
@@ -39,33 +36,38 @@ public class MainTest extends Thread{
 	
     //=========================================================================
 	public void run(){
-		String arrList[]=getTestList();
-		final int SIZE=arrList.length;
-		 
+		final int SIZE=this.root.getChildCount();
+		DefaultMutableTreeNode value;
 		JUnitCore core= new JUnitCore();
 		core.addListener(new TraceListener());
-		
         Result result[]=new Result[SIZE];
 		
         while(true){
-        	setHeadInfo(serverPath);
-        	this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
-        	
-        	for(int i=0;i<SIZE;i++){
-        		if(this.select[i]){
-	        		result[i]=null;
-	        		
-	        		//Kill webDriver process
-	        		cleanTest();
-	        		
-	        		
-	        		 try {result[i]=core.run(Class.forName("com.optifyTest."+arrList[i]));
-	        		} catch (ClassNotFoundException e) {
-	        			System.out.println("Test class "+arrList[i]+" not found!");
-	        		}
-
-        		}
-        	}
+        	 DefaultMutableTreeNode p=this.root;
+        	 value = ((DefaultMutableTreeNode) p.getFirstChild());
+        	 
+        	 for(int i=0;i<SIZE;i++){   
+        		 Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
+        		            
+        		 if (userObject instanceof CheckBoxNode) {
+        		        CheckBoxNode node = (CheckBoxNode) userObject;
+    		     
+    		            if(node.selected || checkIfScriptTrue((DefaultMutableTreeNode) value)){ 
+	    		         	setHeadInfo(this.serverPath);
+	    		     	    this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
+	    		            	 
+	    		     	    //Kill webDriver process
+	    			        cleanTest();
+	    			        		
+			        		try {result[i]=core.run(Class.forName("com.optifyTest."+node.text));
+			        		} catch (ClassNotFoundException e) {
+			        			System.out.println("Test class "+node.text+" not found!");
+			        		}
+    		            }
+	            }
+        		 
+        		 value = ((DefaultMutableTreeNode) value.getNextSibling());
+        	 }
         	
         	//Create report.
         	writeReport(result);
@@ -176,11 +178,41 @@ public class MainTest extends Thread{
 		  }
 	}
 	
-	//Load test least==========================================================
-	private String[] getTestList(){
-		String arrList[]={"DashBoard","Keywords","Pages","PageDetail","Links","LeadIntelligence","TwitterForBusiness"};
+	//=========================================================================
+	private boolean checkIfScriptTrue(DefaultMutableTreeNode value){
+		boolean flag=false; //Set if exist script to run.
+		File file=new File("data/data3");
+		FileWriter fstream;
+		final int SIZE=value.getChildCount();
+		DefaultMutableTreeNode child=(DefaultMutableTreeNode)value.getFirstChild();
 		
-		return arrList;
-	}
+		 try { fstream = new FileWriter(file,false);
+	      	   BufferedWriter out = new BufferedWriter(fstream);
+	      	   
+	      	   for(int i=0;i<SIZE;i++){
+		      		 Object userObject = ((DefaultMutableTreeNode) child)
+		    		            .getUserObject();  
+	      		   if (userObject instanceof CheckBoxNode) {
+				             CheckBoxNode node = (CheckBoxNode) userObject;
+				             if(node.selected){
+				            	 flag=true;
+			  
+				                 //Write to file
+						    	 out.write(node.text.toString()+"\n");
+				             }
+				      }
+	      		   
+	      		   child=(DefaultMutableTreeNode)child.getNextLeaf();
+			   }
+		     out.close();
+		 
+		 } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}        
+		            		 
+		return flag;
+			   
+	}	 
 }
 

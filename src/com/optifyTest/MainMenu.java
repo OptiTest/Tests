@@ -1,9 +1,35 @@
 
 package com.optifyTest;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Rectangle;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.EventObject;
+import java.util.Vector;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
 
 public class MainMenu extends javax.swing.JFrame {
 
@@ -13,13 +39,49 @@ public class MainMenu extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
 	private Settings set=new Settings();
 	private Thread thread2;
+	private ManageTests listTests;
+	public CheckBoxNode testList[];
+	private CheckBoxNodeRenderer renderer;
+	private DefaultMutableTreeNode rootNode;
+	public boolean select[];
 	
     public MainMenu() {
     	//Set MainMenu Components & default user & password:
-        initComponents();
+    	this.listTests=new ManageTests();
+    	
+    	 Vector<Vector<String>> groupVector = new Vector<Vector<String>>();
+    	
+    	 @SuppressWarnings("unchecked")
+		 Vector<String> group[] = (Vector<String>[]) new Vector[this.listTests.testList.size()];
+
+    	 
+    	 for(int i=0;i<this.listTests.testList.size();i++){
+    		 group[i]=new Vector<String>();
+    		 group[i].add(this.listTests.returnFileName(this.listTests.testList.get(i).getFileName()));
+    		 
+    		 for(int j=0;j<this.listTests.testList.get(i).getScriptList().size();j++)
+    			 group[i].add(this.listTests.testList.get(i).getScriptList().get(j).toString());
+    		 
+    		 groupVector.add(group[i]);
+    	 }
+    		 	 
+         this.rootNode = new DefaultMutableTreeNode("Root");
+     	
+         for(int i =0;i<groupVector.size();i++){
+         	DefaultMutableTreeNode node = new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(0).toString(), true));
+         	for(int j=1;j<((Vector<?>)groupVector.elementAt(i)).size();j++){
+         		node.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(j).toString(), true)));		
+         	}
+         	rootNode.add(node);
+         }
+    	
+    	
+        renderer = new CheckBoxNodeRenderer();
+        initComponents(rootNode);
+        
         jUserNameField.setText(set.getUserName());
         jPasswordField.setText(set.getUserPassword());
-      
+
     }
 
     /**
@@ -29,16 +91,15 @@ public class MainMenu extends javax.swing.JFrame {
      */
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
+    private void initComponents(DefaultMutableTreeNode rootNode) {
         jButtonRunTest = new javax.swing.JButton();
         jUserNameField = new javax.swing.JTextField();
         jPasswordField = new javax.swing.JPasswordField();
         jUserNameLabel = new javax.swing.JLabel();
         jUserPasswordLabel = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        jIconLabel = new javax.swing.JLabel();
+        //jScrollPane1 = new javax.swing.JScrollPane();
+        jTree = new javax.swing.JTree(rootNode);
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -48,6 +109,68 @@ public class MainMenu extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
+        
+        JTree tree = new JTree(rootNode);
+        tree.setToggleClickCount(1);
+        tree.setRootVisible(false);
+        tree.setShowsRootHandles(true);
+        tree.putClientProperty("JTree.lineStyle", "None");
+        CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+        tree.setCellRenderer(renderer);
+        
+        tree.setCellEditor(new CheckBoxNodeEditor(tree));
+        tree.setEditable(true);
+        
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener(){                                                        
+            public void actionPerformed(ActionEvent e)              
+            {  if (e.getActionCommand().equals("Submit")) {
+                System.out.println("Button1 has been clicked");
+            } }});
+        
+        JScrollPane jScrollPane1 = new JScrollPane(tree);
+       
+        
+        tree.setModel(new DefaultTreeModel(rootNode) {
+    public void valueForPathChanged(TreePath path, Object newValue) {
+        Object currNode = path.getLastPathComponent();
+        super.valueForPathChanged(path, newValue);
+        if ((currNode != null) && (currNode instanceof DefaultMutableTreeNode)) {
+            DefaultMutableTreeNode editedNode = (DefaultMutableTreeNode) currNode;
+            CheckBoxNode newCBN = (CheckBoxNode) newValue;
+            
+            if (!editedNode.isLeaf()) {
+                for (int i = 0; i < editedNode.getChildCount(); i++) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getChildAt(i);
+                    CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
+                    cbn.setSelected(newCBN.isSelected());
+                }
+            }
+            else{
+                boolean isAllChiledSelected = true;
+               for (int i = 0; i < editedNode.getParent().getChildCount(); i++) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getParent().getChildAt(i);
+                    CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
+                    if(!cbn.isSelected()){
+                        isAllChiledSelected = false;
+                    }
+                }
+                
+                if(isAllChiledSelected){
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)editedNode.getParent();
+                      CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
+                    cbn.setSelected(isAllChiledSelected);
+                }
+            }
+            
+            if (!newCBN.isSelected()) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getParent();
+                if (node.getUserObject() instanceof CheckBoxNode)
+                    ((CheckBoxNode) node.getUserObject()).setSelected(false);                            
+            }                                        
+        }
+    }
+});
 
         
         //Close App & process.
@@ -63,6 +186,7 @@ public class MainMenu extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusable(false);
         setResizable(false);
+        
 
         jButtonRunTest.setBackground(new java.awt.Color(255, 153, 0));
         jButtonRunTest.setText("Run Test");
@@ -93,10 +217,10 @@ public class MainMenu extends javax.swing.JFrame {
 
         jUserPasswordLabel.setText("Password:");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon("objects/optify.PNG")); // NOI18N
-        jLabel3.setText("jLabel3");
+        jIconLabel.setIcon(new javax.swing.ImageIcon("objects/optify.PNG")); // NOI18N
+        jIconLabel.setText("jIconLabel");
 
-        jScrollPane1.setViewportView(jTree1);
+        //jScrollPane1.setViewportView(tree);
 
         jLabel4.setText("Select your tests:");
 
@@ -158,12 +282,12 @@ public class MainMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jIconLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(86, 86, 86)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jUserNameLabel)
@@ -178,7 +302,7 @@ public class MainMenu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jIconLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUserNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,10 +316,10 @@ public class MainMenu extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45))
         );
-
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -210,8 +334,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) throws Exception{//GEN-FIRST:event_jButtonRunTestActionPerformed
-        boolean select[]={true,true,true,true,true,true,true};
-    	this.thread2 = new Thread(new MainTest(select));
+    	this.thread2 = new Thread(new MainTest(this.rootNode));
     	
     	this.thread2.start();
     
@@ -288,7 +411,7 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButtonRunTest;
     private javax.swing.JLabel jUserNameLabel;
     private javax.swing.JLabel jUserPasswordLabel;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jIconLabel;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -299,9 +422,8 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPasswordField jPasswordField;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jUserNameField;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JTree jTree;
     // End of variables declaration//GEN-END:variables
     
     //=========================================================================
@@ -324,4 +446,175 @@ public class MainMenu extends javax.swing.JFrame {
 				e.printStackTrace();
 			}
 	}
+	
+	//========================================================================
+    private void formatSelect(){
+    	final int SIZE=this.testList.length;
+    	this.select=new boolean[SIZE];
+    	
+    	for(int i=0;i<SIZE;i++){
+    		this.select[i]=true;
+    	}
+    }
+}
+
+class CheckBoxNodeRenderer implements TreeCellRenderer {
+    private JCheckBox leafRenderer = new JCheckBox();
+    
+    private DefaultTreeCellRenderer nonLeafRenderer = new DefaultTreeCellRenderer();
+    
+    Color selectionBorderColor, selectionForeground, selectionBackground,
+            textForeground, textBackground;
+    
+    protected JCheckBox getLeafRenderer() {
+        return leafRenderer;
+    }
+    
+    public CheckBoxNodeRenderer() {
+        Font fontValue;
+        fontValue = UIManager.getFont("Tree.font");
+        if (fontValue != null) {
+            leafRenderer.setFont(fontValue);
+        }
+        Boolean booleanValue = (Boolean) UIManager
+                .get("Tree.drawsFocusBorderAroundIcon");
+        leafRenderer.setFocusPainted((booleanValue != null)
+        && (booleanValue.booleanValue()));
+        
+        selectionBorderColor = UIManager.getColor("Tree.selectionBorderColor");
+        selectionForeground = UIManager.getColor("Tree.selectionForeground");
+        selectionBackground = UIManager.getColor("Tree.selectionBackground");
+        textForeground = UIManager.getColor("Tree.textForeground");
+        textBackground = UIManager.getColor("Tree.textBackground");
+    }
+    
+    public Component getTreeCellRendererComponent(JTree tree, Object value,
+            boolean selected, boolean expanded, boolean leaf, int row,
+            boolean hasFocus) {
+        
+        Component returnValue;
+        
+        String stringValue = tree.convertValueToText(value, selected,
+                expanded, leaf, row, false);
+        leafRenderer.setText(stringValue);
+        leafRenderer.setSelected(false);
+        
+        leafRenderer.setEnabled(tree.isEnabled());
+        
+        if (selected) {
+            leafRenderer.setForeground(selectionForeground);
+            leafRenderer.setBackground(selectionBackground);
+        } else {
+            leafRenderer.setForeground(textForeground);
+            leafRenderer.setBackground(textBackground);
+        }
+        
+        if ((value != null) && (value instanceof DefaultMutableTreeNode)) {
+            Object userObject = ((DefaultMutableTreeNode) value)
+            .getUserObject();
+            if (userObject instanceof CheckBoxNode) {
+                CheckBoxNode node = (CheckBoxNode) userObject;
+                leafRenderer.setText(node.getText());
+                leafRenderer.setSelected(node.isSelected());
+            }
+        }
+        returnValue = leafRenderer;
+        return returnValue;
+    }
+}
+ 
+class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
+    
+    CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+    
+    ChangeEvent changeEvent = null;
+    
+    JTree tree1;
+    
+    DefaultMutableTreeNode editedNode;
+    
+    public CheckBoxNodeEditor(JTree tree) {
+        this.tree1 = tree;
+    }
+    
+    public Object getCellEditorValue() {
+        JCheckBox checkbox = renderer.getLeafRenderer();
+        CheckBoxNode checkBoxNode = new CheckBoxNode(checkbox.getText(),
+                checkbox.isSelected());
+        return checkBoxNode;
+    }
+    
+    public boolean isCellEditable(EventObject event) {
+        boolean returnValue = false;
+        if (event instanceof MouseEvent) {
+            MouseEvent mouseEvent = (MouseEvent) event;
+            TreePath path = tree1.getPathForLocation(mouseEvent.getX(),
+                    mouseEvent.getY());
+            if (path != null) {
+                Object node = path.getLastPathComponent();
+                if ((node != null) && (node instanceof DefaultMutableTreeNode)) {
+                    editedNode = (DefaultMutableTreeNode) node;
+                    Object userObject = editedNode.getUserObject();
+                    Rectangle r = tree1.getPathBounds(path);
+                    int x = mouseEvent.getX() - r.x;
+                    int y = mouseEvent.getY() - r.y;
+                    JCheckBox checkbox = renderer.getLeafRenderer();
+                    checkbox.setText("");
+                    returnValue = userObject instanceof CheckBoxNode && x > 0 && x < checkbox.getPreferredSize().width;
+                }
+            }
+        }
+        return returnValue;
+    }
+    
+    public Component getTreeCellEditorComponent(final JTree tree, Object value,
+            boolean selected, boolean expanded, boolean leaf, int row) {
+        
+        Component editor = renderer.getTreeCellRendererComponent(tree, value,
+                true, expanded, leaf, row, true);
+        
+        ItemListener itemListener = new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                    tree.repaint();
+                    fireEditingStopped();
+            }
+        };
+        
+        if (editor instanceof JCheckBox) {
+            ((JCheckBox) editor).addItemListener(itemListener);
+        }
+        
+        return editor;
+    }
+}
+ 
+class CheckBoxNode {
+    String text;
+    
+    boolean selected;
+    
+    public CheckBoxNode(String text, boolean selected) {
+        this.text = text;
+        this.selected = selected;
+    }
+    
+    public boolean isSelected() {
+        return selected;
+    }
+    
+    public void setSelected(boolean newValue) {
+        selected = newValue;
+    }
+    
+    public String getText() {
+        return text;
+    }
+    
+    public void setText(String newValue) {
+        text = newValue;
+    }
+    
+    public String toString() {
+        return getClass().getName() + "[" + text + "/" + selected + "]";
+    }
 }

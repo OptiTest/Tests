@@ -1,9 +1,12 @@
 package com.optifyTest;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,6 +26,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.junit.Assume.assumeTrue; 
 
 import com.google.common.base.Function;
 
@@ -41,11 +45,13 @@ public class Keywords extends TestCase {
     static String setPath=st.getSeleniumBit();
     String keyWord="";
     String keyWordUrl="";
+    static List<String>scripList; //Loads all enable script list.
     
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
     int numTry=0;
+    scripList=getScriptList();
     
 	service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
@@ -97,6 +103,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void helpWithThisPage() throws Exception{
+	  assumeTrue(enable("helpWithThisPage")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("Entering Help with this page.");
@@ -106,6 +113,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void calendar() throws Exception{
+	  assumeTrue(enable("calendar")); 
 	  int numTry=0; //Counter the number of attempts.
 	  Calendar todayDate=Calendar.getInstance();
 	  
@@ -125,6 +133,7 @@ public class Keywords extends TestCase {
   
   @Test 
   public void overview()throws Exception{
+	  assumeTrue(enable("overview"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Keywords page Overview:");
@@ -138,6 +147,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void testView() throws Exception{
+	  assumeTrue(enable("testView"));
 	  int numTry=0; //Counter the number of attempts.
 		 
 	  print("\nTesting view summary.");
@@ -155,6 +165,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void importKeywordList() throws Exception{
+	  assumeTrue(enable("importKeywordList"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\nTesting Import keyword list.");
@@ -166,6 +177,7 @@ public class Keywords extends TestCase {
   
   //@Test
   public void exportKeywordList() throws Exception{
+	  assumeTrue(enable("exportKeywordList"));
 	  int numTry=0; //Counter the number of attempts.
 	 
 	  print("\nTesting export keyword list.");
@@ -175,6 +187,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void editKeywordsReport() throws Exception{
+	  assumeTrue(enable("editKeywordsReport"));
 	  int numTry=0; //Counter the number of attempts.
 		 
 	  print("\nTesting edit keywords report.");
@@ -186,6 +199,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void testRanks() throws Exception{
+	  assumeTrue(enable("testRanks"));
 	  int numTry=0; //Counter the number of attempts.
 		
 	  System.out.print("\n\nTesting ranks:\n");
@@ -204,6 +218,7 @@ public class Keywords extends TestCase {
   
   @Test
   public void addKeyword() throws Exception{
+	  assumeTrue(enable("addKeyword"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting Add Keywords:");
@@ -219,6 +234,7 @@ public class Keywords extends TestCase {
   
   @Test 
   public void getSuggestions() throws Exception{
+	  assumeTrue(enable("getSuggestions"));
 	  int numTry=0; //Counter the number of attempts.
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
@@ -246,6 +262,7 @@ public class Keywords extends TestCase {
   
  @Test
  public void tableSearch() throws Exception{
+	 assumeTrue(enable("tableSearch"));
 	 int numTry=0; //Counter the number of attempts.
 	 
 	 print("\n\nTesting table search...");
@@ -257,6 +274,7 @@ public class Keywords extends TestCase {
  
  @Test 
  public void tableActions() throws Exception{
+	  assumeTrue(enable("tableActions"));
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 		 
@@ -282,6 +300,7 @@ public class Keywords extends TestCase {
  
   @Test
   public void searchEngines() throws Exception{
+	  assumeTrue(enable("searchEngines"));
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting search engines:");
@@ -297,6 +316,7 @@ public class Keywords extends TestCase {
 	  
   @Test
   public void needHelp() throws Exception{
+	  assumeTrue(enable("needHelp"));
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
@@ -1539,5 +1559,42 @@ public class Keywords extends TestCase {
 		} catch (IOException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+  }
+  
+//===========================================================================
+  public boolean enable(String name){
+     for(String elem:this.scripList)
+    	 if(elem!=null && elem.toString().equals(name))
+    		 return true;
+      
+    return false; 
+  }
+  
+  //===========================================================================
+  private static List<String> getScriptList(){
+	  	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		List<String> list=new ArrayList<String>();
+		String line="";
+		
+		try { FileReader fstreamRead=new FileReader(file);
+		  reader=new BufferedReader(fstreamRead);
+		  line = reader.readLine();
+		  
+		  while(line!=null){
+			  list.add(line);
+			  line = reader.readLine();
+		  }
+		  
+		  reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts list from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return list;
   }
 }

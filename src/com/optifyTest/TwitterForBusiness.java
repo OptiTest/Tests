@@ -1,10 +1,16 @@
 package com.optifyTest;
 
+import static org.junit.Assume.assumeTrue;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -38,9 +44,12 @@ public class TwitterForBusiness extends TestCase  {
 	static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
 	static String setPath=st.getSeleniumBit();
+	static List<String>scripList; //Loads all enable script list.
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
+	scripList=getScriptList();
+	
     service = new ChromeDriverService.Builder()
     	.usingDriverExecutable(new File(setPath))
         .usingAnyFreePort()
@@ -88,6 +97,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void postTwitt() throws Exception{
+	  assumeTrue(enable("postTwitt")); 
 	  int numTry=0; //Counter the number of attempts.
 	  String message = testMessage();
 	  
@@ -104,6 +114,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void helpWithThisPage() throws Exception{
+	  assumeTrue(enable("helpWithThisPage")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nHelp with this page.");
@@ -115,6 +126,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void overview() throws Exception{
+	  assumeTrue(enable("overview")); 
 	  int numTry=0; //Counter the number of attempts.
 	  String winHandleBefore = driver.getWindowHandle();
 	  
@@ -134,6 +146,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void calendar() throws Exception{
+	  assumeTrue(enable("calendar")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting calendar.");
@@ -145,6 +158,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void pstList() throws Exception{
+	  assumeTrue(enable("pstList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting PST list.");
@@ -156,6 +170,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void campaignList() throws Exception{
+	  assumeTrue(enable("campaignList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting Campaign list.");
@@ -167,6 +182,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void newCampaigns() throws Exception{
+	  assumeTrue(enable("newCampaigns")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting New Campaigns.");
@@ -178,6 +194,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void campaignsActions() throws Exception{
+	  assumeTrue(enable("campaignsActions")); 
 	  int numTry=0; //Counter the number of attempts.
 
 	  print("\n\nTesting Campaigns actions.");
@@ -189,6 +206,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void userPopup() throws Exception{
+	  assumeTrue(enable("userPopup")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting user popup.");
@@ -200,6 +218,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void nextAndPrev() throws Exception{
+	  assumeTrue(enable("nextAndPrev")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting Next and prev.");
@@ -211,6 +230,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void tableActionsManageList() throws Exception{
+	  assumeTrue(enable("tableActionsManageList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions manager list:");
@@ -226,6 +246,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void tableActionsReplay() throws Exception{
+	  assumeTrue(enable("tableActionsReplay")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions replay:");
@@ -241,6 +262,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void tableActionsRetweet() throws Exception{
+	  assumeTrue(enable("tableActionsRetweet")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting table actions retweet:");
@@ -256,6 +278,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void search() throws Exception{
+	  assumeTrue(enable("search")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  System.out.println("\n\nTesting search:");
@@ -274,6 +297,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void campaignResults() throws Exception{
+	  assumeTrue(enable("campaignResults")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting campaign results.");
@@ -285,6 +309,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void outBox() throws Exception{
+	  assumeTrue(enable("outBox")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting out box.");
@@ -296,6 +321,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test
   public void addAccount() throws Exception{
+	  assumeTrue(enable("addAccount")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting add acount.");
@@ -307,6 +333,7 @@ public class TwitterForBusiness extends TestCase  {
   
   @Test 
   public void switchAccount() throws Exception{
+	  assumeTrue(enable("switchAccount")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
 	  print("\n\nTesting switch acount.");
@@ -319,6 +346,7 @@ public class TwitterForBusiness extends TestCase  {
   @AfterClass
   public static void summary(){
 	  driver.close();
+	  driver.quit();
   }
   
   //===================================================================================================
@@ -990,5 +1018,42 @@ public class TwitterForBusiness extends TestCase  {
 		} catch (IOException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
+  }
+  
+  //===========================================================================
+  public boolean enable(String name){
+     for(String elem:this.scripList)
+    	 if(elem!=null && elem.toString().equals(name))
+    		 return true;
+      
+    return false; 
+  }
+  
+  //===========================================================================
+  private static List<String> getScriptList(){
+	  	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		List<String> list=new ArrayList<String>();
+		String line="";
+		
+		try { FileReader fstreamRead=new FileReader(file);
+		  reader=new BufferedReader(fstreamRead);
+		  line = reader.readLine();
+		  
+		  while(line!=null){
+			  list.add(line);
+			  line = reader.readLine();
+		  }
+		  
+		  reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts list from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return list;
   }
 }
