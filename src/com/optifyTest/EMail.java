@@ -2,6 +2,7 @@ package com.optifyTest;
 
 import java.util.Properties;
 
+/*
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,10 +13,10 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+*/
 
 public class EMail {
-	
+	/*
 	//EMail class attribues:
 	private String to[];	     //Recipient's email ID needs to be mentioned.
 	private String from;     //Sender's email ID needs to be mentioned
@@ -83,6 +84,6 @@ public class EMail {
             e.printStackTrace();
         }
 	}
-	
+	*/
 	//=========================================================================
 }

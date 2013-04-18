@@ -280,9 +280,9 @@ public class Report {
 		 String from="optifyautomation@gmail.com";
 	     String to[]={"orasnin@gmail.com","anthonyp@optify.net"};
 	     String subject="Optify automation report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
- 
+ /*
 	     this.email = new EMail(to,from,subject,text);
-	     email.send();
+	     email.send();*/
 	}
 	
 	//Add action performed=====================================================

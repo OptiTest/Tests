@@ -31,18 +31,17 @@ import com.google.common.base.Function;
   public class DashBoard extends TestCase {
   public static MainMenu ts=new MainMenu();
   public static Settings st=new Settings();
-  
-  
+ 
   
   //Set test parameters:
   public static ChromeDriverService service;
   public static WebDriver driver;
   Actions builder = new Actions(driver);
   
-  static String homeAddress=st.getServerUrl();
-  static String userName=ts.getUserName();
-  static String setPath=st.getSeleniumBit();
-  static String password=ts.getUserPassword();
+  static String homeAddress="https://dashboard.optify.net";
+  static String userName="orasnin@gmail.com";
+  static String setPath="selenium\\chromedriver.exe";
+  static String password="wrwmfy9m";
 
   @BeforeClass
   public static void createAndStartService() throws Throwable {
