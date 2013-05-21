@@ -1,5 +1,8 @@
 package com.optifyTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class NodeFailure {
 
 	//NodeFailures class attributes:
@@ -7,7 +10,10 @@ public class NodeFailure {
 					objectName,
 					actionPerformed,
 					errorDescription,
-					trace;
+					trace,
+					date;
+	
+	private int num;                    //The number of instances
 	
 	private NodeFailure next;
 	
@@ -20,8 +26,22 @@ public class NodeFailure {
 		this.actionPerformed=actionPerformed;
 		this.errorDescription=errorDescription;
 		this.trace=trace;
+		this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+		this.num=1;
 		this.next=null;
 	}
+	
+	public NodeFailure(String arr[]){
+		int i=0; //arr index.
+		this.pageName=arr[i];i++;
+		this.objectName=arr[i];i++;
+		this.actionPerformed=arr[i];i++;
+		this.errorDescription=arr[i];i++;
+		this.trace=arr[i];
+		this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+		this.num=1;
+		this.next=null;
+}
 
 	//Set next=================================================================
 	public void setNext(NodeFailure next){
@@ -53,8 +73,18 @@ public class NodeFailure {
 		return this.errorDescription;
 	}
 	
-	//Return trace=============================================================
+	//Return trace===================================================================
 	public String returnTrace(){
 		return this.trace;
+	}
+	
+	//Set num======================================================================
+	public void setNum(int num){
+		this.num=num;
+	}
+	
+	//Get num==================================================================
+	public int getNum(){
+		return num;
 	}
 }

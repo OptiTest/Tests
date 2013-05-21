@@ -9,9 +9,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 
 import org.junit.AfterClass;
@@ -29,6 +29,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import bsh.This;
 
 import com.google.common.base.Function;
 
@@ -48,7 +50,11 @@ import com.google.common.base.Function;
   static String userName=ts.getUserName();
   static String setPath=st.getSeleniumBit();
   static String password=ts.getUserPassword();
+  static public String object;
+  static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
+  static public double time=0; 
   static List<String>scripList; //Loads all enable script list.
+  boolean junit=false;           //The default should be false. True for JUnit test only!
 
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -64,13 +70,16 @@ import com.google.common.base.Function;
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
 	
-	System.out.println("\n");
-	
 	dashboardLogIn(driver);
   }
   
   public static void dashboardLogIn(WebDriver driver) throws Throwable{
+	  time=System.currentTimeMillis();
+	  
+	  System.out.println();
 	  print("Login to Optify.");
+	  
+	  object="";
 	  
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
@@ -78,7 +87,7 @@ import com.google.common.base.Function;
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
 	  
-	  System.out.println(" v");
+	  printSuccess();
   }
   
   @Test
@@ -86,16 +95,17 @@ import com.google.common.base.Function;
 	  assumeTrue(enable("seoWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting SEO performance widget:");
+	  object="SEO performance widget";
+	  
 	  print("Entering Average score.");
 	  seoWidget_EnteringAverageScore(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Homepage score.");
 	  seoWidget_EnteringHomepageScore(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Estimated click value.");
 	  seoWidget_EnteringEstimatedClickValue(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -105,31 +115,32 @@ import com.google.common.base.Function;
 	  assumeTrue(enable("gettingStartedWidget"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting Getting started widget:");
+	  object="Getting started widget";
+	  
 	  print("Entering 1.Create your target keywords list.");
 	  gettingStartedWidget_CreateYourTargetKeywords(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 1.Create your target keywords list LEARN MORE.");
 	  gettingStartedWidget_CreateYourTargetKeywords_LEARN_MORE(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 2.Optimize your website pages.");
 	  gettingStartedWidget_OptimizeYourWebsitPages(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 2.Optimize your website pages LEARN MORE.");
 	  gettingStartedWidget_OptimizeYourWebsitPages_LEARN_MORE(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 3.View and manage your leads.");
 	  gettingStartedWidget_ViewAndManageYourLeads(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 3.View and manage your leads LEARN MORE.");
 	  gettingStartedWidget_ViewAndManageYourLeads_LEARN_MORE(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 4.Create a Twitter campaign.");
 	  gettingStartedWidget_CreateATwitterCampaign(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering 4.Create a Twitter campaign LEARN MORE.");
 	  gettingStartedWidget_CreateATwitterCampaign_LEARN_MORE(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -143,19 +154,20 @@ import com.google.common.base.Function;
 	  
 	  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
 	  
-	  System.out.println("\n\nTesting Twitter for Business widget:");
+	  object="Twitter for Business widget";
+	  
 	  print("Entering title link.");
 	  twitterForBusinessWidget_titleLink(numTry);
-	  System.out.println(" v");	  
+	  printSuccess();	  
 	  print("Sending twitt.");
 	  twitterForBusinessWidget_sendingTwitt(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Social monitor.");
 	  twitterForBusinessWidget_socialMonitor(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing drop down list.");
 	  twitterForBusinessWidget_dropDownList(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -168,23 +180,23 @@ import com.google.common.base.Function;
 	  goBase();
 	  wait.until(presenceOfElementLocated(By.className("keyword_widget_title")));
 	  
-	  System.out.println("\n\nTesting Keyword Performance widget:");
+	  object="Testing Keyword Performance widget";
 	  
 	  print("Entering title link.");
 	  keywordPerformanceWidget_EnteringTitleLink(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing rank1 label.");
 	  keywordPerformanceWidget_rank1(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing rank2 label.");
 	  keywordPerformanceWidget_rank2(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing drop down list (search engine).");
 	  keywordPerformanceWidget_searchEngineDropDawn(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing drop down list (Lists).");
 	  keywordPerformanceWidget_dropDownList(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -195,20 +207,20 @@ import com.google.common.base.Function;
 	  goBase();
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nPage Optimization widget:");
+	  object="Page Optimization widget";
 	  
 	  print("Entering title link.");
 	  pageOptimizationWidget_enteringTitleLink(numTry);
-	  System.out.println(" v"); 
+	  printSuccess(); 
 	  print("Entering Optify page score link.");
 	  pageOptimizationWidget_enteringPageScoreLink(numTry);
-	  System.out.println(" v");  
+	  printSuccess();  
 	  print("Testing drop down list.");
 	  pageOptimizationWidget_dropDownList(numTry);
-	  System.out.println(" v");  
+	  printSuccess();  
 	  print("Testing score bar.");
 	  pageOptimizationWidget_testingScoreBar(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -220,20 +232,20 @@ import com.google.common.base.Function;
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
-	  System.out.println("\n\nLink Opportunities widget:");
+	  object="Link Opportunities widget";
 	  
 	  print("Entering title link.");
 	  linkOpportunitiesWidget_enteringTitleLink(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing drop down list (View).");
 	  linkOpportunitiesWidget_dropDownListView(numTry);
-	  System.out.println(" v"); 
+	  printSuccess(); 
 	  print("Testing drop down list (List).");
 	  linkOpportunitiesWidget_dropDownList(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add more URLs.");
 	  linkOpportunitiesWidget_addMoreURLs(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")));
 	  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div"))).getAttribute("id");
@@ -249,14 +261,14 @@ import com.google.common.base.Function;
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
-	  System.out.println("\n\nLink Opportunities widget:");
+	  object="Link Opportunities widget";
 	  
 	  print("Entering title link.");
 	  keywordTrendsWidget_enteringTitleLink(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing display graph.");
 	  keywordTrendsWidget_testingDisplayGraph(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -268,44 +280,38 @@ import com.google.common.base.Function;
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
-	  System.out.println("\n\nWebsite Feed widget:");
+	  object="Website Feed widget";
 	  
 	  print("Testing drop down list (Score set used).");
 	  websiteFeedWidget_dropDownListScore(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  //Test record:  
-	  try{if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/strong"))).getText().equals("No website activity at the moment but we'll keep you posted.")){
-			  print("Testing lead detail link.");
-			  websiteFeedWidget_leadDetailLink(numTry);
-			  System.out.println(" v");
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/strong"))).getText().equals("No website activity at the moment but we'll keep you posted.");
+	  }
+	  catch(Exception e){
+		  try{print("Testing lead detail link.");
+		      websiteFeedWidget_leadDetailLink(numTry);
+			  printSuccess();
 		      print("Testing Watch button.");
 		      websiteFeedWidget_watchButton(numTry);
-		      System.out.println(" v");
+		      printSuccess();
+		      Thread.sleep(3000);                                                                                                                                                     
+		      wait.until(presenceOfElementLocated(By.xpath("//ul[@class='content website_feed data-feed data-list']//*[text()='Edit alert settings']"))).click();
+		      Thread.sleep(2000); 
+		      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());                                                                                                          
+		      driver.get(homeAddress);
+	      
+		      print("Testing hide button.");
+		      websiteFeedWidget_hideButton(numTry);
+		      printSuccess();
+		      print("Testing Unwatch button.");
+		      websiteFeedWidget_hideButtonUnwatchButton(numTry);
+		      printSuccess();	
 		  }
-	  }
-	  catch(Exception ex){
-		  throw ex;
-	  }
-	  
-	  if(!wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/strong"))).getText().equals("No website activity at the moment but we'll keep you posted.")){
-		      try{wait.until(presenceOfElementLocated(By.linkText("WATCH"))).click();
-		      }
-		      catch(Exception ex){
-		    	  wait.until(presenceOfElementLocated(By.linkText("UNWATCH"))).click();
-		    	  Thread.sleep(3000);
-			      builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[3]/span[2]/a")))).perform();
-			      assertEquals("Lead alerts settings","Alerts | Optify",driver.getTitle());
-			      driver.get(homeAddress);
-		      
-			      print("Testing hide button.");
-			      websiteFeedWidget_hideButton(numTry);
-			      System.out.println(" v");
-			      print("Testing Unwatch button.");
-			      websiteFeedWidget_hideButtonUnwatchButton(numTry);
-			      System.out.println(" v");
-	      }
-
+		  catch(Exception ex){
+				  throw ex;
+		  }
 	  }
 	
 	  Thread.sleep(3000);
@@ -317,16 +323,17 @@ import com.google.common.base.Function;
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
-	  System.out.println("\n\nWebsite Feed widget:");
+	  object="Website Feed widget:";
+	  
 	  print("Testing keywrods check box.");
 	  alertsWidget_keywrodsCheckBox(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Leads check box.");
 	  alertsWidget_leadsCheckBox(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing records.");
 	  alertsWidget_records(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -339,23 +346,23 @@ import com.google.common.base.Function;
 	  String getId="";
 	  goBase();
 	  
-	  System.out.println("\n\nTesting Remove/Add new widgets:");
+	  object="Testing Remove/Add new widgets";
 	  
 	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']")));
 	  getId=driver.findElement(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all alerts widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[3]")).getAttribute("id");
 	
 	  print("Testing removing widget.");
 	  addWidgets_removingWidget(getId,numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing add widget.");
 	  addWidgets_removingWidget_addWidget(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing menu widget feature collapse.");
 	  getId=addWidgets_menuWidgetFeatureCollapse(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing menu widget feature edit.");
 	  addWidgets_menuWidgetFeatureEdit(getId,numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -367,65 +374,65 @@ import com.google.common.base.Function;
 	  int numTry=0; //Counter the number of attempts.
 	  goBase();
 	  
-	  System.out.println("\n\nWelcome toolbar:");
+	  object="Welcome toolbar";
 	  
 	  print("Testing Collapse/Expand.");
 	  welcomeToolbar_collapseExpand(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add Keywords.");
 	  welcomeToolbar_addKeywords(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Send an email.");
 	  welcomeToolbar_sendAnEmail(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing View Traffic.");
 	  welcomeToolbar_viewTraffic(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Create a report.");
 	  welcomeToolbar_createAReport(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  //Test links:
 	  print("Entering Take me to the Help home page link.");
 	  welcomeToolbar_takeMeToTheHelHomePageLink(winHandleBefore,numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Help me customize my dashboard link.");
 	  welcomeToolbar_HelpMeCustomizeMyDashboardLink(winHandleBefore,numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Submit a support ticket link.");
 	  welcomeToolbar_SubmitASupportTicketLink(winHandleBefore,numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  //Test see more actions:
 	  print("Testing Add keywords.");
 	  welcomeToolbar_moreAddKeywords(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add pages.");
 	  welcomeToolbar_moreAddPages(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add Urls.");
 	  welcomeToolbar_moreAddUrls(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Import Contacts.");
 	  welcomeToolbar_moreImportContacts(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  //Create an Email:
 	  //Send an email:
 	  print("Testing Create a Landing Page.");
 	  welcomeToolbar_moreCreateALandingPage(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Create a Lead Score.");
 	  welcomeToolbar_moreCreateALeadScore(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing View your Traffic.");
 	  welcomeToolbar_moreViewYourTraffic(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Create an alert.");
 	  welcomeToolbar_moreCreateAnAlert(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Create a report.");
 	  welcomeToolbar_moreCreateAReport(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -524,8 +531,11 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+			 if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
+				 
 			 
 			 numTry++;
 			 gettingStartedWidget_CreateYourTargetKeywords_LEARN_MORE(numTry);
@@ -542,8 +552,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_CreateYourTargetKeywords(numTry);
@@ -570,8 +582,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_OptimizeYourWebsitPages_LEARN_MORE(numTry);
@@ -588,8 +602,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_OptimizeYourWebsitPages(numTry);
@@ -616,8 +632,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_ViewAndManageYourLeads_LEARN_MORE(numTry);
@@ -634,8 +652,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_ViewAndManageYourLeads(numTry);
@@ -662,8 +682,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 gettingStartedWidget_CreateATwitterCampaign_LEARN_MORE(numTry);
@@ -680,8 +702,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception ex){
-		 if(numTry>3)
-			 	throw ex;
+		  if(numTry>2){
+				 printFailed();
+				 throw ex;
+			 }
 			 
 		 numTry++;
 		 gettingStartedWidget_CreateATwitterCampaign(numTry);
@@ -698,9 +722,11 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
-			 
+			 }
+		  
 			 numTry++;
 			 seoWidget_EnteringAverageScore(numTry);
 	  }
@@ -713,12 +739,14 @@ import com.google.common.base.Function;
 	  
 	  try{wait.until(presenceOfElementLocated(By.linkText("Homepage score")));
 	  	  wait.until(presenceOfElementLocated(By.linkText("Homepage score"))).click();
-		  assertEquals("Homepage score","Website Page | Optify",driver.getTitle());
+		  assertEquals("Homepage score","Pages | Optify",driver.getTitle());
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 seoWidget_EnteringHomepageScore(numTry);
@@ -736,8 +764,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 seoWidget_EnteringEstimatedClickValue(numTry);
@@ -755,8 +785,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
+		  if(numTry>2){
+				 printFailed();
 				 throw e;
+			 }
 			 
 			 numTry++;
 			 keywordPerformanceWidget_EnteringTitleLink(numTry);
@@ -781,8 +813,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+			  printFailed();
+			  throw e; 
+		  }
 			 
 			 numTry++;
 			 keywordPerformanceWidget_rank1(numTry);
@@ -807,12 +841,19 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
-			 
-			 numTry++;
-			 keywordPerformanceWidget_rank2(numTry);
+		  if(numTry>2){
+			  printFailed();
+				 throw e; 
+		  }	
 	  }
+	  catch(ComparisonFailure ex){
+			  printFailed();
+				 throw ex; 
+	  }
+			 
+			
+	  	 numTry++;
+		 keywordPerformanceWidget_rank2(numTry);  
   }
   
   //=========================================================================================================
@@ -831,8 +872,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+			  printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 keywordPerformanceWidget_searchEngineDropDawn(numTry);
@@ -855,8 +898,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+			  printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 keywordPerformanceWidget_dropDownList(numTry);
@@ -865,7 +910,6 @@ import com.google.common.base.Function;
   
   //=========================================================================================================
   private void pageOptimizationWidget_enteringTitleLink(int numTry) throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
 	  try{builder.click(driver.findElement(By.linkText("Page optimization"))).perform();
@@ -873,8 +917,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+			  printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 pageOptimizationWidget_enteringTitleLink(numTry);
@@ -891,8 +937,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+			  printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 pageOptimizationWidget_enteringPageScoreLink(numTry);
@@ -921,8 +969,10 @@ import com.google.common.base.Function;
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li")));
 	  }
 	  catch(Exception e){
-		 if(numTry>3)
-			 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 
 		 numTry++;
 		 pageOptimizationWidget_dropDownList(numTry);
@@ -942,9 +992,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
-			 
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 numTry++;
 			 pageOptimizationWidget_testingScoreBar(numTry);
 	  }
@@ -960,8 +1011,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 linkOpportunitiesWidget_enteringTitleLink(numTry);
@@ -974,20 +1027,18 @@ import com.google.common.base.Function;
 	  goBase();
 	  
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div"))).getAttribute("id");
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']//li[@class='list_item']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']//span[@class='ui-pulldown-arrow']")));
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")))).perform();
 		  Thread.sleep(3000);
 		  wait.until(presenceOfElementLocated(By.xpath("//*[@id='"+getId+"-pulldown']/ul/li[2]"))).click();
 		  Thread.sleep(3000);
-		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")))).perform();
-		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li"))).click();
-		  Thread.sleep(3000);
-		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")))).perform();
+		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span[2]/div/div/span[2]")))).perform();	  
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 linkOpportunitiesWidget_dropDownListView(numTry);
@@ -1002,13 +1053,15 @@ import com.google.common.base.Function;
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div"))).getAttribute("id");
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all link widget-height-1 widget-width-1 ui-draggable']/div[2]/div/div/span/div/div/span[2]")))).perform();
 		  Thread.sleep(5000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[3]"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']/ul/li[2]"))).click();
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
-			 
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 			 numTry++;
 			 linkOpportunitiesWidget_dropDownList(numTry);
 	  }
@@ -1026,8 +1079,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress); 
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 linkOpportunitiesWidget_addMoreURLs(numTry);
@@ -1045,8 +1100,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 keywordTrendsWidget_enteringTitleLink(numTry);
@@ -1065,8 +1122,10 @@ import com.google.common.base.Function;
 		  catch(Exception e){}
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 keywordTrendsWidget_testingDisplayGraph(numTry);
@@ -1089,8 +1148,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(5000); 
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 websiteFeedWidget_dropDownListScore(numTry);
@@ -1107,8 +1168,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 websiteFeedWidget_leadDetailLink(numTry);
@@ -1121,12 +1184,16 @@ import com.google.common.base.Function;
 	  goBase();
 	  
 	  try{builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div/a/strong")))).perform();
+	  	  wait.until(presenceOfElementLocated(By.linkText("WATCH"))).click();    
 	  }
   	  catch(Exception e){
-		 if(numTry>3)
-			 throw e;
+  		 if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		 
 		 numTry++;
+		 wait.until(presenceOfElementLocated(By.linkText("UNWATCH"))).click();
 		 websiteFeedWidget_watchButton(numTry);
 	  }
   }
@@ -1141,12 +1208,14 @@ import com.google.common.base.Function;
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a[3]")));
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a[3]"))).click();
 		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a"))).click();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all website_feed widget-height-1 widget-width-1 ui-draggable has-toolbar']/div[2]/ul/li/div[2]/a")))).perform();
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 websiteFeedWidget_hideButton(numTry);
@@ -1159,16 +1228,18 @@ import com.google.common.base.Function;
 	  goBase();
 	  
 	  try{try{ wait.until(presenceOfElementLocated(By.linkText("UNWATCH"))).click();
-		  System.out.println(" v");
+		  printSuccess();
 		  }
 		  catch(Exception e){
 			  wait.until(presenceOfElementLocated(By.linkText("WATCH"))).click();
-			  System.out.println(" v");
+			  printSuccess();
 		  }
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 websiteFeedWidget_hideButtonUnwatchButton(numTry);
@@ -1188,8 +1259,10 @@ import com.google.common.base.Function;
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']/button"))).click();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 addWidgets_removingWidget(getId,numTry);
@@ -1205,8 +1278,10 @@ import com.google.common.base.Function;
 		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//button[@value='0']")))).perform();
 	  }
 	  catch(Exception e){
-		 if(numTry>3)
-			 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 
 		 numTry++;
 		 addWidgets_removingWidget_addWidget(numTry);
@@ -1234,8 +1309,10 @@ import com.google.common.base.Function;
 		  return getId;
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+			 if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 			 
 			 numTry++;
 			 return addWidgets_menuWidgetFeatureCollapse(numTry);
@@ -1259,8 +1336,10 @@ import com.google.common.base.Function;
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget-settings ui-corner-bottom']/div[2]/a"))).click();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 addWidgets_menuWidgetFeatureEdit(getId,numTry);
@@ -1279,8 +1358,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_collapseExpand(numTry);
@@ -1298,8 +1379,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_addKeywords(numTry);
@@ -1315,8 +1398,10 @@ import com.google.common.base.Function;
 	      //Do something.
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_addKeywords(numTry);
@@ -1333,8 +1418,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_viewTraffic(numTry);
@@ -1351,8 +1438,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_createAReport(numTry);
@@ -1371,8 +1460,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_takeMeToTheHelHomePageLink(winHandleBefore,numTry);
@@ -1391,8 +1482,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_HelpMeCustomizeMyDashboardLink(winHandleBefore,numTry);
@@ -1411,8 +1504,10 @@ import com.google.common.base.Function;
 		  driver.switchTo().window(winHandleBefore); 
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_SubmitASupportTicketLink(winHandleBefore,numTry);
@@ -1436,8 +1531,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreAddKeywords(numTry);
@@ -1461,8 +1558,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreAddPages(numTry);
@@ -1485,8 +1584,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreAddUrls(numTry);
@@ -1509,8 +1610,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreImportContacts(numTry);
@@ -1531,8 +1634,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreCreateALandingPage(numTry);
@@ -1553,8 +1658,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreCreateALeadScore(numTry);
@@ -1576,8 +1683,10 @@ import com.google.common.base.Function;
 	  }
 	  
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreViewYourTraffic(numTry);
@@ -1598,8 +1707,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreCreateAnAlert(numTry);
@@ -1619,8 +1730,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 welcomeToolbar_moreCreateAReport(numTry);
@@ -1637,8 +1750,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 twitterForBusinessWidget_titleLink(numTry);
@@ -1673,8 +1788,10 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 twitterForBusinessWidget_sendingTwitt(numTry);
@@ -1699,7 +1816,8 @@ import com.google.common.base.Function;
 				  wait.until(presenceOfElementLocated(By.id("search-twitter-input"))).sendKeys(Keys.ENTER);
 				  Thread.sleep(5000);
 				  wait.until(presenceOfElementLocated(By.xpath("//*[@id='search-action']/a"))).click();
-				  Thread.sleep(5000);
+				  wait.until(presenceOfElementLocated(By.xpath("//*[@id='twitter_searches']//*[text()='ad']")));
+				  
 				  
 				  driver.get(homeAddress);
 				  wait.until(presenceOfElementLocated(By.xpath("//div[@class='widget ui-widget ui-widget-content ui-corner-all twitter widget-height-2 widget-width-1 ui-draggable']/div[2]/div[2]/div[3]/div[2]/div/ul/li/div/div/div/div[2]/a")));
@@ -1714,18 +1832,23 @@ import com.google.common.base.Function;
 			  if(cathSum>3)
 				  throw ex;
 			  
-			  cathSum++;
-			  contin=true;
-			  wait.until(presenceOfElementLocated(By.xpath("//div[@class='footer-controls']/a"))).click();
-			  removeTwitterSearchSave();
-			  driver.get(homeAddress);
-			  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
+			  try{cathSum++;
+				  contin=true;
+				  wait.until(presenceOfElementLocated(By.xpath("//div[@class='footer-controls']/a"))).click();
+				  removeTwitterSearchSave();
+				  driver.get(homeAddress);
+				  wait.until(presenceOfElementLocated(By.linkText("Twitter for Business")));
+			  }
+			  catch(Exception e){}
+			  
 			  }
   		}
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 twitterForBusinessWidget_socialMonitor(numTry);
@@ -1749,8 +1872,10 @@ import com.google.common.base.Function;
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 twitterForBusinessWidget_dropDownList(numTry);
@@ -1781,8 +1906,10 @@ import com.google.common.base.Function;
 		  }
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 alertsWidget_keywrodsCheckBox(numTry);
@@ -1813,8 +1940,10 @@ import com.google.common.base.Function;
 		  }
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 alertsWidget_leadsCheckBox(numTry);
@@ -1827,7 +1956,7 @@ import com.google.common.base.Function;
 	  goBase();
 	  
 	  try{try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='list_item alert_row lead_alert']/div/a"))).click();
-	  		  assertEquals("Lead detail:","Lead Detail | Optify",driver.getTitle());
+	  		  assertEquals("Lead detail:","Visitor Detail | Optify",driver.getTitle());
 	  		  driver.get(homeAddress);
 	  		  Thread.sleep(3000);
 	 	  }
@@ -1836,8 +1965,20 @@ import com.google.common.base.Function;
 			//Do some test.
 		}
 		catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+			if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+			 
+			 numTry++;
+			 alertsWidget_records(numTry);
+		}
+	  
+	  	catch(ComparisonFailure ex){
+			if(numTry>2){
+				 printFailed();
+				 throw ex; 
+		  }
 			 
 			 numTry++;
 			 alertsWidget_records(numTry);
@@ -1848,7 +1989,7 @@ import com.google.common.base.Function;
   private static void print(String action){
 	  FileWriter fstreamWrite=null;
 	  
-	  System.out.print(action);
+	  System.out.printf("%-52s",action);
 	  
 	  try{fstreamWrite = new FileWriter("data/actionStram");
 		 }catch(IOException e) {
@@ -1866,7 +2007,10 @@ import com.google.common.base.Function;
   
 //===========================================================================
   public boolean enable(String name){
-     for(String elem:this.scripList)
+	  if(junit)
+			 return true;
+	  
+	  for(String elem:DashBoard.scripList)
     	 if(elem!=null && elem.toString().equals(name))
     		 return true;
       
@@ -1900,5 +2044,24 @@ import com.google.common.base.Function;
 		
 	 	return list;
   }
+  
+//=================`===============================================
+  public static void printSuccess(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-5s","Success");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
+  
+  //=================`===============================================
+  public static void printFailed(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-7s","Failed");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
 } 
-

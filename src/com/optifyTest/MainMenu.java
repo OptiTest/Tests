@@ -1,3 +1,70 @@
+/*
+ * This project was written by Asnin Or to the Optify Company 2013.
+ * Parts of the OATS system.
+ * 
+ * The MainMenu class.
+ * ============================================================================
+ * 
+ * This class display the main menu of the OATS program and display to the user
+ * the all program functionality, includes: settings options, selecting script 
+ * to run,running new test scenario, change server and user information for the 
+ * testing etc.
+ * 
+ * 
+ * MainMenu methods:
+ * =================
+ * 
+ * 1. MainMenu():
+ * 
+ *    The MainMenu constructor initialize the list using the manageTests class,
+ *    In addition all the GUI components, user name & password fields and 
+ *    create the JTree scripts to run selection tree.   
+ * 
+ * 
+ * 2. private void initComponents(DefaultMutableTreeNode rootNode).
+ *    
+ *    This method received the JTree as explained and create the 
+ *    main menu screen by using all GUI components.
+ *    
+ *    
+ * 3. public void endApp()
+ *    
+ *    The method responsible to save the state of the JTree (With scripts has
+ *    privilege to run) to data/data3 file. In addition responsible to end 
+ *    the program and to end all her process.
+ *    
+ *    
+ * 4. private DefaultMutableTreeNode creatJTree()
+ * 
+ *    This method responsible to create the JTree himself. The idea is very
+ *    simple by creating two String vector, one vector include all tests pages
+ *    arrays (the groupVector) when the second vector it's array which include 
+ *    all the list scripts for each page. This group of vector with constructed
+ *    from test pages and their scripts is the base of the construction of the
+ *    JTree himself. After we have got the list name of the test script we want
+ *    to organized them in a tree of check box list in order to use the ability
+ *    to select or deselect. For this reason we are using the CheckBox class in
+ *    order to built those check box from the vector list, and just adding 
+ *    those check boxes into the JTree.
+ *    
+ *    
+ * 5. private boolean getScriptsPrivilege(String name)
+ *    
+ *    This method checks with scripts as the privileged to run and "send" this
+ *    information to the creatJTree method in order to built this tree, by
+ *    the privilege information (with scripts enabled/disabled - true/false).
+ *    The method get the privileged list from data/data3 file.
+ *    
+ *    
+ * 6. private void saveJTree()
+ * 
+ * 	  This method will always run when exiting program command initiate.
+ *    Her purpose is to save all the privilege test information (with script 
+ *    has the permission to run) to the disk, data/data3 file.
+ *    
+ *      
+ */
+
 
 package com.optifyTest;
 
@@ -13,6 +80,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.EventObject;
 import java.util.Vector;
@@ -44,43 +116,19 @@ public class MainMenu extends javax.swing.JFrame {
 	private CheckBoxNodeRenderer renderer;
 	private DefaultMutableTreeNode rootNode;
 	public boolean select[];
+	private String pageName;
 	
     public MainMenu() {
     	//Set MainMenu Components & default user & password:
     	this.listTests=new ManageTests();
     	
-    	 Vector<Vector<String>> groupVector = new Vector<Vector<String>>();
-    	
-    	 @SuppressWarnings("unchecked")
-		 Vector<String> group[] = (Vector<String>[]) new Vector[this.listTests.testList.size()];
-
-    	 
-    	 for(int i=0;i<this.listTests.testList.size();i++){
-    		 group[i]=new Vector<String>();
-    		 group[i].add(this.listTests.returnFileName(this.listTests.testList.get(i).getFileName()));
-    		 
-    		 for(int j=0;j<this.listTests.testList.get(i).getScriptList().size();j++)
-    			 group[i].add(this.listTests.testList.get(i).getScriptList().get(j).toString());
-    		 
-    		 groupVector.add(group[i]);
-    	 }
-    		 	 
-         this.rootNode = new DefaultMutableTreeNode("Root");
-     	
-         for(int i =0;i<groupVector.size();i++){
-         	DefaultMutableTreeNode node = new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(0).toString(), true));
-         	for(int j=1;j<((Vector<?>)groupVector.elementAt(i)).size();j++){
-         		node.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(j).toString(), true)));		
-         	}
-         	rootNode.add(node);
-         }
-    	
-    	
         renderer = new CheckBoxNodeRenderer();
-        initComponents(rootNode);
+        initComponents(creatJTree());
         
         jUserNameField.setText(set.getUserName());
         jPasswordField.setText(set.getUserPassword());
+        
+        pageName="";
 
     }
 
@@ -219,8 +267,6 @@ public class MainMenu extends javax.swing.JFrame {
 
         jIconLabel.setIcon(new javax.swing.ImageIcon("objects/optify.PNG")); // NOI18N
         jIconLabel.setText("jIconLabel");
-
-        //jScrollPane1.setViewportView(tree);
 
         jLabel4.setText("Select your tests:");
 
@@ -439,6 +485,10 @@ public class MainMenu extends javax.swing.JFrame {
 	//=========================================================================
 	public void endApp(){
 			System.out.println("Exiting!!!");
+			
+			//Save JTree scripts privilege
+			saveJTree();
+			
 			try {
 				Runtime.getRuntime().exec("killall chromedriver");
 			} catch (IOException e) {
@@ -448,16 +498,137 @@ public class MainMenu extends javax.swing.JFrame {
 	}
 	
 	//========================================================================
-    private void formatSelect(){
-    	final int SIZE=this.testList.length;
-    	this.select=new boolean[SIZE];
+    private DefaultMutableTreeNode creatJTree(){
+    	Vector<Vector<String>> groupVector = new Vector<Vector<String>>();
     	
-    	for(int i=0;i<SIZE;i++){
-    		this.select[i]=true;
-    	}
+   	 	@SuppressWarnings("unchecked")
+		Vector<String> group[] = (Vector<String>[]) new Vector[this.listTests.testList.size()];
+   	 	
+   	 	for(int i=0;i<this.listTests.testList.size();i++){
+	   		 group[i]=new Vector<String>();
+	   		 group[i].add(this.listTests.returnFileName(this.listTests.testList.get(i).getFileName()));
+	   		 
+	   		 for(int j=0;j<this.listTests.testList.get(i).getScriptList().size();j++)
+	   			 group[i].add(this.listTests.testList.get(i).getScriptList().get(j).toString());
+	   		 
+	   		 groupVector.add(group[i]);
+   	 	}
+   	 	
+   	 	this.rootNode = new DefaultMutableTreeNode("Root");
+  	
+	    for(int i =0;i<groupVector.size();i++){
+	     	DefaultMutableTreeNode node = new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(0).toString(), getScriptsPrivilege(((Vector<?>)groupVector.elementAt(i)).elementAt(0).toString()+" page")));
+	     	for(int j=1;j<((Vector<?>)groupVector.elementAt(i)).size();j++){
+	     		node.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector<?>)groupVector.elementAt(i)).elementAt(j).toString(), getScriptsPrivilege(((Vector<?>)groupVector.elementAt(i)).elementAt(j).toString()))));		
+	     	}
+	     	rootNode.add(node);
+	    }
+	    
+	    return rootNode;
+    }
+    
+    //=========================================================================
+    private boolean getScriptsPrivilege(String name){
+    	//Load all file info into Contact List.
+		BufferedReader reader=null;
+		File file=new File("data/data3");
+		String line="";
+		
+		final int PAGE_SIZE=4;
+		String arr[];
+		
+		//Set with page test scenario his been testing for privilege.
+		if(name.length()>=PAGE_SIZE && name.substring(name.length()-PAGE_SIZE, name.length()).equals("page"))
+			this.pageName=name.substring(0,name.length()-PAGE_SIZE);
+			
+		try { @SuppressWarnings("resource")
+			  FileReader fstreamRead=new FileReader(file);
+		      reader=new BufferedReader(fstreamRead);
+		      line = reader.readLine();
+		  
+		      while(line!=null){
+		    	 arr=line.split(" ");
+		    	 
+		    	 if((this.pageName).equals(arr[0]+" ")&&arr.length==1)
+		    		 return true;
+		    	 
+			     if(arr[0].equals(this.pageName.substring(0,this.pageName.length()-1))&&arr[1].equals(name))
+				    return true;
+			     
+			     line = reader.readLine();
+		      }
+		  
+		      reader.close();
+	
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+			System.out.println("Can't load scripts privilege from file data/data3!");
+			e.printStackTrace();
+		}
+		
+	 	return false;
+    }
+    
+    //=========================================================================
+    private void saveJTree(){
+    	File file=new File("data/data3");     //Destination writing to file.
+		FileWriter fstream;
+		final int SIZE=this.rootNode.getChildCount(); //Get the number of test pages.
+		DefaultMutableTreeNode value;             
+		DefaultMutableTreeNode p=this.rootNode;
+   	 	String pageName="";
+		
+		value = ((DefaultMutableTreeNode) p.getFirstChild());
+		
+		try { fstream = new FileWriter(file,false);
+	      	   BufferedWriter out = new BufferedWriter(fstream);
+	      	 
+	      	   for(int i=0;i<SIZE;i++){ 
+	      		    //Get the test scripts nodes of the test page.
+	      		   	DefaultMutableTreeNode child=(DefaultMutableTreeNode)value.getFirstChild(); 
+	        	
+	      		   	Object pageObject = ((DefaultMutableTreeNode) value)
+		      				.getUserObject(); 
+	      		  
+		      		if (pageObject instanceof CheckBoxNode) {
+	       		        CheckBoxNode node = (CheckBoxNode) pageObject;
+				             //Write to file
+	       		        
+	       		        pageName=node.text.toString();
+	       		        
+	       		        if(node.selected)
+	       		        	out.write(node.text.toString()+"\n");
+		            }
+		      		
+	        		final int PAGE_SIZE=value.getChildCount();
+	        		  
+	        		for(int j=0;j<PAGE_SIZE;j++){
+			      		Object scriptObject = ((DefaultMutableTreeNode) child)
+			      				.getUserObject(); 
+		        		if (scriptObject instanceof CheckBoxNode) {
+		        		       CheckBoxNode node = (CheckBoxNode) scriptObject;
+					             //Write to file
+		        		         if(node.selected)
+		        		        	out.write(pageName+" "+node.text.toString()+"\n");
+			             }
+		        		 
+		        		 child=(DefaultMutableTreeNode)child.getNextLeaf();
+	        		}
+	        		 
+	        		value = ((DefaultMutableTreeNode)value.getNextSibling());
+	      	   }
+	      		
+		     out.close();
+		 
+		 } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}        
+    	
     }
 }
 
+//=============================================================================
 class CheckBoxNodeRenderer implements TreeCellRenderer {
     private JCheckBox leafRenderer = new JCheckBox();
     

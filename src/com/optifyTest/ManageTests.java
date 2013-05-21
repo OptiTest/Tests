@@ -24,7 +24,11 @@ import org.junit.Test;
  *  
  * Methods:
  * 
- * 1. The textFilter method will filter all files in src folder that can be use
+ * 1.  public ManageTests():
+ * 
+ *     The constructor 
+ * 
+ * The textFilter method will filter all files in src folder that can be use
  *    as test files, she will search all filed end with "Java".
  *    
  * 2. The modifiedTestFiles method will search on all files that has been 
@@ -47,8 +51,6 @@ public class ManageTests {
 		this.files=this.dir.listFiles(textFilter);
 		modifiedTestFiles(this.files);
 		packList();
-		//printList();
-		printScripts();
 	}
 	
 	//=========================================================================

@@ -1,3 +1,79 @@
+/*
+ * This project was written by Asnin Or to the Optify Company 2013.
+ * Parts of the OATS system.
+ * The MainTest class.
+ * ============================================================================
+ * 
+ * This class gathering all tests information in order to filter with test 
+ * or test script will run and which not. The main idea of understanding this 
+ * issue by using a Jtree that pass to this class from the MainMenu class by 
+ * reference. The Jtree builds from Check boxes nodes, which each check box 
+ * responsible a bout test or script.
+ * 
+ * In addition this class responsible for gathering all reporting information 
+ * for the report class in order to create it (failures info, time generating,
+ * scripts etc).
+ * 
+ * 
+ * MainTest methods:
+ * =================
+ * 
+ * 1. MainTest(DefaultMutableTreeNode root):
+ * 
+ *    The MainTest constructor get the JTree root, as explained before.
+ *    and initialize all class attributes.
+ * 
+ * 
+ * 2. run():
+ *    
+ *    This is the operational method responsible for all running test.
+ *    The method check for with test/script as the privilege to run according
+ *    to the JTree that explained before.
+ *    For now this method will run in endless loop. 
+ * 
+ * 
+ * 3. writeReport(Result result[]):
+ * 
+ * 	  This method responsible of collecting the test report head information:
+ *    time, number of test executed, number of tests failed, rate etc.
+ *    
+ * 
+ * 4. class TraceListener:
+ *    
+ *    Responsible to "Listen" test executed and record all failures.
+ *    
+ *  
+ * 5. getTodayDate():
+ * 
+ *    Setting the system clock info into a visible date format.
+ *    
+ * 
+ * 6. getTime():
+ * 
+ *    Setting the system clock info into a visible time format.
+ *    
+ * 
+ * 7. setHeadInfo(String serverPath)
+ * 
+ *    Setting the main head report information.
+ *    
+ *    
+ * 8. cleanTest():
+ * 
+ *    Using the system run time in order to clean all test process.
+ *    
+ *    
+ * 9. checkIfScriptTrue(DefaultMutableTreeNode value):
+ * 
+ *    This method receive JTree node of page test, in order to check if there
+ *    is any run privilege on this specific test file, those scripts will write
+ *    into data file and "will sent" into the test executed in order to "tell"
+ *    to the page test executed which script will run.
+ *    
+ *    this method will return a TRUE only if at least one of the scripts has 
+ *    a running privilege.
+ */
+
 package com.optifyTest;
 
 import java.io.BufferedWriter;
@@ -16,7 +92,8 @@ import org.junit.runner.notification.RunListener;
 public class MainTest extends Thread{
 	//Main test attributes:
 	private Report report; //Report 
-	public String []headInformation; //Headline report information.
+	private ManageFailure mFailures;
+	public  String []headInformation; //Headline report information.
 	private String setReportSavePath;
 	private String serverPath;
 	private PrintStream oldoutps;
@@ -25,40 +102,54 @@ public class MainTest extends Thread{
 	
 	//Main test constructor:
 	public MainTest(DefaultMutableTreeNode root){
-		final int SIZE=10;//Headline report information array size.
-		this.set=new Settings();
-		this.headInformation=new String[SIZE];
-		this.root=root;
-		this.serverPath=set.getServerUrl();
-		this.oldoutps = System.out;
-		this.setReportSavePath="data/";
+		final int SIZE=10;                     //Headline report information array size.
+		this.set=new Settings();               //Get the settings info.
+		this.headInformation=new String[SIZE]; //The headline info array.
+		this.root=root;                        //The JTree root. 
+		this.serverPath=set.getServerUrl();    //Get the server path information.
+		this.oldoutps = System.out;            //Save the old print out stream.
+		this.setReportSavePath="data/";        //The report save path.
+		this.report=null;                      //Initialization the report pointer to null.
+		this.mFailures=null;
 	}
 	
     //=========================================================================
 	public void run(){
-		final int SIZE=this.root.getChildCount();
-		DefaultMutableTreeNode value;
-		JUnitCore core= new JUnitCore();
-		core.addListener(new TraceListener());
-        Result result[]=new Result[SIZE];
+		final int SIZE=this.root.getChildCount(); //Get the number of test pages.
+		DefaultMutableTreeNode value;             
+		JUnitCore core= new JUnitCore();          //Create JUnitCore object in
+		                                          //order to run the tests.
+		core.addListener(new TraceListener());    //Add the failure test listener.
+        Result result[]=new Result[SIZE+1];         //Create the results array.
 		
+        
         while(true){
+        	 this.mFailures=new ManageFailure(this.setReportSavePath,this.oldoutps);
+        	 
+        	 this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps,this.mFailures);
+        	 
         	 DefaultMutableTreeNode p=this.root;
         	 value = ((DefaultMutableTreeNode) p.getFirstChild());
+        	 setHeadInfo(this.serverPath);
         	 
+        	 //Run server alive test.
+     		 try {result[SIZE]=core.run(Class.forName("com.optifyTest.LogIn"));
+     	 	 } catch (ClassNotFoundException e) {
+     			System.out.println("Couldn't run the server alive test");
+     		 }
+        	  
         	 for(int i=0;i<SIZE;i++){   
         		 Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
         		            
         		 if (userObject instanceof CheckBoxNode) {
         		        CheckBoxNode node = (CheckBoxNode) userObject;
     		     
-    		            if(node.selected || checkIfScriptTrue((DefaultMutableTreeNode) value)){ 
-	    		         	setHeadInfo(this.serverPath);
-	    		     	    this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps);
-	    		            	 
-	    		     	    //Kill webDriver process
+        		        //Check if one of the scripts true.
+    		            if(checkIfScriptTrue((DefaultMutableTreeNode) value)){ 
+    		            	//Kill webDriver process
 	    			        cleanTest();
-	    			        		
+	    			        
+	    			        //Run the test.
 			        		try {result[i]=core.run(Class.forName("com.optifyTest."+node.text));
 			        		} catch (ClassNotFoundException e) {
 			        			System.out.println("Test class "+node.text+" not found!");
@@ -71,14 +162,16 @@ public class MainTest extends Thread{
         	
         	//Create report.
         	writeReport(result);
+        	
+        	this.mFailures.saveToLog();
         }
 	}
 	
 	//=========================================================================
 	private void writeReport(Result result[]){
-		int numOfTest=0;
-		int numOfFailure=0;
-		double timeInSec=0;
+		int numOfTest=0;          //Save the sum of script test number as executable.
+		int numOfFailure=0;       //Save the sum failure number detected.
+		double timeInSec=0;       //Save the sum of run time in seconds.
 		
 		final int SIZE=result.length;
 		
@@ -90,9 +183,10 @@ public class MainTest extends Thread{
 			}
 		}
 		
-		int numOfSuccess=(numOfTest-numOfFailure);
+		int numOfSuccess=(numOfTest-numOfFailure);  //Save the number of succeed
+		                                            //test out of all executed.
 		
-		if(numOfTest!=0){
+		if(numOfTest>=numOfSuccess){ //If number of test executed equal 0. don't check success rate.
 			double rate=((double)numOfSuccess/(double)numOfTest);
 			this.headInformation[6]=Integer.toString((int)(rate*100))+"%";
 		}
@@ -100,19 +194,18 @@ public class MainTest extends Thread{
 		}
 		
 		this.headInformation[4]=Integer.toString(numOfTest);
-		this.headInformation[5]=Integer.toString(numOfFailure);
+		this.headInformation[5]=Integer.toString(mFailures.getNewFailureList().size());
 		
 		//Set time results:
 		timeInSec/=3600;
 		int hour=(int)(timeInSec/3600);
-		int min=(int)(timeInSec/60);
+		int min=(int)((timeInSec/60)%60);
 		int sec=(int)(timeInSec%60);
 		
 		this.headInformation[7]=hour+":"+min+":"+sec;
 		//Generate the report:
 		report.createReport();
 		System.setOut(this.oldoutps); 
-		
 	}
 	
 	//=========================================================================
@@ -120,7 +213,8 @@ public class MainTest extends Thread{
 	    public void testFailure(Failure failure) throws java.lang.Exception {
 	    	PrintStream oldoutps = System.out; //get the current output //stream
 	    	
-	    	report.addFailure(failure);
+	    	mFailures.addNewFailure(failure);
+	    	//report.addFailure(failure);
 	    	System.setOut(oldoutps); 
 	    }
 	 }
@@ -180,11 +274,13 @@ public class MainTest extends Thread{
 	
 	//=========================================================================
 	private boolean checkIfScriptTrue(DefaultMutableTreeNode value){
-		boolean flag=false; //Set if exist script to run.
-		File file=new File("data/data3");
+		boolean flag=false;                   //Set if at least exist on script with privilege to run.
+		File file=new File("data/data3");     //Destination writing to file.
 		FileWriter fstream;
-		final int SIZE=value.getChildCount();
-		DefaultMutableTreeNode child=(DefaultMutableTreeNode)value.getFirstChild();
+		final int SIZE=value.getChildCount(); //Number of scripts file exist in test file.
+		
+		//Get the test scripts nodes of the test page.
+		DefaultMutableTreeNode child=(DefaultMutableTreeNode)value.getFirstChild(); 
 		
 		 try { fstream = new FileWriter(file,false);
 	      	   BufferedWriter out = new BufferedWriter(fstream);
@@ -211,8 +307,7 @@ public class MainTest extends Thread{
 			e.printStackTrace();
 		}        
 		            		 
-		return flag;
-			   
+		return flag;		   
 	}	 
 }
 

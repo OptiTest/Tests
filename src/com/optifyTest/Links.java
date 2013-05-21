@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 
 import org.junit.AfterClass;
@@ -44,7 +45,11 @@ public class Links extends TestCase {
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
   static String setPath=st.getSeleniumBit();
+  static public String object;
+  static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
+  static public double time=0;
   static List<String>scripList; //Loads all enable script list.
+  boolean junit=false;           //The default should be false. True for JUnit test only!
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -66,10 +71,11 @@ public class Links extends TestCase {
   
   public static void enterToDashBoard() throws Exception{
 	  int numTry=0; //Counter the number of attempts.
+	  time=System.currentTimeMillis();
+	  object="";
 	  
-	  System.out.println("\nStarting Links test:\n");
-	  
-	  print("\nLogin to Optify.");
+	  System.out.println();
+	  print("Login to Optify.");
 	  
 	  //Log in Optify:
 	  driver.get(homeAddress+"/login");
@@ -78,11 +84,11 @@ public class Links extends TestCase {
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
 	  
-	  System.out.println(" v");
+	  printSuccess();
 	  
-	  print("\n\nEntering Links.");
+	  print("Entering Links.");
 	  enterToLinks(numTry);
-	  System.out.println(" v");
+	  printSuccess();
   }
   
   @Test
@@ -90,12 +96,14 @@ public class Links extends TestCase {
 	  assumeTrue(enable("addUrls")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting add Urls.");
+	  object="Url link";
+	  
+	  print("Testing add Urls.");
 	  addUrls_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing add Urls to group.");
 	  addUrls_toGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -105,16 +113,17 @@ public class Links extends TestCase {
 	  assumeTrue(enable("checkFilters")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting filters:");
+	  object="Filters";
+	  
 	  print("Add new filter.");
 	  checkFilters_add(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Check received filter values.");
 	  checkFilters_checkReceivedValues(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Delete filters.");
 	  checkFilters_delete(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  Thread.sleep(3000);
   }
   
@@ -123,9 +132,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("assignToList"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting adding url into list:");
+	  object="Add to list button";
+	  
+	  print("Testing adding url into list:");
 	  assignToList_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -135,25 +146,26 @@ public class Links extends TestCase {
 	  assumeTrue(enable("tableSort"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting table sort:");
+	  object="Table sort";
+	  
 	  print("Testing source sort.");
 	  tableSort_source(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing priority sort.");
 	  tableSort_priority(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Link to my site sort.");
 	  tableSort_linkToMySiteSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing link from my site sort.");
 	  tableSort_linkFromMySiteSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing link to competitors sort.");
 	  tableSort_linkToCompetitorsSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing page rank sort.");
 	  tableSort_pageRank(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -163,9 +175,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("helpWithThisPage"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting helpWithThisPage.");
+	  object="Help With This Page link";
+	  
+	  print("Testing Help With This Page.");
 	  helpWithThisPage_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -175,9 +189,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("importLinks"));
 	  int numTry=0; //Counter the number of attempts.
 	 
-	  print("\n\nTesting import links.");
+	  object="Import link button";
+	  
+	  print("Testing import links.");
 	  importLinks_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -187,9 +203,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("exportCSV"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting export CSV.");
+	  object="Export CSV button";
+	  
+	  print("Testing export CSV.");
 	  exportCSV_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -199,9 +217,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("exportPDF"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting export PDF.");
+	  object="Export PDF button";
+	  
+	  print("Testing export PDF.");
 	  exportPDF_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -211,9 +231,11 @@ public class Links extends TestCase {
 	  assumeTrue(enable("nextAndPrev"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting next and prev:");
+	  object="Next & Prev button";
+	  
+	  print("Testing next and prev:");
 	  nextAndPrev_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -223,16 +245,17 @@ public class Links extends TestCase {
 	  assumeTrue(enable("showResults"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting show results:");
+	  object="Show results";
+	  
 	  print("Testing show fifty.");
 	  showResults_fifty(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing show twentyfive.");
 	  showResults_twentyfivey(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing show ten.");
 	  showResults_ten(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -242,19 +265,20 @@ public class Links extends TestCase {
 	  assumeTrue(enable("getSuggestions"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting get suggestions:");
+	  object="Get suggestions button";
+	  
 	  print("Testing Get url suggest.");
 	  String getUrl=getSuggestions_getUrlSuggest(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing save url to test group.");
 	  getSuggestions_saveUrlToTestGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("check saved url and test group.");
 	  getSuggestions_checkSaveUrlAndTestGroup(numTry,getUrl);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing delete url and group.");
 	  getSuggestions_deleteUrlAndGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -294,18 +318,18 @@ public class Links extends TestCase {
   //=========================================================================================================
   private static void enterToLinks(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  Actions builder = new Actions(driver);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
-		  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
-		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li[3]/a"))).click();
-		  assertEquals("Links page","Links | Optify",driver.getTitle());
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='optify-nav-menu-icon']/span"))).click();
+  	  	  Thread.sleep(2000);
+	      wait.until(presenceOfElementLocated(By.xpath("//*[@id='main-menu-content']/div/div/div[2]/div[3]/div[2]/a"))).click();
+	      assertEquals("Links page","Links | Optify",driver.getTitle());
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			
 		 	numTry++;
 		 	enterToLinks(numTry);
@@ -317,14 +341,17 @@ public class Links extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
 	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='view links_actions']/div/button")))).perform();
+	  	  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='links_add_urls']"))).sendKeys(Keys.chord(Keys.CONTROL, "a"));
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='links_add_urls']"))).sendKeys("www.walla.co.il");
 		  Thread.sleep(2000);
 		  
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='add-url-save']/span"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			
 		 	try{wait.until(presenceOfElementLocated(By.xpath("//html/body/div[11]/div[1]/a/span"))).click();
 		 	}
@@ -339,7 +366,10 @@ public class Links extends TestCase {
   private void addUrls_toGroup(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='view links_actions']/div/button")))).perform();
+	  try{Thread.sleep(2000);
+	  
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='view links_actions']/div/button")))).perform();
+		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='links_add_urls']"))).sendKeys(Keys.chord(Keys.CONTROL, "a"));
 		  wait.until(presenceOfElementLocated(By.xpath("//textarea[@id='links_add_urls']"))).sendKeys("www.ynet.co.il");
 		  Thread.sleep(2000);
 		  
@@ -353,8 +383,10 @@ public class Links extends TestCase {
 	  }
 	  
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			
 		 	numTry++;
 		 	addUrls_toGroup(numTry);
@@ -375,8 +407,10 @@ public class Links extends TestCase {
 		  builder.sendKeys(Keys.ENTER).perform();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			
 		 	numTry++;
 		 	checkFilters_add(numTry);
@@ -388,8 +422,8 @@ public class Links extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
 	  try{//Check received values:
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='http://www.ynet.co.il']")));
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='http://www.walla.co.il']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='ynet.co.il']")));
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='walla.co.il']")));
 		  
 		  //Go over all values in table:
 		  int sumOfRows=getRowCount(By.xpath("//table[@id='links-table']"));
@@ -401,10 +435,14 @@ public class Links extends TestCase {
 		  }
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
+		 	addUrls_test(numTry);
+		 	addUrls_toGroup(numTry);
 		 	checkFilters_checkReceivedValues(numTry);
 	  }
   }
@@ -420,8 +458,10 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-remove icon-white']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	checkFilters_delete(numTry);
@@ -433,7 +473,7 @@ public class Links extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
 	  try{//Add url into new list:
-		  String value=wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a"))).getAttribute("title");
+		  String value=wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a"))).getText();
 		  
 		  builder.moveToElement(wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody/tr/td/span/a")))).perform();
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action button-action action-tags']")));
@@ -449,7 +489,6 @@ public class Links extends TestCase {
 		  Thread.sleep(2000);
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).click();
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='http://www.ynet.co.il']")));
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']//a[text()='"+value+"']")));
 		  
 		  Thread.sleep(3000);
@@ -460,11 +499,20 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
-		 	assignToList_test(numTry);
+		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]")))).perform();
+			wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown-pulldown']//label[text()='test']"))).click();
+			Thread.sleep(2000);
+			
+			if(wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).isSelected())
+				wait.until(presenceOfElementLocated(By.xpath("//div[@id='filter-list-pulldown']/div/span[2]"))).click();
+		 	
+			assignToList_test(numTry);
 	  }
   }
   
@@ -499,8 +547,10 @@ public class Links extends TestCase {
 		  finally{}
 	 }
 	 catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		 	
 		 	numTry++;
 		 	tableSort_source(numTry);
@@ -537,8 +587,10 @@ public class Links extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	tableSort_priority(numTry);
@@ -575,8 +627,10 @@ public class Links extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	tableSort_linkToMySiteSort(numTry);
@@ -613,8 +667,10 @@ public class Links extends TestCase {
 		  finally{}
   	  }
   	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		 	
 		 	numTry++;
 		 	tableSort_linkFromMySiteSort(numTry);
@@ -651,8 +707,10 @@ public class Links extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	tableSort_linkToCompetitorsSort(numTry);
@@ -701,8 +759,10 @@ public class Links extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	tableSort_pageRank(numTry);
@@ -712,22 +772,39 @@ public class Links extends TestCase {
   //=========================================================================================================
   private void helpWithThisPage_test(int numTry)throws Exception {
   	  WebDriverWait wait = new WebDriverWait(driver, 10);
-  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")));
-		  String winHandleBefore = driver.getWindowHandle();
-		  
-		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")))).perform();
+  	  String winHandleBefore = driver.getWindowHandle();
+	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//i[@class='icon-help-circle nav-icon nav-icon-white optify-nav-button-icon']")))).perform();
 		  switcWindow();
 		  assertEquals("Help with this page:","Links overview : Help and Support",driver.getTitle());
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  //Restart Test:
+		  driver.close();
+		  driver.switchTo().window(winHandleBefore);
+		  
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
-		 	numTry++;
-		 	helpWithThisPage_test(numTry);
+		  numTry++;
+		  helpWithThisPage_test(numTry);
+	 }
+	  
+	 catch(ComparisonFailure ex){
+		  //Restart Test:
+		  driver.close();
+		  driver.switchTo().window(winHandleBefore);
+		  
+		  if(numTry>2){
+				 printFailed();
+				 throw ex; 
+		  }
+		 	
+		  numTry++;
+		  helpWithThisPage_test(numTry);
 	 }
   }
   
@@ -735,10 +812,10 @@ public class Links extends TestCase {
   private void importLinks_test(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  String winHandleBefore = driver.getWindowHandle();
-	  
-	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='view sharing']/div/a"))).click();
   
-	  try{//Test link "How to format your file":
+	  try{wait.until(presenceOfElementLocated(By.xpath("//*[@id='page-header']/div/div/div/div/a/span"))).click();
+		  
+		  //Test link "How to format your file":
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='import-links-dialog']/p[3]/a"))).click();
 		  switcWindow();
 		  assertEquals("How to format your file:","How to import links into Optify : Help and Support",driver.getTitle());
@@ -752,16 +829,21 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@aria-labelledby='ui-dialog-title-import-links-dialog']/div/a/span"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 //Restart test:
+		 try{driver.close();
+		     driver.switchTo().window(winHandleBefore);
+		 }
+		 catch(Exception ex){}
+		  
+		  
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
-		 	//Restart test:
-		 	try{driver.close();
-		 	    driver.switchTo().window(winHandleBefore);
-		 	}
-		 	catch(Exception ex){}
-		 	numTry++;
-		 	importLinks_test(numTry);
+		 	
+		  numTry++;
+		  importLinks_test(numTry);
 	 }
   }
   
@@ -769,13 +851,15 @@ public class Links extends TestCase {
   private void exportCSV_test(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='view sharing']/div/a[2]"))).click();
+	  try{wait.until(presenceOfElementLocated(By.xpath("//*[@id='page-header']/div/div/div/div/a[2]"))).click();
   
 	  	  //Here we can add some file to test.
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	exportCSV_test(numTry);
@@ -786,13 +870,15 @@ public class Links extends TestCase {
   private void exportPDF_test(int numTry)throws Exception {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='view sharing']/div/a[3]"))).click();
+	  try{wait.until(presenceOfElementLocated(By.xpath("//*[@id='page-header']/div/div/div/div/a[3]"))).click();
   
 	  	  //Here we can add some file to test.
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	exportPDF_test(numTry);
@@ -827,8 +913,10 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-pager data-pager']//a[text()='1']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-pager data-pager']//a[text()='1']"))).click();
 		 	}
@@ -854,14 +942,20 @@ public class Links extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  try{//Restart test:
+			  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
+			  wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select/option"))).click();
+			  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
+			  wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody")));
+		  }  
+		  catch(Exception ex){}
 		 	
-		 	//Restart test:
-		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
-		    wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select/option"))).click();
-		    builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
-		    wait.until(presenceOfElementLocated(By.xpath("//table[@id='links-table']/tbody")));
+		    
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		 	
 		 	numTry++;
 		 	showResults_fifty(numTry);
 	 }
@@ -883,8 +977,10 @@ public class Links extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	//Restart test:
 		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
@@ -912,8 +1008,10 @@ public class Links extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	//Restart test:
 		 	builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='results_count_pager']/select")))).perform();
@@ -942,8 +1040,10 @@ public class Links extends TestCase {
 		  
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	return getSuggestions_getUrlSuggest(numTry);
@@ -968,8 +1068,10 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='suggest-links-save']/span"))).click();
   	  }
   	  catch(Exception e){
-	 	if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 	
 	 	numTry++;
 	 	Thread.sleep(2000);
@@ -990,8 +1092,10 @@ public class Links extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='report-filters']/div/div/div/span[2]"))).click();
 	  }
 	  catch(Exception e){
-	 	if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	numTry++;
 	 	Thread.sleep(2000);
@@ -1024,8 +1128,10 @@ public class Links extends TestCase {
 		  Thread.sleep(2000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		 	
 		 	numTry++;
 		 	getSuggestions_deleteUrlAndGroup(numTry);
@@ -1036,7 +1142,7 @@ public class Links extends TestCase {
   private static void print(String action){
 	  FileWriter fstreamWrite=null;
 	  
-	  System.out.print(action);
+	  System.out.printf("%-40s",action);
 	  
 	  try{fstreamWrite = new FileWriter("data/actionStram");
 		 }catch(IOException e) {
@@ -1054,7 +1160,10 @@ public class Links extends TestCase {
   
   //===========================================================================
   public boolean enable(String name){
-     for(String elem:this.scripList)
+	 if(junit)
+		 return true;
+	 
+     for(String elem:Links.scripList)
     	 if(elem!=null && elem.toString().equals(name))
     		 return true;
       
@@ -1087,5 +1196,25 @@ public class Links extends TestCase {
 		}
 		
 	 	return list;
+  }
+  
+  //=================================================================
+  public static void printSuccess(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-5s","Success");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
+  
+  //=================================================================
+  public static void printFailed(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-7s","Failed");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
   }
 }

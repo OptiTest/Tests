@@ -44,7 +44,11 @@ public class TwitterForBusiness extends TestCase  {
 	static String userName=ts.getUserName();
     static String password=ts.getUserPassword();
 	static String setPath=st.getSeleniumBit();
+	static public String object;
+	static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
+	static public double time=0;
 	static List<String>scripList; //Loads all enable script list.
+	boolean junit=false;           //The default should be false. True for JUnit test only!
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -66,11 +70,11 @@ public class TwitterForBusiness extends TestCase  {
   
   public static void enterToTwitterForBusiness() throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  Actions builder = new Actions(driver);
+	  time=System.currentTimeMillis();
+	  object="";
 	  
-	  print("\n\nStarting Twitter for business:\n");
-	  
-	  print("\n\nLogin to Optify.");
+	  System.out.println();
+	  print("Login to Optify.");
 	  
 	  //Log in Optify:
 	  driver.get(homeAddress+"/login");
@@ -79,18 +83,17 @@ public class TwitterForBusiness extends TestCase  {
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
 	  
-	  System.out.println(" v");
+	  printSuccess();
 	  
-	  System.out.print("\nEnter to Twitter for business.");
+	  print("Enter to Twitter for business.");
 	  
 	  //Enter to Twitter For Business:
-	  wait.until(presenceOfElementLocated(By.xpath("//li[@class='enable']/a/span")));
-	  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
-	  Thread.sleep(3000);
-	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='header-nav']/li[2]/ul/li[4]/a"))).click();
-	  assertEquals("Twitter for Business:","Twitter for Business | Optify",driver.getTitle());
+	  wait.until(presenceOfElementLocated(By.xpath("//div[@class='optify-nav-menu-icon']/span"))).click();
+	  Thread.sleep(2000);
+      wait.until(presenceOfElementLocated(By.xpath("//*[@id='main-menu-content']/div/div/div[2]/div[4]/div[2]/a"))).click();
+      assertEquals("Twitter for Business:","Twitter for Business | Optify",driver.getTitle());
 	  
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -101,13 +104,14 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  String message = testMessage();
 	  
-	  System.out.println("\n\nTesting show results:");
+	  object="Testing show results";
+	  
 	  print("Testing send twitt.");
 	  postTwitt_send(numTry,message);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Checking sent twitt.");
 	  postTwitt_checkSend(numTry,message);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   } 
@@ -117,9 +121,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("helpWithThisPage")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nHelp with this page.");
+	  object="Help with this page link";
+	  
+	  print("Entering Help with this page.");
 	  helpWithThisPage_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   } 
@@ -130,16 +136,17 @@ public class TwitterForBusiness extends TestCase  {
 	  int numTry=0; //Counter the number of attempts.
 	  String winHandleBefore = driver.getWindowHandle();
 	  
-	  System.out.println("\n\nTesting overview:");
+	  object="Overview bar";
+	  
 	  print("Testing Updates.");
 	  overview_updates(numTry,winHandleBefore);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Followers.");
 	  overview_followers(numTry,winHandleBefore);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Following.");
 	  overview_Following(numTry,winHandleBefore);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -149,9 +156,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("calendar")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting calendar.");
+	  object="Calendar";
+	  
+	  print("Testing calendar.");
 	  calendar_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -161,9 +170,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("pstList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting PST list.");
+	  object="Pst list";
+	  
+	  print("Testing PST list.");
 	  pstList_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -173,9 +184,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("campaignList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting Campaign list.");
+	  object="Campaign list";
+	  
+	  print("Testing Campaign list.");
 	  campaignList_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -185,9 +198,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("newCampaigns")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting New Campaigns.");
+	  object="New Campaigns button";
+	  
+	  print("Testing New Campaigns.");
 	  newCampaigns_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 
 	  Thread.sleep(3000);
   }
@@ -197,9 +212,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("campaignsActions")); 
 	  int numTry=0; //Counter the number of attempts.
 
-	  print("\n\nTesting Campaigns actions.");
+	  object="Campaigns actions";
+	  
+	  print("Testing Campaigns actions.");
 	  campaignsActions_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -209,9 +226,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("userPopup")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting user popup.");
+	  object="User popup";
+	  
+	  print("Testing user popup.");
 	  userPopup_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -221,9 +240,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("nextAndPrev")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting Next and prev.");
+	  object="Next & Prev";
+	  
+	  print("Testing Next and prev.");
 	  nextAndPrev_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -233,13 +254,14 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("tableActionsManageList")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting table actions manager list:");
-	  print("\n\nTesting creating new list.");
+	  object="Table actions manager list";
+	  
+	  print("Testing creating new list.");
 	  tableActionsManageList_creatNewList(numTry);
-	  System.out.println(" v");
-	  print("\n\nTesting delete new list.");
+	  printSuccess();
+	  print("Testing delete new list.");
 	  tableActionsManageList_deleteList(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -249,13 +271,14 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("tableActionsReplay")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting table actions replay:");
-	  print("\n\nTesting click replay.");
+	  object="Table actions replay";
+	  
+	  print("Testing click replay.");
 	  String message=tableActionsReplay_click(numTry);
-	  System.out.println(" v");
-	  print("\n\nTesting replay message.");
+	  printSuccess();
+	  print("Testing replay message.");
 	  tableActionsReplay_message(numTry,message);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -265,13 +288,14 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("tableActionsRetweet")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting table actions retweet:");
-	  print("\n\nTesting click retweet.");
+	  object="Table actions retweet";
+	  
+	  print("Testing click retweet.");
 	  tableActionsRetweet_click(numTry);
-	  System.out.println(" v");
-	  print("\n\nTesting replay output.");
+	  printSuccess();
+	  print("Testing replay output.");
 	  tableActionsRetweet_replayOutput(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	
 	  Thread.sleep(3000);
   }
@@ -281,16 +305,17 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("search")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting search:");
-	  print("\n\nTesting search for 'ad'.");
+	  object="search";
+	  
+	  print("Testing search for 'ad'.");
 	  search_searchForAd(numTry);
-	  System.out.println(" v");
-	  print("\n\nTesting save 'ad'.");
+	  printSuccess();
+	  print("Testing save 'ad'.");
 	  search_save(numTry);
-	  System.out.println(" v");
-	  print("\n\nTesting delete saved search object.");
+	  printSuccess();
+	  print("Testing delete saved search object.");
 	  search_deleteSavedObject(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -300,9 +325,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("campaignResults")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting campaign results.");
+	  object="campaign results";
+	  
+	  print("Testing campaign results.");
 	  campaignResults_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	
 	  Thread.sleep(3000);
   }
@@ -312,9 +339,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("outBox")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting out box.");
+	  object="Out Box";
+	  
+	  print("Testing out box.");
 	  outBox_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -324,9 +353,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("addAccount")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting add acount.");
+	  object="Add acount";
+	  
+	  print("Testing add acount.");
 	  addAccount_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -336,9 +367,11 @@ public class TwitterForBusiness extends TestCase  {
 	  assumeTrue(enable("switchAccount")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting switch acount.");
+	  object="Switch account";
+	  
+	  print("Testing switch acount.");
 	  switchAccount_test(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -394,8 +427,10 @@ public class TwitterForBusiness extends TestCase  {
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -416,8 +451,10 @@ public class TwitterForBusiness extends TestCase  {
 		  assertEquals("Message",message,getMessage.substring(account.length()+1, 1+account.length()+message.length()));
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -430,18 +467,19 @@ public class TwitterForBusiness extends TestCase  {
   private void helpWithThisPage_test(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")));
-		  String winHandleBefore = driver.getWindowHandle();
+	  try{String winHandleBefore = driver.getWindowHandle();
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//i[@class='icon-help-circle nav-icon nav-icon-white optify-nav-button-icon']"))).click();
 		  switcWindow();
 		  assertEquals("Help with this page:","Twitter for Business overview : Help and Support",driver.getTitle());
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -462,8 +500,10 @@ public class TwitterForBusiness extends TestCase  {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -484,8 +524,10 @@ public class TwitterForBusiness extends TestCase  {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -506,8 +548,10 @@ public class TwitterForBusiness extends TestCase  {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -531,8 +575,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='post_tweet_date']/button/span"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -552,8 +598,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='post_tweet_time-pulldown']/ul/li"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -573,8 +621,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@id='post_tweet_campaign_id-pulldown']/ul/li"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -592,8 +642,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only transparent']/span"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -615,8 +667,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='ui-dialog-buttonpane ui-widget-content ui-helper-clearfix']/div/button[2]"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -635,8 +689,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='profile_box_close']"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -658,8 +714,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous_page hidden-none']"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -682,8 +740,10 @@ public class TwitterForBusiness extends TestCase  {
 		  builder.sendKeys(Keys.ENTER).perform();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -704,8 +764,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='confirm_delete_ok']"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -729,13 +791,15 @@ public class TwitterForBusiness extends TestCase  {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
-	 	
- 	    //Restart test
- 	    numTry++;
-	 	Thread.sleep(2000);
-	 	tableActionsReplay_click(numTry);
+		 if(numTry>2){
+			 printFailed();
+			 throw e; 
+		 }
+		 
+		 //Restart test
+	 	 numTry++;
+		 Thread.sleep(2000);
+		 tableActionsReplay_click(numTry);
 	  }
 	  
 	  return message;
@@ -758,8 +822,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -779,8 +845,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='action action-retweet button-action']"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -806,8 +874,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -830,8 +900,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -853,8 +925,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -874,8 +948,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -899,8 +975,10 @@ public class TwitterForBusiness extends TestCase  {
   	  }
   	  
   	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+		 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -932,8 +1010,10 @@ public class TwitterForBusiness extends TestCase  {
 	  }
 	  
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+			 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -954,18 +1034,16 @@ public class TwitterForBusiness extends TestCase  {
 		  driver.navigate().back();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3){
-	 		if(!driver.getTitle().equals("Twitter for Business | Optify"))
+		 //Restart test
+		 if(!driver.getTitle().equals("Twitter for Business | Optify"))
 	 			driver.navigate().back();
-	 		
+		  
+	 	 if(numTry>2){
+	 		printFailed();
 	 		throw e;
 	 	 }
 	 	
-	 	 //Restart test
 	 	 numTry++;
-	 	 if(!driver.getTitle().equals("Twitter for Business | Optify"))
-	 		driver.navigate().back();
-	 	 
 	 	 Thread.sleep(2000);
 	 	 outBox_test(numTry);
 	  }
@@ -990,8 +1068,10 @@ public class TwitterForBusiness extends TestCase  {
 		  wait.until(presenceOfElementLocated(By.xpath("//select[@id='twitter_screenname']/option[3]"))).click();
 	  }
 	  catch(Exception e){
-	 	 if(numTry>3)
-	 		  throw e;
+		  if(numTry>2){
+		 		printFailed();
+		 		throw e;
+		 	 }
 	 	
 	 	 //Restart test
 	 	 numTry++;
@@ -1004,7 +1084,7 @@ public class TwitterForBusiness extends TestCase  {
   private static void print(String action){
 	  FileWriter fstreamWrite=null;
 	  
-	  System.out.print(action);
+	  System.out.printf("%-40s",action);
 	  
 	  try{fstreamWrite = new FileWriter("data/actionStram");
 		 }catch(IOException e) {
@@ -1022,7 +1102,10 @@ public class TwitterForBusiness extends TestCase  {
   
   //===========================================================================
   public boolean enable(String name){
-     for(String elem:this.scripList)
+	 if(junit)
+		return true;
+	  
+     for(String elem:TwitterForBusiness.scripList)
     	 if(elem!=null && elem.toString().equals(name))
     		 return true;
       
@@ -1055,5 +1138,25 @@ public class TwitterForBusiness extends TestCase  {
 		}
 		
 	 	return list;
+  }
+  
+  //=================================================================
+  public static void printSuccess(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-5s","Success");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
+  
+  //=================================================================
+  public static void printFailed(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-7s","Failed");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
   }
 }

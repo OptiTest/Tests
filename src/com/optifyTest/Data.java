@@ -1,3 +1,23 @@
+/*
+ * This project was written by Asnin Or to the Optify Company 2013.
+ * Parts of the OATS system.
+ * 
+ * The Data class.
+ * ============================================================================
+ * 
+ * This class manage all the settings data of the OATS system, include:
+ * user accounts, email, schedule, server path etc.
+ * 
+ * 
+ * Data methods:
+ * =================
+ * 
+ * 1. public Data():
+ * 
+ *    The data constructor initialize all the setting attributes.
+ * 
+ */
+
 package com.optifyTest;
 
 import java.io.BufferedReader;

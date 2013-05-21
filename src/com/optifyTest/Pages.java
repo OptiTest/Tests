@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 
 import org.junit.AfterClass;
@@ -44,7 +45,11 @@ public class Pages extends TestCase {
   static String userName=ts.getUserName();
   static String password=ts.getUserPassword();
   static String setPath=st.getSeleniumBit();
+  static public String object;
+  static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
+  static public double time=0;
   static List<String>scripList; //Loads all enable script list.
+  boolean junit=false;           //The default should be false. True for JUnit test only!
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -66,8 +71,11 @@ public class Pages extends TestCase {
   
   public static void enterToDashBoard() throws Throwable{
 	  int numTry=0; //Counter the number of attempts.
+	  time=System.currentTimeMillis();
+	  object="";
 	  
-	  print("\nLogin to Optify.");
+	  System.out.println();
+	  print("Login to Optify.");
 	  
 	  driver.get(homeAddress+"/login");
 	  driver.findElement(By.id("j_username")).sendKeys(userName);
@@ -75,13 +83,25 @@ public class Pages extends TestCase {
 	  driver.findElement(By.id("login_button")).click();
 	  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
 	  
-	  System.out.println(" v");
+	  printSuccess();
 	  
-	  print("\n\nEntering to Pages page.");
+	  print("Entering to Pages page.");
 	  enterToPages(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
+  }
+  
+  @Test
+  public void helpWithThisPage() throws Exception{
+	  assumeTrue(enable("helpWithThisPage")); 
+	  int numTry=0; //Counter the number of attempts.
+	  
+	  object="Help with this page";
+	  
+	  print("Entering Help with this page.");
+	  helpWithThisPage_link(numTry);
+	  printSuccess();
   }
   
   @Test
@@ -89,15 +109,17 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("addPages")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nEntering Add pages.");
+	  object="Add pages";
+	  
+	  print("Enter to Add page.");
 	  addPages_enter(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add page.");
 	  addPages_save(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add page into group.");
 	  addPages_saveGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -107,19 +129,20 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("tableSort")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting tabel sort:");
+	  object="Tabel sort";
+	  
 	  print("Testing title sort.");
 	  tableSort_titleSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Optify score sort.");
 	  tableSort_optifyScoreSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Views sort.");
 	  tableSort_viewsSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Links sort.");
 	  tableSort_linksSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -130,13 +153,14 @@ public class Pages extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting inbound links:");
+	  object="Inbound links";
+	  
 	  print("Entering inbound links.");
 	  inboundsLink_enter(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Go to links application.");
 	  inboundsLink_goToLinksApplication(numTry,winHandleBefore);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -147,34 +171,35 @@ public class Pages extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting need help:");
+	  object="Need help";
+	  
 	  print("Entering need help.");
 	  needHelp_enter(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing learn more about pages.");
 	  needHelp_learnMoreAboutPages(numTry,winHandleBefore);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to overview.");
 	  needHelp_forwardOverview(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to pages table.");
 	  needHelp_forwardPageTable(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to add pages.");
 	  needHelp_forwardAddPages(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to table actions.");
 	  needHelp_forwardTableActions(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to lists.");
 	  needHelp_forwardLists(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to pages tab.");
 	  needHelp_forwardPagesTab(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing minimize need help.");
 	  needHelp_done(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -184,16 +209,17 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("showLinks")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting show links:");
+	  object="Show links";
+	  
 	  print("Testing showing 50 links.");
 	  showLinks_fifty(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing showing 25 links.");
 	  showLinks_twentyFifth(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing showing 10 links.");
 	  showLinks_ten(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	
 	  Thread.sleep(3000);
   }
@@ -203,16 +229,17 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("nextAndPrev")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting next and prev:");
+	  object="Next and prev";
+	  
 	  print("Testing next.");
 	  nextAndPrev_next(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing next3.");
 	  nextAndPrev_next3(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing prev.");
 	  nextAndPrev_prev(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -222,19 +249,20 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("tableAction")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting table actions:");
+	  object="Table actions";
+	  
 	  print("Testing saving page to group.");
 	  tableAction_savingPageToGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering test group.");
 	  tableAction_enterTestGroup(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing links.");
 	  tableAction_links(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing remove pages.");
 	  tableAction_removePages(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	 
 	  Thread.sleep(3000);
   }
@@ -244,19 +272,20 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("sortIssuesTable")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting sort issues table:");
+	  object="Sort issues table";
+	  
 	  print("Testing issues sort.");
 	  sortIssuesTable_issuesSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing impact sort.");
 	  sortIssuesTable_impactSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Category sort.");
 	  sortIssuesTable_categorySort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Status sort.");
 	  sortIssuesTable_statusSort(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -266,13 +295,14 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("issuesNote")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting adding not:");
+	  object="Adding not";
+	  
 	  print("Testing add a note.");
 	  issuesNote_addNote(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing delete a note.");
 	  issuesNote_deleteNote(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -282,12 +312,14 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("setIssueToGroup"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting add a issue to group.");
+	  object="Add a issue to group";
+	  
+	  print("Testing add issue to group.");
 	  setIssueToGroup_add(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing delete the test group.");
 	  setIssueToGroup_delete(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -297,12 +329,14 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("issuesLinks"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\n\nTesting issues links.");
+	  object="Issues links";
+	  
+	  print("Testing issues links.");
 	  issuesLinks_qtipHavering(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering issues link.");
 	  issuesLinks_enterLink(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -312,13 +346,14 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("issuesPrevNext"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting issues prev & next:");
+	  object="Issues prev & next";
+	  
 	  print("Testing issues next.");
 	  String sumIssues=issuesPrevNext_next(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing issues prev.");
 	  issuesPrevNext_prev(numTry,sumIssues);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -328,16 +363,17 @@ public class Pages extends TestCase {
 	  assumeTrue(enable("issuesShow"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting issues show:");
+	  object="Issues show:";
+	  
 	  print("Testing issues show 50.");
 	  issuesShow_fifty(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing issues show 25.");
 	  issuesShow_twentyFive(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing issues show 10.");
 	  issuesShow_ten(numTry);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -393,9 +429,11 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
-		
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 		 //Close Add Pages dialog box & restaet test.
 		 builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']")))).perform();
 		 numTry++;
@@ -422,8 +460,10 @@ public class Pages extends TestCase {
 	 	}
 	 	catch(Exception ex){}
 		 	
-	 	if(numTry>3)
-		  throw e;
+	 	if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		
 		 	
 	 	numTry++;
@@ -456,12 +496,12 @@ public class Pages extends TestCase {
 	  }
 	  catch(Exception e){
 		//Close Add Pages dialog box & restaet test.
-	 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
-	 	}
-	 	catch(Exception ex){}
+	 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();}catch(Exception ex){}
 	 	
-	 	if(numTry>3)
-		  throw e;
+	 	if(numTry>2){
+			 printFailed();
+			 throw e; 
+	    }
 	 	
 	 	
 	 	numTry++;
@@ -503,8 +543,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableSort_titleSort(numTry);
@@ -543,8 +585,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableSort_optifyScoreSort(numTry);
@@ -583,8 +627,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableSort_viewsSort(numTry);
@@ -627,8 +673,10 @@ public class Pages extends TestCase {
 		  
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableSort_linksSort(numTry);
@@ -662,13 +710,16 @@ public class Pages extends TestCase {
 		  
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
-		
-		 	//Close Inbound links dialog box & restart test.
+		    //Close Inbound links dialog box & restart test.
 		 	try{wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-icon ui-icon-closethick']"))).click();
 		 	}
 		 	catch(Exception ex){}
+		 	
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
+		
 		 	numTry++;
 		 	inboundsLink_enter(numTry);
 	  }
@@ -689,8 +740,14 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='ui-dialog-titlebar-close ui-corner-all']/span"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		    //If failed close dialog box and restart test.
+		    try{wait.until(presenceOfElementLocated(By.xpath("//div[@id='show-links-popup']/div[5]/button/span"))).click();
+		    }
+		    catch(Exception ex){}
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	inboundsLink_goToLinksApplication(numTry,winHandleBefore);
@@ -712,8 +769,10 @@ public class Pages extends TestCase {
 		  assertEquals("help 1/9:",help1,driver.findElement(By.xpath("//div[@class='trainer-left']/div")).getText());
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_enter(numTry);
@@ -732,8 +791,10 @@ public class Pages extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_learnMoreAboutPages(numTry,winHandleBefore);
@@ -755,8 +816,10 @@ public class Pages extends TestCase {
 	  	  wait.until(presenceOfElementLocated(By.xpath("//div[text()='These numbers indicate how many issues you have across your site. Each issue is an opportunity to improve your pages and drive up your search rankings.']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardOverview(numTry);
@@ -777,8 +840,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Your pages and their Optify scores are listed here.']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardPageTable(numTry);
@@ -799,8 +864,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Go ahead and click to add some pages!']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardAddPages(numTry);
@@ -822,8 +889,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()=' lets you organize your pages into custom categories like timeframe or campaign. ']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardTableActions(numTry);
@@ -844,8 +913,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Any lists that you create will be displayed here. Selecting a list will display only the pages that have been assigned to that list.']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardLists(numTry);
@@ -866,8 +937,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[text()='Click on a page title now to see details and optimization issues for that page. ']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_forwardPagesTab(numTry);
@@ -887,8 +960,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='done']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	needHelp_done(numTry);
@@ -915,11 +990,18 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
+		 	
 		
 		 	numTry++;
 		 	showLinks_fifty(numTry);
+	  }
+	  catch(ComparisonFailure ex){
+		  printFailed();
+			 throw ex; 
 	  }
   }
   
@@ -936,8 +1018,10 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	showLinks_twentyFifth(numTry);
@@ -956,8 +1040,10 @@ public class Pages extends TestCase {
 		  assertEquals("count 10:",SUMTH,getRowCount(By.xpath("//table[@id='page_table']/tbody")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	showLinks_ten(numTry);
@@ -981,8 +1067,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	nextAndPrev_next(numTry);
@@ -998,8 +1086,10 @@ public class Pages extends TestCase {
 	      wait.until(presenceOfElementLocated(By.xpath("//table[@id='page_table']/tbody")));
 	  }
       catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+  	 	if(numTry>2){
+			 printFailed();
+			 throw e; 
+	    }
 		
 		 	numTry++;
 		 	nextAndPrev_next3(numTry);
@@ -1015,8 +1105,10 @@ public class Pages extends TestCase {
 	  	  wait.until(presenceOfElementLocated(By.xpath("//a[@class='previous']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	nextAndPrev_prev(numTry);
@@ -1062,8 +1154,14 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		    //If failed close dialog box.
+		  	try{driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div[2]/button/span")).click();	
+		  	}catch(Exception ex){}
+		 	
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableAction_savingPageToGroup(numTry);
@@ -1082,8 +1180,14 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='ynet חדשות תוכן ועדכונים - ידיעות אחרונות']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		  	//If failed close dialog box.
+		  	try{driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div[2]/button/span")).click();	
+		  	}catch(Exception ex){}
+		 	
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableAction_enterTestGroup(numTry);
@@ -1102,7 +1206,7 @@ public class Pages extends TestCase {
 		  driver.close();
 		  driver.switchTo().window(winHandleBefore);
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='http://www.ynet.co.il/home/0,7340,L-8,00.html']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']//a[text()='ynet.co.il/home/0,7340,L-8,00.html']"))).click();
 		  switcWindow();
 		  assertEquals("link page","ynet חדשות תוכן ועדכונים - ידיעות אחרונות",driver.getTitle());
 		  driver.close();
@@ -1111,8 +1215,14 @@ public class Pages extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		  	//If failed close dialog box.
+		  	try{driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div[2]/button/span")).click();	
+		  	}catch(Exception ex){}
+		 	
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableAction_links(numTry);
@@ -1142,8 +1252,14 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		   //If failed close dialog box.
+		   try{driver.findElement(By.xpath("//div[@id='add-pages-dialog']/div[2]/button/span")).click();	
+		   }catch(Exception ex){}
+		   
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	tableAction_removePages(numTry);
@@ -1188,8 +1304,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	sortIssuesTable_issuesSort(numTry);
@@ -1228,8 +1346,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	sortIssuesTable_impactSort(numTry);
@@ -1267,8 +1387,10 @@ public class Pages extends TestCase {
 		  finally{}
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 		
 		 	numTry++;
 		 	sortIssuesTable_categorySort(numTry);
@@ -1309,8 +1431,10 @@ public class Pages extends TestCase {
 		  }
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	sortIssuesTable_statusSort(numTry);
@@ -1347,8 +1471,10 @@ public class Pages extends TestCase {
 		  Thread.sleep(2000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesNote_addNote(numTry);
@@ -1363,8 +1489,10 @@ public class Pages extends TestCase {
 	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='stickynote']/a"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesNote_deleteNote(numTry);
@@ -1392,8 +1520,10 @@ public class Pages extends TestCase {
 		  assertEquals("Check Issue to group:",val,wait.until(presenceOfElementLocated(By.xpath("//table[@id='issue_list']/tbody/tr[2]/td/div/a[2]"))).getAttribute("href"));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	driver.navigate().refresh();
@@ -1412,8 +1542,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@class='confirm-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']"))).click();
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	setIssueToGroup_delete(numTry);
@@ -1435,8 +1567,10 @@ public class Pages extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='qtip qtip-cream']")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesLinks_qtipHavering(numTry);
@@ -1464,8 +1598,10 @@ public class Pages extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesLinks_enterLink(numTry);
@@ -1492,7 +1628,6 @@ public class Pages extends TestCase {
 		  //Get the sum of pages:
 		  Thread.sleep(2000);
 		  String sumIssues=wait.until(presenceOfElementLocated(By.xpath("//span[@class='page_status']"))).getText().substring(10);
-		  System.out.printf(sumIssues);
 		  Thread.sleep(3000);
 		  
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next_page']"))).click();
@@ -1503,11 +1638,38 @@ public class Pages extends TestCase {
 		  return sumIssues;
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	return issuesPrevNext_next(numTry);
+	  }
+  }
+  
+//==================================================================================================
+  private void helpWithThisPage_link(int numTry)throws Exception{
+	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  goBase();
+  
+	  try{String winHandleBefore = driver.getWindowHandle();
+	  
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//i[@class='icon-help-circle nav-icon nav-icon-white optify-nav-button-icon']")))).perform();
+		  Thread.sleep(3000);
+		  switcWindow();
+		  assertEquals("Help with this page","Pages overview : Help and Support",driver.getTitle());
+		  driver.close();
+		  driver.switchTo().window(winHandleBefore);
+	  }
+	  catch(Exception e){
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+			 
+			 numTry++;
+			 helpWithThisPage_link(numTry);
 	  }
   }
   
@@ -1521,8 +1683,10 @@ public class Pages extends TestCase {
 		  assertEquals("Check page num 1:","Page 1 of "+sumIssues,wait.until(presenceOfElementLocated(By.xpath("//span[@class='page_status']"))).getText());
 	  }
 	  catch(Exception e){
-			 	if(numTry>3)
-					  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 				
 				 	numTry++;
 				 	issuesPrevNext_prev(numTry,sumIssues);
@@ -1545,8 +1709,10 @@ public class Pages extends TestCase {
 		  assertEquals("Count 50 results:",FIFNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 		 	numTry++;
 		 	issuesShow_fifty(numTry);
@@ -1564,8 +1730,10 @@ public class Pages extends TestCase {
 		  assertEquals("Count 25 results:",TFNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesShow_twentyFive(numTry);
@@ -1583,8 +1751,10 @@ public class Pages extends TestCase {
 		  assertEquals("Count 10 results:",TENNUM,getRowCount(By.xpath("//table[@id='issue_list']/tbody")));
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	issuesShow_ten(numTry);
@@ -1594,18 +1764,17 @@ public class Pages extends TestCase {
   //=========================================================================================================
   private static void enterToPages(int numTry)throws Exception {	 
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  Actions builder = new Actions(driver);
 	  
-	  try{wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
-		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")))).perform();
-		  
-		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li[2]/a"))).click();
-		  assertEquals("Pages page","Pages | Optify",driver.getTitle());
+	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='optify-nav-menu-icon']/span"))).click();
+	  	  Thread.sleep(2000);
+	  	  wait.until(presenceOfElementLocated(By.xpath("//*[@id='main-menu-content']/div/div[1]/div[2]/div[2]/div[2]/a"))).click();
+	      assertEquals("Pages page","Pages | Optify",driver.getTitle());
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-				  throw e;
+		 	if(numTry>2){
+				 printFailed();
+				 throw e; 
+		    }
 			
 			 	numTry++;
 			 	enterToPages(numTry);
@@ -1616,7 +1785,7 @@ public class Pages extends TestCase {
   private static void print(String action){
 	  FileWriter fstreamWrite=null;
 	  
-	  System.out.print(action);
+	  System.out.printf("%-40s",action);
 	  
 	  try{fstreamWrite = new FileWriter("data/actionStram");
 		 }catch(IOException e) {
@@ -1634,7 +1803,10 @@ public class Pages extends TestCase {
   
   //===========================================================================
   public boolean enable(String name){
-     for(String elem:this.scripList)
+	 if(junit)
+			 return true;
+	  
+     for(String elem:Pages.scripList)
     	 if(elem!=null && elem.toString().equals(name))
     		 return true;
       
@@ -1667,6 +1839,26 @@ public class Pages extends TestCase {
 		}
 		
 	 	return list;
+  }
+  
+  //=================================================================
+  public static void printSuccess(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-5s","Success");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
+  
+  //=================================================================
+  public static void printFailed(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-7s","Failed");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
   }
 }
 	  

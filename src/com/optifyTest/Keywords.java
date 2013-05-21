@@ -45,7 +45,11 @@ public class Keywords extends TestCase {
     static String setPath=st.getSeleniumBit();
     String keyWord="";
     String keyWordUrl="";
+    static public String object;
+    static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
+    static public double time=0; 
     static List<String>scripList; //Loads all enable script list.
+    boolean junit=false;           //The default should be false. True for JUnit test only!
     
   
   @BeforeClass
@@ -64,13 +68,16 @@ public class Keywords extends TestCase {
 	capabilities.setCapability("chrome.switches", listCapability);
 	driver = new RemoteWebDriver(service.getUrl(),capabilities);
 	
-	print("\nLogin to Optify.");
+	System.out.println();
+	print("Login to Optify.");
 	enterToKeywords(numTry);
   }
   
   public static void enterToKeywords(int numTry) throws Throwable{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  Actions builder = new Actions(driver);
+	  time=System.currentTimeMillis();
+	  object="";
 	  
 	  try{driver.get(homeAddress+"/login");
 		  driver.findElement(By.id("j_username")).sendKeys(userName);
@@ -78,17 +85,17 @@ public class Keywords extends TestCase {
 		  driver.findElement(By.id("login_button")).click();
 		  assertEquals("Dashboard","Dashboard | Optify",driver.getTitle());
 		  
-		  System.out.println(" v");
+		  printSuccess();
 		  
-		  print("\n\nEntering to Keywords page.");
+		  print("Entering to Keywords page.");
 		  
-		  wait.until(presenceOfElementLocated(By.xpath("//li[@class='drive']/a/span")));
-		  builder.clickAndHold(driver.findElement(By.xpath("//li[@class='drive']/a/span"))).perform();
-		  Thread.sleep(3000);
-		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div/div[2]/ul/li[2]/ul/li/a"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='optify-nav-menu-icon']/span"))).click();
+		  Thread.sleep(2000);
+		  wait.until(presenceOfElementLocated(By.xpath("//*[@id='main-menu-content']/div/div/div[2]/div/div[2]/a"))).click();
+		             
 		  assertEquals("Keywords page","Keywords | Optify",driver.getTitle());
 		  
-		  System.out.println(" v");
+		  printSuccess();
 	  }
 	  catch(Exception e){
 		  if(numTry>3)
@@ -106,9 +113,11 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("helpWithThisPage")); 
 	  int numTry=0; //Counter the number of attempts.
 	  
+	  object="Help with this page";
+	  
 	  print("Entering Help with this page.");
 	  helpWithThisPage_link(numTry);
-	  System.out.println(" v");
+	  printSuccess();
   }
   
   @Test
@@ -117,32 +126,34 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  Calendar todayDate=Calendar.getInstance();
 	  
-	  System.out.println("\n\nTesting Keywords page Calendar:");
+	  object="Calendar";
+	  
 	  print("Testing 7d dates.");
 	  calendar_7d(numTry,todayDate);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing 30d dates.");
 	  calendar_30d(numTry,todayDate);
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing 24h dates.");
 	  calendar_24h(numTry,todayDate);
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
   
   @Test 
-  public void overview()throws Exception{
+  public void overview() throws Exception{
 	  assumeTrue(enable("overview"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting Keywords page Overview:");
+	  object="Overview";
+	  
 	  print("Testing Visits from Keywords.");
 	  overview_visitsFromKeywords(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Estimated Click Value.");
 	  overview_estimatedClickValue(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
   }
   
   @Test
@@ -150,15 +161,17 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("testView"));
 	  int numTry=0; //Counter the number of attempts.
 		 
-	  print("\nTesting view summary.");
+	  object="View bar";
+	  
+	  print("Testing view summary.");
 	  testView_summary(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing view competitor.");
 	  testView_competitor(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing view performance.");
 	  testView_performance(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -168,9 +181,11 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("importKeywordList"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  print("\nTesting Import keyword list.");
+	  object="Import button";
+	  
+	  print("Testing Import keyword list.");
 	  importKeywordList_get(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -180,19 +195,23 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("exportKeywordList"));
 	  int numTry=0; //Counter the number of attempts.
 	 
-	  print("\nTesting export keyword list.");
+	  object="Export button";
+	  
+	  print("Testing export keyword list.");
 	  exportKeywordList_get(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
   }
   
   @Test
   public void editKeywordsReport() throws Exception{
 	  assumeTrue(enable("editKeywordsReport"));
 	  int numTry=0; //Counter the number of attempts.
-		 
-	  print("\nTesting edit keywords report.");
+		
+	  object="Edit keyword report button";
+	  
+	  print("Testing edit keywords report.");
 	  editKeywordsReport_set(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -202,16 +221,17 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("testRanks"));
 	  int numTry=0; //Counter the number of attempts.
 		
-	  System.out.print("\n\nTesting ranks:\n");
+	  object="Ranks";
+	  
 	  print("Testing left slider rank.");
 	  testRanks_setLeftSlide(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Right slider rank.");
 	  testRanks_setRightSlide(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing keyword rank.");
 	  testRanks_keyword(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	    
 	  Thread.sleep(3000);
   }
@@ -221,13 +241,14 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("addKeyword"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting Add Keywords:");
+	  object="Add Keywords";
+	  
 	  print("Testing Add keyword & saving to test group.");
 	  addKeyword_addAndSaveToGroup(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Add keyword.");
 	  addKeyword_add(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -238,16 +259,16 @@ public class Keywords extends TestCase {
 	  int numTry=0; //Counter the number of attempts.
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  
-	  try{System.out.println("\n\nTesting Get suggestions:");
+	  try{object="Get suggestions";
 	      print("Testing Get suggestion popup frame.");
 		  getSuggestions_popUp(numTry); 
-		  System.out.println(" v");
+		  printSuccess();
 		  print("Testing saveing suggested keyword.");
 		  getSuggestions_savingSuggestKeywords(numTry); 
-		  System.out.println(" v");
+		  printSuccess();
 		  print("Testing saveing suggested Url.");
 		  getSuggestions_savingSuggestUrl(numTry); 
-		  System.out.println(" v");
+		  printSuccess();
 	  }
 	  catch(Exception e){
 		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@aria-labelledby='ui-dialog-title-keyword_suggestions']/div/a/span"))).click();
@@ -265,9 +286,11 @@ public class Keywords extends TestCase {
 	 assumeTrue(enable("tableSearch"));
 	 int numTry=0; //Counter the number of attempts.
 	 
-	 print("\n\nTesting table search...");
+	 object="Search";
+	 
+	 print("Testing table search...");
 	 tableSearch_go(numTry); 
-	 System.out.println(" v");
+	 printSuccess();
 	  
 	 Thread.sleep(3000);
  }
@@ -277,23 +300,24 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("tableActions"));
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
-		 
-	  System.out.println("\n\nTesting table actions");
+	  
+	  object="Table actions";
+	  
 	  print("Testing saving keywords to group.");
 	  tableActions_saveKeywordToGroup(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Google view results.");
 	  tableActions_googleViewResults(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Twitter view results.");
 	  tableActions_twitterViewResults(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Bing view results.");
 	  tableActions_bingViewResults(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing Yahoo! view results.");
 	  tableActions_yahooViewResults(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -303,13 +327,14 @@ public class Keywords extends TestCase {
 	  assumeTrue(enable("searchEngines"));
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting search engines:");
+	  object="Search engines";
+	  
 	  print("Testing search engines replacing.");
 	  searchEngines_searchEngineReplacing(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing add more search engines.");
 	  searchEngines_addMoreSearchEngines(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -320,55 +345,56 @@ public class Keywords extends TestCase {
 	  String winHandleBefore = driver.getWindowHandle();
 	  int numTry=0; //Counter the number of attempts.
 	  
-	  System.out.println("\n\nTesting need help:");
+	  object="Need help";
+	  
 	  print("Testing opeaning need help.");
 	  needHelp_openHelp(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing opeaning video.");
 	  needHelp_openVideo(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Learn more about keywords.");
 	  needHelp_learnMoreAboutKeywords(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to Overview.");
 	  needHelp_forwordOverview(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing watch a video on keywords.");
 	  needHelp_watchAVideoOnKeywords(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Learn more about keywords.");
 	  needHelp_learnMoreAboutKeywords2(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Optify Best Practices: Choosing Target keywords.");
 	  needHelp_optifyBestPractices(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to Keyword list.");
 	  needHelp_forwordKeywordList(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to Add keyword.");
 	  needHelp_forwordAddKeyword(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to Get Suggestions.");
 	  needHelp_forwordGetSuggestions(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to table actions.");
 	  needHelp_forwordTableActions(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to keyword groups.");
 	  needHelp_forwordKeywordGroup(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to keyword View.");
 	  needHelp_forwordKeywordView(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Testing going forward to final.");
 	  needHelp_forwordFinal(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Help.");
 	  needHelp_enterHelp(numTry,winHandleBefore); 
-	  System.out.println(" v");
+	  printSuccess();
 	  print("Entering Next:  Take the Pages Tour.");
 	  needHelp_nextTakePageTour(numTry); 
-	  System.out.println(" v");
+	  printSuccess();
 	  
 	  Thread.sleep(3000);
   }
@@ -416,7 +442,7 @@ public class Keywords extends TestCase {
 	  goBase();
   
 	  try{String winHandleBefore = driver.getWindowHandle();
-		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//a[@class='help_for_this_page iconlink track']")))).perform();
+		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//i[@class='icon-help-circle nav-icon nav-icon-white optify-nav-button-icon']")))).perform();
 		  Thread.sleep(3000);
 		  switcWindow();
 		  assertEquals("Help with this page","Keywords application reference : Help and Support",driver.getTitle());
@@ -424,8 +450,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 helpWithThisPage_link(numTry);
@@ -453,8 +481,10 @@ public class Keywords extends TestCase {
 		  assertEquals("7d year",Integer.toString(todayDate.get(Calendar.YEAR)),wait.until(presenceOfElementLocated(By.xpath("//span[@class='ui-datepicker-year']"))).getText());
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 calendar_7d(numTry,todayDate);
@@ -479,8 +509,10 @@ public class Keywords extends TestCase {
 		  assertEquals("30d year",Integer.toString(todayDate.get(Calendar.YEAR)),driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText());
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 calendar_30d(numTry,todayDate);
@@ -509,8 +541,10 @@ public class Keywords extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='interval_change_link interval-30d']"))).click();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 calendar_24h(numTry,todayDate);
@@ -525,8 +559,10 @@ public class Keywords extends TestCase {
 	  try{builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@class='first overview_statbox']/h5/span/span")))).perform();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 overview_visitsFromKeywords(numTry);
@@ -541,8 +577,10 @@ public class Keywords extends TestCase {
 	  try{wait.until(presenceOfElementLocated(By.xpath("//div[@class='last overview_statbox']/h5/span/span"))).click();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 overview_estimatedClickValue(numTry);
@@ -556,7 +594,7 @@ public class Keywords extends TestCase {
 	  
 	  try{String winHandleBefore = driver.getWindowHandle();
 	  
-		  wait.until(presenceOfElementLocated(By.xpath("//span[@class='icon-import']"))).click();
+		  wait.until(presenceOfElementLocated(By.xpath("//a[@id='import_keywords_open']"))).click();
 		                  //We can add some files to upload & equal with the keywords table data base.
 		  
 		  wait.until(presenceOfElementLocated(By.linkText("How to format your file"))).click();
@@ -573,9 +611,11 @@ public class Keywords extends TestCase {
 		  Thread.sleep(10000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
-			 
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 			 numTry++;
 			 importKeywordList_get(numTry);
 	  }	
@@ -594,8 +634,10 @@ public class Keywords extends TestCase {
 	  }
 	  
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 exportKeywordList_get(numTry);
@@ -615,8 +657,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 testView_summary(numTry);
@@ -635,8 +679,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 testView_competitor(numTry);
@@ -655,8 +701,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(5000);
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 testView_performance(numTry);
@@ -687,8 +735,10 @@ public class Keywords extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//html/body/div[10]/div[3]/div/button/span"))).click();
 	  }
 	  catch(Exception e){
-			 if(numTry>3)
-				 throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 			 
 			 numTry++;
 			 editKeywordsReport_set(numTry);
@@ -707,8 +757,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(2000);
   	  }
   	  catch(Exception e){
-		 if(numTry>3)
-			 throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		 
 		 //Set back slider left pin:
 		 builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//a[@id='handle_rank_slider_min']")))).perform();
@@ -733,8 +785,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(2000);
   	  }
   	  catch(Exception e){
-  		  if(numTry>3)
-			 throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 		  
 		  //Set back slider Right pin:
 		  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']"))).perform();
@@ -750,27 +804,30 @@ public class Keywords extends TestCase {
   //=========================================================================================================
   private void testRanks_keyword(int numTry)throws Exception{ 
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  final int SIZE=11; //Slider click number from one end point to another.
   	  goBase();
   
-  	  try{wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']/tbody/tr/td[2]/span/a/span"))).click();
+  	  try{wait.until(presenceOfElementLocated(By.xpath("//table[@class='data-table active']/tbody/tr/td[2]/div/a/span"))).click();
 		  Thread.sleep(3000);
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='keyword_rank_ok']"))).click();
 		  
 		  //Set back slider left pin:
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//a[@id='handle_rank_slider_min']")))).perform();
-		  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_LEFT).perform();
-		  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_LEFT).perform();
+		  for(int i=0;i<SIZE;i++)
+			  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_min']")), Keys.ARROW_LEFT).perform();
 		  
 		  Thread.sleep(2000);
 		  
 		  //Set back slider Right pin:
 		  builder.clickAndHold(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']"))).perform();
-		  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_RIGHT).perform();
-		  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_RIGHT).perform();
+		  for(int i=0;i<SIZE;i++)
+			  builder.sendKeys(driver.findElement(By.xpath("//a[@id='handle_rank_slider_max']")), Keys.ARROW_RIGHT).perform();
   	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
   		  
 		  //Set slider Left pin:
 		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//a[@id='handle_rank_slider_min']")))).perform();
@@ -812,8 +869,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  addKeyword_addAndSaveToGroup(numTry);
@@ -832,9 +891,11 @@ public class Keywords extends TestCase {
 		  driver.findElement(By.xpath("//button[@class='orange ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span")).click();
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
-	 
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 		  numTry++;
 		  addKeyword_add(numTry);
 	  }
@@ -849,8 +910,10 @@ public class Keywords extends TestCase {
 		  
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  getSuggestions_popUp(numTry);
@@ -862,7 +925,8 @@ public class Keywords extends TestCase {
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
   	  goBase();
 
-	  try{wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
+	  try{wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys(Keys.CLEAR);
+		  wait.until(presenceOfElementLocated(By.xpath("//input[@id='keyword-suggest-input']"))).sendKeys("seo");
 	  	  wait.until(presenceOfElementLocated(By.xpath("//button[@class='suggest-keywords-submit ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']/span"))).click();
 	  
 		  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
@@ -882,12 +946,16 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 	  
- 		  if(wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).isSelected());
+ 		  try{if(wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).isSelected());
 			 wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).click();
-
+ 		  }
+		  catch(Exception ex){}
+		  
                   numTry++;
 		  getSuggestions_savingSuggestKeywords(numTry);
 	  }
@@ -922,8 +990,10 @@ public class Keywords extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//button[@id='suggest-keywords-save']"))).click();
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  try{wait.until(presenceOfElementLocated(By.xpath("//div[@aria-labelledby='ui-dialog-title-keyword_suggestions']/div/a/span"))).click();
@@ -965,8 +1035,10 @@ public class Keywords extends TestCase {
 		  assertEquals("get cc2","cc2",wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody/tr/td/span/span"))).getText());
   	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  tableSearch_go(numTry);
@@ -984,7 +1056,11 @@ public class Keywords extends TestCase {
   		  
   		  //Check for viewing test keyword:
   		  int numTry2=0;
-  		  tableSearch_go(numTry2);
+  		  try{tableSearch_go(numTry2);
+  		  }catch(Exception ex){
+			  addKeyword_addAndSaveToGroup(numTry);
+			  addKeyword_add(numTry);
+  		  }
 		  
 		  builder.sendKeys(Keys.PAGE_DOWN).perform();
 		  Thread.sleep(1000);
@@ -1015,8 +1091,10 @@ public class Keywords extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//table[@id='keyword_table']/tbody//span[text()='cc2']")));
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//span[@class='filter_selection tags']//a[text()='test']")))).perform();
@@ -1045,8 +1123,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  tableActions_googleViewResults(numTry,winHandleBefore);
@@ -1073,8 +1153,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  tableActions_twitterViewResults(numTry,winHandleBefore);
@@ -1101,8 +1183,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  tableActions_bingViewResults(numTry,winHandleBefore);
@@ -1140,8 +1224,10 @@ public class Keywords extends TestCase {
 		  }
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  tableActions_yahooViewResults(numTry,winHandleBefore);
@@ -1169,8 +1255,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  searchEngines_searchEngineReplacing(numTry);
@@ -1194,8 +1282,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  searchEngines_addMoreSearchEngines(numTry);
@@ -1214,9 +1304,11 @@ public class Keywords extends TestCase {
 		  assertEquals("help 1/9:",help1,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
-	 
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 		  numTry++;
 		  needHelp_openHelp(numTry);
 	  }
@@ -1256,8 +1348,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
   	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_learnMoreAboutKeywords(numTry,winHandleBefore);
@@ -1276,8 +1370,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 2/9:",help2,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_forwordOverview(numTry);
@@ -1297,8 +1393,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  needHelp_watchAVideoOnKeywords(numTry);
@@ -1317,8 +1415,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
   	  }
 	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 	 
 		  numTry++;
 		  needHelp_learnMoreAboutKeywords2(numTry,winHandleBefore);
@@ -1337,8 +1437,10 @@ public class Keywords extends TestCase {
 		  driver.switchTo().window(winHandleBefore);
   	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_optifyBestPractices(numTry,winHandleBefore);
@@ -1357,8 +1459,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 3/9:",help3,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
   	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_forwordKeywordList(numTry);
@@ -1377,8 +1481,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 4/9:",help4,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_forwordAddKeyword(numTry);
@@ -1397,8 +1503,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 5/9:",help5,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
   	  catch(Exception e){
-		  if(numTry>3)
-			  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	 
 		  numTry++;
 		  needHelp_forwordGetSuggestions(numTry);
@@ -1417,8 +1525,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 6/9:",help6,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
 	  catch(Exception e){
-	 	if(numTry>3)
-		  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
  
 	 	numTry++;
 	 	needHelp_forwordTableActions(numTry);
@@ -1437,9 +1547,11 @@ public class Keywords extends TestCase {
 		  assertEquals("help 7/9:",help7,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
 	  catch(Exception e){
-	 	if(numTry>3)
-		  throw e;
-	
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+		  
 	 	numTry++;
 	 	needHelp_forwordKeywordGroup(numTry);
 	  }	
@@ -1457,8 +1569,10 @@ public class Keywords extends TestCase {
 		  assertEquals("help 8/9:",help8,wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-left']/div"))).getText());
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		
 		 	numTry++;
 		 	needHelp_forwordKeywordView(numTry);
@@ -1478,8 +1592,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		
 		 	numTry++;
 		 	needHelp_forwordFinal(numTry);
@@ -1499,8 +1615,10 @@ public class Keywords extends TestCase {
 		  Thread.sleep(3000);
 	  }
 	  catch(Exception e){
-		 	if(numTry>3)
-			  throw e;
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
 		
 		 	numTry++;
 		 	needHelp_enterHelp(numTry,winHandleBefore);
@@ -1519,8 +1637,10 @@ public class Keywords extends TestCase {
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='trainer-buttons']/a"))).click();
   	  }
   	  catch(Exception e){
-	 	if(numTry>3)
-		  throw e;
+  		if(numTry>2){
+			 printFailed();
+			 throw e; 
+	  }
 	
 	 	numTry++;
 	 	needHelp_nextTakePageTour(numTry);
@@ -1545,7 +1665,7 @@ public class Keywords extends TestCase {
   private static void print(String action){
 	  FileWriter fstreamWrite=null;
 	  
-	  System.out.print(action);
+	  System.out.printf("%-40s",action);
 	  
 	  try{fstreamWrite = new FileWriter("data/actionStram");
 		 }catch(IOException e) {
@@ -1563,7 +1683,10 @@ public class Keywords extends TestCase {
   
 //===========================================================================
   public boolean enable(String name){
-     for(String elem:this.scripList)
+	  if(junit)
+			 return true;
+	  
+	  for(String elem:Keywords.scripList)
     	 if(elem!=null && elem.toString().equals(name))
     		 return true;
       
@@ -1596,5 +1719,25 @@ public class Keywords extends TestCase {
 		}
 		
 	 	return list;
+  }
+  
+  //=================================================================
+  public static void printSuccess(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-5s","Success");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
+  }
+  
+  //=================================================================
+  public static void printFailed(){
+	  double sumTime=(System.currentTimeMillis()-time)/1000;
+	  System.out.printf("%-7s","Failed");
+	  System.out.printf("%5.0f",(sumTime/60)%60);
+	  System.out.printf(".%-5.0f",sumTime%60);
+	  System.out.printf("%-30s %s%n",object,pageName);
+	  time=System.currentTimeMillis();
   }
 }

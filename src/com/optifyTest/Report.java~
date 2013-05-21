@@ -1,12 +1,99 @@
+/*
+ * This project was written by Asnin Or to the Optify Company 2013.
+ * Parts of the OATS system.
+ * The Report class.
+ * ============================================================================
+ * 
+ * This class creates the testing scenario report and has the ability to send
+ * throw mail using the EMail class.
+ * 
+ * 
+ * Report methods:
+ * =================
+ * 
+ * 1. Report(String savePath,String []headInformation,PrintStream oldoutps):
+ * 
+ *    The Report constructor receive the headInformation array that include all
+ *    report head information from the MainTest class. In addition the
+ *    constructor receive the printStream of the console in order to print 
+ *    information to the user screen.The method received the server tested path
+ *    and list of failure. 
+ * 
+ * 
+ * 2. public void createReport():
+ *    
+ *    This method using the HTML code in order to create the design. In 
+ *    addition the method using the headInformation as explained before to
+ *    insert the report. The list of failure also mentioned added to the
+ *    
+ *    
+ * 3. public void setHeadInformation(String []headInformation):
+ * 
+ *    This method update the headInfromation array.
+ *    
+ *    
+ * 4. public void addFailure(Failure failure):
+ * 
+ *    This method receive the failure and parsing is information in order to
+ *    display it in the report. After parsing it will add the information
+ *    to the listFailure.
+ *   
+ *    
+ * 5. private String parseObjectName(Failure failure):
+ * 
+ *    The method parse the name of the object that as been tested.
+ *    
+ *  
+ * 6. private String parsePageName(Failure failure):
+ * 
+ *    The method parse the page name that has been tested.
+ *    
+ *    
+ * 7. private String generateFileName():
+ * 
+ *    This method generate the name of the report file.
+ *    
+ *   
+ * 8. private boolean createLog():
+ * 
+ *    This method create a log file of the last failures report. It's
+ *    return true if a new log file has been created or false if not.
+ *    The idea is to understand if any new failures reported and return true
+ *    in order to update the user throw an email or any other way.
+ *    
+ *    
+ * 9. private boolean newFailures():
+ * 
+ *    This method reads the log file and compare it with the new failures list,
+ *    if any new failure doesn't appear the method will return true.
+ *    
+ *    
+ * 10.private void sendReportByEMail(String text):
+ * 
+ *    This method receiving the email body text, and set it to send throw the
+ *    EMail class. This include from, to and subject. For now all those 
+ *    attributes set manually.
+ *    
+ *    
+ * 11.public void setActionPerformed(String act):
+ * 
+ *    This method updating the action that has been testing. The idea is to use
+ *    This action information in case of failure.
+ *     
+ *   
+ * 12.private String readFromActionStream():
+ * 
+ *    Read the last actions has performed from data/actionStream.
+ */
+
+
 package com.optifyTest;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-
 import org.junit.runner.notification.Failure;
 
 public class Report {
@@ -18,6 +105,7 @@ public class Report {
 	private String report;             //Include the copy of the generated report.
 	private EMail email;               //Using email object to send the report throw
 	private PrintStream oldoutps;
+	private String action;
 	
 	//Report class constructor:
 	Report(String savePath,String []headInformation,PrintStream oldoutps){
@@ -26,6 +114,7 @@ public class Report {
 		this.headInformation=headInformation;
 		this.report="";
 		this.oldoutps=oldoutps;
+		this.action="n/a";
 	}
 	
 	//Report class methods:
@@ -55,7 +144,7 @@ public class Report {
 							 "<tr>\n"+
 							 "<td height='31' colspan='2' bgcolor='#7AC8F1' class='summary'><strong><span class='summary_headline'>System tested</span></td>\n"+
 							 "<td height='31' bgcolor='#7AC8F1' class='summary'><strong><span class='summary_headline'>Today date</span></td>\n"+
-							 "<td height='31' bgcolor='#7AC8F1' class='summary_headline'<strong>>Generate time</td>\n"+
+							 "<td height='31' bgcolor='#7AC8F1' class='summary'><strong><span class='summary_headline'>Generate time</td>\n"+
 							 "<td height='31' colspan='2' bgcolor='#7AC8F1' class='summary'><strong><span class='summary_headline'>Browser</span></td>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
@@ -65,7 +154,7 @@ public class Report {
 							 "	<td height='24' colspan='2' bgcolor='#CCCCCC' class='summary'><span class='summary_headline' style='font-weight: normal'>"+this.headInformation[3]+"</span></td>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
-							 "<td height='61' colspan='6' class='summary'><p class='Summary1'>Summary</p></td>\n"+
+							 "<td height='46' colspan='5' class='summary' style='font-size: 20px' align='left' scope='col'><p>Summary</p></th>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
 							 "	<td width='94' height='26' bgcolor='#7AC8F1' class='summary_headline'><strong>Tests</td>\n"+
@@ -89,7 +178,7 @@ public class Report {
 							 "</table>\n"+
 							 "<table width='1229' border='0'>\n"+
 							 "<tr>\n"+
-							 "<th height='46' colspan='5' class='summary' style='font-size: 24px' scope='col'><p>Failures</p></th>\n"+
+							 "<th height='46' colspan='5' class='summary' style='font-size: 20px' align='left' scope='col'><p>Failures</p></th>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
 							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Page name</span></td>\n"+
@@ -104,10 +193,10 @@ public class Report {
 								this.report+=("<tr>\n"+
 													"<td height='37' bgcolor='#CCCCCC'>"+p.returnPageName()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'>"+p.returnObjectName()+"</td>\n"+
-													"<td bgcolor='#CCCCCC'"+p.returnActionPerformed()+"</td>\n"+
+													"<td bgcolor='#CCCCCC'>"+p.returnActionPerformed()+"</td>\n"+
 													"<td bgcolor='#CCCCCC' style='text-align: left'>"+p.returnErrorDescription()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'><form id='form1' name='form1' method='post' action=''>\n"+
-													"<textarea name='Trace' cols='50' rows='4' disabled='disabled' readonly='readonly' id='Trace'>\n"+
+													"<textarea name='Trace' cols='135' rows='10' disabled='disabled' readonly='readonly' id='Trace'>\n"+
 													 p.returnTrace()+
 													"</textarea>\n"+
 													"</form></td>\n"+
@@ -122,13 +211,12 @@ public class Report {
 											   "</html>");
 							
 							System.out.print(this.report);
-							
 
 		}
 		catch (Exception e) {
 			PrintStream newoutps = new PrintStream(this.oldoutps);
 			System.setOut(newoutps); //set the output stream
-    		System.out.println("Failed while trying writing report");
+    		System.out.println("Failed while writing report");
     	}
 		
 		//Save to log
@@ -136,7 +224,7 @@ public class Report {
 			sendReportByEMail(this.report);
 	}
 	
-	//Set head information============================================
+	//Set head information=====================Console.this.=======================
 	public void setHeadInformation(String []headInformation){
 		this.headInformation=headInformation;
 	}
@@ -145,8 +233,9 @@ public class Report {
 	public void addFailure(Failure failure){
 		String pageName=parsePageName(failure);
 		String objectName=parseObjectName(failure);
-		String actionPerformed="Na";
-		listFailure.addNewFailure(pageName,objectName,
+		String actionPerformed=readFromActionStream();
+		
+		this.listFailure.addNewFailure(pageName,objectName,
 				                  actionPerformed, 
 				                  failure.getMessage(),failure.getTrace());
 	}
@@ -191,12 +280,12 @@ public class Report {
 		if(!newFailures())
 			return false;
 		
-		try{FileOutputStream outfos = new FileOutputStream(savePath+"log.txt"); //create new //output stream
+		try{FileOutputStream outfos = new FileOutputStream(savePath+"log"); //create new //output stream
 			PrintStream newoutps = new PrintStream(outfos);
 			System.setOut(newoutps); //set the output stream
-			NodeFailure p=listFailure.getHead(); //Pointer for the link list.
+			NodeFailure p=this.listFailure.getHead(); //Pointer for the link list.
 			
-			System.out.print(this.headInformation[1]);
+			System.out.print(this.headInformation[1]+"\n");
 					
 			while(p!=null){
 				System.out.print(p.returnPageName()+",,"+p.returnObjectName()+",,"+
@@ -217,34 +306,47 @@ public class Report {
 	}
 	
 	//Check for new failures===================================================
+	@SuppressWarnings("null")
 	private boolean newFailures(){
-		String line="";
-		String []arr=null;
-		NodeFailure p=listFailure.getHead(); //Pointer for the failure link list.
+		String line="",buffer="";
+		final int ARR_SIZE=this.listFailure.getFailuresNumber();
+		String[][]arr=new String[ARR_SIZE][];
+		NodeFailure p; //Pointer for the failure link list.
 		
-		try{FileReader fstreamReader = new FileReader("data\\log.txt");
+		try{FileReader fstreamReader = new FileReader("data/log");
 			BufferedReader reader=new BufferedReader(fstreamReader);
 			
 			line = reader.readLine();
 			
 			if(line==null||!line.equals(this.headInformation[1]))
 				return true;
-				
-			line = reader.readLine();
 			
-			while(line!=null){
-				arr=line.split(",,");
+			
+			int j=0; //Reset index.
+			
+			while(j<ARR_SIZE){
+				line=reader.readLine();
 				
-				
-				if(!((p.returnPageName().equals(arr[0]))&&
-				   (p.returnObjectName().equals(arr[1]))&&
-				   (p.returnActionPerformed().equals(arr[2]))&&
-				   (p.returnErrorDescription().equals(arr[3]))&&
-				   (p.returnTrace().equals(arr[4]))))
+				while(line!=null&&!line.equals("")){
+					buffer+=line;
+					line = reader.readLine();
+				}
+					
+			    arr[j]=buffer.split(",,");
+			
+			    for(p=this.listFailure.getHead();p!=null;p=p.getNext()){
+					if((p.returnPageName().equals(arr[j][0]))&&
+					   (p.returnObjectName().equals(arr[j][1]))&&
+					   (p.returnActionPerformed().equals(arr[j][2])))
+							break;
+					
+					if(p.getNext()==null)
 						return true;
-				
+					
+			    }
+			    
 				line = reader.readLine();
-				p=p.getNext();
+				j++;
 			}
 	
 		}catch (IOException e){
@@ -258,12 +360,31 @@ public class Report {
 	
 	//Send report by email=====================================================
 	private void sendReportByEMail(String text){
-		 String from="orasnin@gmail.com";
-	     String to="orasnin@gmail.com";
-	     String subject="Test1";
+		 String from="optifyautomation@gmail.com";
+	     String to[]={"orasnin@gmail.com"};
+	     String subject="Optify automation report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
  
-	     this.email = new EMail(from, to, subject, text);
+	     this.email = new EMail(to,from,subject,text);
 	     email.send();
+	}
+	
+	//Add action performed=====================================================
+	public void setActionPerformed(String act){
+		this.action=act;
+	}
+	
+	//Read the last action performed===========================================
+	private String readFromActionStream(){
+		String line="N/A";
+		
+		try{FileReader fstreamReader=new FileReader("data/actionStram");
+			BufferedReader out=new BufferedReader(fstreamReader);
+			line = out.readLine();
+		}catch (IOException e){
+			System.out.println("Error occurred while trying reading from action stream");
+		}
+		
+		return line;
 	}
 	
 }
