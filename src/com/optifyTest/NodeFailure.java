@@ -10,9 +10,8 @@ public class NodeFailure {
 					objectName,
 					actionPerformed,
 					errorDescription,
-					trace,
-					date;
-	
+					trace;
+	private String date[];
 	private int num;                    //The number of instances
 	
 	private NodeFailure next;
@@ -21,12 +20,15 @@ public class NodeFailure {
 	public NodeFailure(String pageName,String objectName,
 					   String actionPerformed, String errorDescription,
 					   String trace){
+		final int SIZE=1;
+		
 		this.pageName=pageName;
 		this.objectName=objectName;
 		this.actionPerformed=actionPerformed;
 		this.errorDescription=errorDescription;
 		this.trace=trace;
-		this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+		this.date=new String[SIZE];
+	    this.date[0]=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		this.num=1;
 		this.next=null;
 	}
@@ -37,11 +39,11 @@ public class NodeFailure {
 		this.objectName=arr[i];i++;
 		this.actionPerformed=arr[i];i++;
 		this.errorDescription=arr[i];i++;
-		this.trace=arr[i];
-		this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		this.num=1;
+		this.trace=arr[i];i++;
+		this.num=Integer.parseInt(arr[i]);i++;
+		this.date=deepCopyPluse(arr[i]);
 		this.next=null;
-}
+	}
 
 	//Set next=================================================================
 	public void setNext(NodeFailure next){
@@ -85,6 +87,43 @@ public class NodeFailure {
 	
 	//Get num==================================================================
 	public int getNum(){
-		return num;
+		return this.num;
+	}
+	
+	//Get dates================================================================
+	public String[] getDates(){
+		return this.date;
+	}
+	
+	//Set last date:===========================================================
+	public void setLastDate(){
+		this.date[this.date.length-1]=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+	}
+	
+	//=========================================================================
+	private String[] deepCopyPluse(String from){
+		String a[]=from.split("::");
+		final int SIZE=2;
+		
+		if(a[a.length-1].length()>SIZE)
+			if(a[a.length-1].substring(a[a.length-1].length()-2,a[a.length-1].length()).equals("\n"))
+				a[a.length-1]=a[a.length-1].substring(0,a[a.length-1].length()-2);
+			
+		return a;
+	}
+	
+	//=========================================================================
+	private String[] deepCopy(String from){
+		String a[]=from.split("::");
+		String b[]=null;
+		
+		if(a!=null){
+			b=new String[a.length-1];
+			
+			for(int i=0;i<b.length;i++)
+				b[i]=a[i];
+		}
+		
+		return b;
 	}
 }

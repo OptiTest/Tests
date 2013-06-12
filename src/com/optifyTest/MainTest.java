@@ -99,6 +99,7 @@ public class MainTest extends Thread{
 	private PrintStream oldoutps;
 	private Settings set;
 	private DefaultMutableTreeNode root;
+	private double reportTime;                        //Working with massive failure to alert every 30 minutes.
 	
 	//Main test constructor:
 	public MainTest(DefaultMutableTreeNode root){
@@ -111,6 +112,7 @@ public class MainTest extends Thread{
 		this.setReportSavePath="data/";        //The report save path.
 		this.report=null;                      //Initialization the report pointer to null.
 		this.mFailures=null;
+		this.reportTime=0;
 	}
 	
     //=========================================================================
@@ -123,8 +125,8 @@ public class MainTest extends Thread{
         Result result[]=new Result[SIZE+1];         //Create the results array.
 		
         
-        while(true){
-        	 this.mFailures=new ManageFailure(this.setReportSavePath,this.oldoutps);
+        while(!Thread.currentThread().isInterrupted()){
+        	 this.mFailures=new ManageFailure(this.setReportSavePath,this.oldoutps,this.reportTime);
         	 
         	 this.report=new Report(this.setReportSavePath,this.headInformation,this.oldoutps,this.mFailures);
         	 
@@ -133,12 +135,22 @@ public class MainTest extends Thread{
         	 setHeadInfo(this.serverPath);
         	 
         	 //Run server alive test.
-     		 try {result[SIZE]=core.run(Class.forName("com.optifyTest.LogIn"));
+        	 if(Thread.currentThread().isInterrupted())
+        		 return;
+        	 
+     		try {result[SIZE]=core.run(Class.forName("com.optifyTest.LogIn"));
      	 	 } catch (ClassNotFoundException e) {
      			System.out.println("Couldn't run the server alive test");
      		 }
         	  
-        	 for(int i=0;i<SIZE;i++){   
+        	 for(int i=0;i<SIZE;i++){ 
+        		 if(Thread.currentThread().isInterrupted())
+            		 return;
+        		 
+        		 //If massive failure skip tests
+        		 if(!result[SIZE].wasSuccessful())
+        			 break;
+        		 
         		 Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
         		            
         		 if (userObject instanceof CheckBoxNode) {
@@ -149,21 +161,25 @@ public class MainTest extends Thread{
     		            	//Kill webDriver process
 	    			        cleanTest();
 	    			        
+	    			        
 	    			        //Run the test.
 			        		try {result[i]=core.run(Class.forName("com.optifyTest."+node.text));
 			        		} catch (ClassNotFoundException e) {
 			        			System.out.println("Test class "+node.text+" not found!");
-			        		}
+			        		
+	    		            } catch (Exception ex) {
+	    		            	System.out.println("Unslove problem occur!"+ex.toString());
+	    		            }
     		            }
 	            }
         		 
         		 value = ((DefaultMutableTreeNode) value.getNextSibling());
         	 }
         	
-        	//Create report.
-        	writeReport(result);
-        	
-        	this.mFailures.saveToLog();
+        	 if(Thread.currentThread().isInterrupted())
+        		 break;
+        	 
+        	 summaryTestScenario(result);
         }
 	}
 	
@@ -194,7 +210,7 @@ public class MainTest extends Thread{
 		}
 		
 		this.headInformation[4]=Integer.toString(numOfTest);
-		this.headInformation[5]=Integer.toString(mFailures.getNewFailureList().size());
+		this.headInformation[5]=Integer.toString(numOfFailure);
 		
 		//Set time results:
 		timeInSec/=3600;
@@ -212,9 +228,8 @@ public class MainTest extends Thread{
 	public class TraceListener extends RunListener {
 	    public void testFailure(Failure failure) throws java.lang.Exception {
 	    	PrintStream oldoutps = System.out; //get the current output //stream
-	    	
+	  
 	    	mFailures.addNewFailure(failure);
-	    	//report.addFailure(failure);
 	    	System.setOut(oldoutps); 
 	    }
 	 }
@@ -308,6 +323,35 @@ public class MainTest extends Thread{
 		}        
 		            		 
 		return flag;		   
-	}	 
+	}
+	
+	//If massive failure detected suspend:=====================================
+	private void ifMassiveSuspend(){
+		final int SUSPEND_TIME=(1000)*60;
+	
+		for(NodeFailure i:this.mFailures.getNewFailureList())
+  			if(i.returnErrorDescription()!=null&&i.returnErrorDescription().equals("Can't log to server!")){
+  					try {
+						Thread.sleep(SUSPEND_TIME);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+  					break;
+  			}
+	}
+	
+	//Summary the test scenario:===============================================
+	private void summaryTestScenario(Result result[]){
+		//Create report.
+    	writeReport(result);
+    	this.mFailures.saveToLog();
+    	
+    	//If massive failure occur suspend next test.
+    	ifMassiveSuspend();
+    	
+    	//Update the last report difference.
+    	this.reportTime=mFailures.getReportTimeDifference(); 
+	}
 }
 

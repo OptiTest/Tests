@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
@@ -113,7 +114,7 @@ public class ManageTests {
 				    	if(splitList[j].equals("class"))
 				    		FINAL=true;
 				    	
-				    	if(splitList[j].equals("TestCase"))
+				    	if(splitList[j].equals("OptifyTestScenario{")||splitList[j].equals("TestCase"))
 				    		this.testFileList.add(list[i]);
 				    	
 				    }

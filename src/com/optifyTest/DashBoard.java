@@ -1,74 +1,49 @@
 package com.optifyTest;
 
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.ComparisonFailure;
-import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import bsh.This;
 
-import com.google.common.base.Function;
-
-  @RunWith(BlockJUnit4ClassRunner.class)
-  public class DashBoard extends TestCase {
-  public static MainMenu ts=new MainMenu();
-  public static Settings st=new Settings();
-  
-  
-  
-  //Set test parameters:
-  public static ChromeDriverService service;
-  public static WebDriver driver;
-  Actions builder = new Actions(driver);
-  
-  static String homeAddress=st.getServerUrl();
-  static String userName=ts.getUserName();
-  static String setPath=st.getSeleniumBit();
-  static String password=ts.getUserPassword();
-  static public String object;
-  static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
-  static public double time=0; 
-  static List<String>scripList; //Loads all enable script list.
-  boolean junit=false;           //The default should be false. True for JUnit test only!
-
-  @BeforeClass
-  public static void createAndStartService() throws Throwable {
-	scripList=getScriptList();
-	service = new ChromeDriverService.Builder()
-    	.usingDriverExecutable(new File(setPath))
-        .usingAnyFreePort()
-        .build();
-	service.start();
-	
-	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-	String[] listCapability={"--start-minimized","--disable-extensions","--disable-translate"};
-	capabilities.setCapability("chrome.switches", listCapability);
-	driver = new RemoteWebDriver(service.getUrl(),capabilities);
+  public class DashBoard extends OptifyTestScenario{
+	  
+	  @SuppressWarnings("static-access")
+	  public DashBoard(){
+		  super();
+		  super.pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();	
+		  super.junit=false;           //The default should be false. True for JUnit test only!
+		  this.scripList=getScriptList();  //Loads all enable script list.
+	  }
+	  
+	  @BeforeClass
+	  public static void createAndStartService() throws Throwable {
+		service = new ChromeDriverService.Builder()
+	    	.usingDriverExecutable(new File(setPath))
+	        .usingAnyFreePort()
+	        .build();
+		service.start();
+		
+		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+		String[] listCapability={"--start-minimized","--disable-extensions","--disable-translate"};
+		capabilities.setCapability("chrome.switches", listCapability);
+		driver = new RemoteWebDriver(service.getUrl(),capabilities);
 	
 	dashboardLogIn(driver);
   }
@@ -165,8 +140,8 @@ import com.google.common.base.Function;
 	  print("Testing Social monitor.");
 	  twitterForBusinessWidget_socialMonitor(numTry);
 	  printSuccess();
-	  print("Testing drop down list.");
-	  twitterForBusinessWidget_dropDownList(numTry);
+	  print("Testing switching account.");
+	  twitterForBusinessWidget_switchAccount(numTry);
 	  printSuccess();
 	  
 	  Thread.sleep(3000);
@@ -191,11 +166,11 @@ import com.google.common.base.Function;
 	  print("Testing rank2 label.");
 	  keywordPerformanceWidget_rank2(numTry);
 	  printSuccess();
-	  print("Testing drop down list (search engine).");
-	  keywordPerformanceWidget_searchEngineDropDawn(numTry);
+	  print("Testing switch search engine.");
+	  keywordPerformanceWidget_switchSearchEngine(numTry);
 	  printSuccess();
-	  print("Testing drop down list (Lists).");
-	  keywordPerformanceWidget_dropDownList(numTry);
+	  print("Testing switch show filter.");
+	  keywordPerformanceWidget_switchShowFilter(numTry);
 	  printSuccess();
 	  
 	  Thread.sleep(3000);
@@ -237,11 +212,11 @@ import com.google.common.base.Function;
 	  print("Entering title link.");
 	  linkOpportunitiesWidget_enteringTitleLink(numTry);
 	  printSuccess();
-	  print("Testing drop down list (View).");
-	  linkOpportunitiesWidget_dropDownListView(numTry);
+	  print("Testing change of view.");
+	  linkOpportunitiesWidget_changeView(numTry);
 	  printSuccess(); 
-	  print("Testing drop down list (List).");
-	  linkOpportunitiesWidget_dropDownList(numTry);
+	  print("Testing change filter");
+	  linkOpportunitiesWidget_changeFilter(numTry);
 	  printSuccess();
 	  print("Testing Add more URLs.");
 	  linkOpportunitiesWidget_addMoreURLs(numTry);
@@ -282,8 +257,8 @@ import com.google.common.base.Function;
 	  
 	  object="Website Feed widget";
 	  
-	  print("Testing drop down list (Score set used).");
-	  websiteFeedWidget_dropDownListScore(numTry);
+	  print("Testing switch score set.");
+	  websiteFeedWidget_switchScoreSet(numTry);
 	  printSuccess();
 	  
 	  //Test record:  
@@ -443,27 +418,6 @@ import com.google.common.base.Function;
 	 driver.quit();
   }
   
-  //===============================================================================================
-  private Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
-	    return new Function<WebDriver, WebElement>() {
-	        public WebElement apply(WebDriver driver) {
-	            return driver.findElement(locator);
-	          }
-       };
-  }
-  
-  //================================================================================================
-  private void switcWindow(){
-	  for(String winHandle : driver.getWindowHandles())
-		  driver.switchTo().window(winHandle);
-  }
-  
-  //================================================================================================
-  private String getTime(){
-	  return Integer.toString((int)((System.currentTimeMillis()/(1000*60*60))%24))+
-	         Integer.toString((int) ((System.currentTimeMillis()/(1000*60))%60));
-  }
-  
   //================================================================================================
   private void removeTwitterSearchSave() throws InterruptedException{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -476,41 +430,6 @@ import com.google.common.base.Function;
 	  Thread.sleep(5000);
   }
 
-  //================================================================================================
-  private int getRowCount(By by) throws Exception {
-      try { WebElement table = driver.findElement(by);
-            List<WebElement> rows = table.findElements(By.tagName("tr"));
-            return rows.size();
-      
-      } catch (Exception e) {
-          return -1;
-      }
-  }
-  
-  //================================================================================================
-  private int getRowsNum(By by) throws Exception{
-	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  int num=0;
-	  int sum=0;
-	  int MAX_ROWS=100;
-	  
-	  while((num=getRowCount(by))>=MAX_ROWS){
-		  sum+=num;
-		  wait.until(presenceOfElementLocated(By.xpath("//a[@class='next']")));
-		  driver.findElement(By.xpath("//a[@class='next']")).click();
-		  wait.until(presenceOfElementLocated(by));
-	  }
-	  
-	  sum+=num;
-	  return sum;
-  }
-  
-  //==================================================================================================
-  private void goBase(){
-	  if(!driver.getTitle().equals("Dashboard | Optify"))
-		  driver.get(homeAddress);
-  }
-  
   //==================================================================================================
   private void gettingStartedWidget_CreateYourTargetKeywords_LEARN_MORE(int numTry) throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -840,16 +759,19 @@ import com.google.common.base.Function;
 		  
 		  driver.get(homeAddress);
 	  }
+	  catch(ComparisonFailure ex){
+		  if(numTry>2){
+		  printFailed();
+			 throw ex; 
+		  }
+	  }
 	  catch(Exception e){
 		  if(numTry>2){
 			  printFailed();
 				 throw e; 
 		  }	
 	  }
-	  catch(ComparisonFailure ex){
-			  printFailed();
-				 throw ex; 
-	  }
+	  
 			 
 			
 	  	 numTry++;
@@ -857,7 +779,7 @@ import com.google.common.base.Function;
   }
   
   //=========================================================================================================
-  private void keywordPerformanceWidget_searchEngineDropDawn(int numTry) throws Exception{;
+  private void keywordPerformanceWidget_switchSearchEngine(int numTry) throws Exception{;
       WebDriverWait wait = new WebDriverWait(driver, 10);
       goBase();
       
@@ -878,12 +800,12 @@ import com.google.common.base.Function;
 		  }
 			 
 			 numTry++;
-			 keywordPerformanceWidget_searchEngineDropDawn(numTry);
+			 keywordPerformanceWidget_switchSearchEngine(numTry);
 	  }
   }
   
   //=========================================================================================================
-  private void keywordPerformanceWidget_dropDownList(int numTry) throws Exception{
+  private void keywordPerformanceWidget_switchShowFilter(int numTry) throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -904,7 +826,7 @@ import com.google.common.base.Function;
 		  }
 			 
 			 numTry++;
-			 keywordPerformanceWidget_dropDownList(numTry);
+			 keywordPerformanceWidget_switchShowFilter(numTry);
 	  }
   }
   
@@ -1022,7 +944,7 @@ import com.google.common.base.Function;
   }
   
   //=========================================================================================================
-  private void linkOpportunitiesWidget_dropDownListView(int numTry)throws Exception{
+  private void linkOpportunitiesWidget_changeView(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -1041,12 +963,12 @@ import com.google.common.base.Function;
 		  }
 			 
 			 numTry++;
-			 linkOpportunitiesWidget_dropDownListView(numTry);
+			 linkOpportunitiesWidget_changeView(numTry);
 	  }
   }
   
   //=========================================================================================================
-  private void linkOpportunitiesWidget_dropDownList(int numTry)throws Exception{
+  private void linkOpportunitiesWidget_changeFilter(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -1063,7 +985,7 @@ import com.google.common.base.Function;
 		  }
 		  
 			 numTry++;
-			 linkOpportunitiesWidget_dropDownList(numTry);
+			 linkOpportunitiesWidget_changeFilter(numTry);
 	  }
   }
   
@@ -1133,7 +1055,7 @@ import com.google.common.base.Function;
   }
   
   //=========================================================================================================
-  private void websiteFeedWidget_dropDownListScore(int numTry)throws Exception{
+  private void websiteFeedWidget_switchScoreSet(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -1154,7 +1076,7 @@ import com.google.common.base.Function;
 		  }
 			 
 			 numTry++;
-			 websiteFeedWidget_dropDownListScore(numTry);
+			 websiteFeedWidget_switchScoreSet(numTry);
 	  }
   }
   
@@ -1168,6 +1090,15 @@ import com.google.common.base.Function;
 		  driver.get(homeAddress);
 	  }
 	  catch(Exception e){
+		  if(numTry>2){
+				 printFailed();
+				 throw e; 
+		  }
+			 
+			 numTry++;
+			 websiteFeedWidget_leadDetailLink(numTry);
+	  }
+	  catch(ComparisonFailure  e){
 		  if(numTry>2){
 				 printFailed();
 				 throw e; 
@@ -1674,7 +1605,7 @@ import com.google.common.base.Function;
 	  goBase();
 	  
 	  try{String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]"))).getAttribute("id");
-		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore expanded']/div[2]/div/span")))).perform();
+		  builder.clickAndHold(wait.until(presenceOfElementLocated(By.xpath("//div[@class='action faq_seemore ']/div[2]/div/span")))).perform();
 		  Thread.sleep(3000);
 		  builder.click(wait.until(presenceOfElementLocated(By.xpath("//div[@id='"+getId+"-pulldown']//li[text()='View your Traffic']")))).perform();
 		  assertEquals("View your Traffic","Lead Intelligence | Optify",driver.getTitle());
@@ -1829,7 +1760,7 @@ import com.google.common.base.Function;
 			  }
 		  }
 		  catch(WebDriverException ex){
-			  if(cathSum>3)
+			  if(cathSum>2)
 				  throw ex;
 			  
 			  try{cathSum++;
@@ -1856,7 +1787,7 @@ import com.google.common.base.Function;
   }
   
   //=========================================================================================================
-  private void twitterForBusinessWidget_dropDownList(int numTry)throws Exception{
+  private void twitterForBusinessWidget_switchAccount(int numTry)throws Exception{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
 	  goBase();
 	  
@@ -1878,7 +1809,7 @@ import com.google.common.base.Function;
 		  }
 			 
 			 numTry++;
-			 twitterForBusinessWidget_dropDownList(numTry);
+			 twitterForBusinessWidget_switchAccount(numTry);
 	  }
   }
   
@@ -1984,84 +1915,9 @@ import com.google.common.base.Function;
 			 alertsWidget_records(numTry);
 		}
   }
-  
-  //==========================================================================================================
-  private static void print(String action){
-	  FileWriter fstreamWrite=null;
-	  
-	  System.out.printf("%-52s",action);
-	  
-	  try{fstreamWrite = new FileWriter("data/actionStram");
-		 }catch(IOException e) {
-		 	// TODO Auto-generated catch block
-			e.printStackTrace();
-		 }
-		 
-		BufferedWriter out = new BufferedWriter(fstreamWrite);
-		try {out.write(action);
-			 out.close();
-		} catch (IOException e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-  }
-  
-//===========================================================================
-  public boolean enable(String name){
-	  if(junit)
-			 return true;
-	  
-	  for(String elem:DashBoard.scripList)
-    	 if(elem!=null && elem.toString().equals(name))
-    		 return true;
-      
-    return false; 
-  }
-  
   //===========================================================================
-  private static List<String> getScriptList(){
-	  	//Load all file info into Contact List.
-		BufferedReader reader=null;
-		File file=new File("data/data3");
-		List<String> list=new ArrayList<String>();
-		String line="";
-		
-		try { FileReader fstreamRead=new FileReader(file);
-		  reader=new BufferedReader(fstreamRead);
-		  line = reader.readLine();
-		  
-		  while(line!=null){
-			  list.add(line);
-			  line = reader.readLine();
-		  }
-		  
-		  reader.close();
-	
-		} catch (Exception e) {
-		// TODO Auto-generated catch block
-			System.out.println("Can't load scripts list from file data/data3!");
-			e.printStackTrace();
-		}
-		
-	 	return list;
-  }
-  
-//=================`===============================================
-  public static void printSuccess(){
-	  double sumTime=(System.currentTimeMillis()-time)/1000;
-	  System.out.printf("%-5s","Success");
-	  System.out.printf("%5.0f",(sumTime/60)%60);
-	  System.out.printf(".%-5.0f",sumTime%60);
-	  System.out.printf("%-30s %s%n",object,pageName);
-	  time=System.currentTimeMillis();
-  }
-  
-  //=================`===============================================
-  public static void printFailed(){
-	  double sumTime=(System.currentTimeMillis()-time)/1000;
-	  System.out.printf("%-7s","Failed");
-	  System.out.printf("%5.0f",(sumTime/60)%60);
-	  System.out.printf(".%-5.0f",sumTime%60);
-	  System.out.printf("%-30s %s%n",object,pageName);
-	  time=System.currentTimeMillis();
+  public void goBase(){
+	  if(!driver.getTitle().equals("Dashboard | Optify"))
+		  driver.get(homeAddress);
   }
 } 

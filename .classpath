@@ -52,5 +52,14 @@
 	<classpathentry kind="lib" path="/home/Oras/Optify/Linux/Test/selenium/libs/xml-apis-1.3.04.jar"/>
 	<classpathentry kind="lib" path="/home/Oras/Optify/Linux/Test/selenium/selenium-server-standalone-2.24.1.jar"/>
 	<classpathentry kind="lib" path="/home/Oras/Optify/Linux/Test/javamail-1.4.5/mail.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/gnujaxp.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/jfreechart-1.0.14.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/jfreechart-1.0.14-experimental.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/jfreechart-1.0.14-swt.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="/home/Oras/workspace/Test/jfreechart-1.0.14/lib/swtgraphics2d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

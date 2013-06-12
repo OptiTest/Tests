@@ -177,6 +177,7 @@ public class Report {
 							 "<th height='46' colspan='5' style='font-size: 20px' align='left' scope='col'>New issues</th>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
+							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>ID</span></td>\n"+
 							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Page name</span></td>\n"+
 							 "  <td width='203' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Object name</span></td>\n"+
 							 "  <td width='204' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Action performed</span></td>\n"+
@@ -184,8 +185,10 @@ public class Report {
 							 "  <td width='323' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Trace</span></td>\n"+
 							 "</tr>\n");
 			
+							int id=1;
 							for(NodeFailure i:this.mFailures.getNewFailureList()){
 								this.report+=("<tr>\n"+
+										            "<td height='37' bgcolor='#CCCCCC'>"+id+"</td>\n"+
 													"<td height='37' bgcolor='#CCCCCC'>"+i.returnPageName()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'>"+i.returnObjectName()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'>"+i.returnActionPerformed()+"</td>\n"+
@@ -196,7 +199,7 @@ public class Report {
 													"</textarea>\n"+
 													"</form></td>\n"+
 												"</tr>\n");
-								
+								id++;
 								
 							}
 							this.report+=("</table>\n"+
@@ -205,6 +208,8 @@ public class Report {
 							 "<th height='46' colspan='5' style='font-size: 20px' align='left' scope='col'>Exisiting issues</th>\n"+
 							 "</tr>\n"+
 							 "<tr>\n"+
+							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>ID</span></td>\n"+
+							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Ins</span></td>\n"+
 							 "  <td width='192' height='27' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Page name</span></td>\n"+
 							 "  <td width='203' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Object name</span></td>\n"+
 							 "  <td width='204' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Action performed</span></td>\n"+
@@ -212,8 +217,11 @@ public class Report {
 							 "  <td width='323' bgcolor='#7AC8F1'><strong><span class='summary_headline'>Trace</span></td>\n"+
 							 "</tr>\n");
 			
+							id=0;
 							for(NodeFailure i:this.mFailures.getOldFailureList()){
 								this.report+=("<tr>\n"+
+										            "<td height='37' bgcolor='#CCCCCC'>"+id+"</td>\n"+
+										            "<td height='37' bgcolor='#CCCCCC'>"+i.getNum()+"</td>\n"+
 													"<td height='37' bgcolor='#CCCCCC'>"+i.returnPageName()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'>"+i.returnObjectName()+"</td>\n"+
 													"<td bgcolor='#CCCCCC'>"+i.returnActionPerformed()+"</td>\n"+
@@ -225,7 +233,7 @@ public class Report {
 													"</form></td>\n"+
 												"</tr>\n");
 								
-								
+								id++;
 							}
 								
 							this.report+=("</table>\n"+
@@ -259,9 +267,16 @@ public class Report {
 	
 	//Send report by email=====================================================
 	private void sendReportByEMail(String text){
+		 String subject="";
 		 String from="optifyautomation@gmail.com";
 	     String to[]={"orasnin@gmail.com"};
-	     String subject="Optify automation report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
+	     
+	     //Set high priority email if massive failure detected.
+	     if(checkIfmassiveFailure())
+	    	 subject="Optify automation [[[Massive Failure!!!!]]] report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
+	     
+	     else
+	    	 subject="Optify automation report for "+this.headInformation[1]+" generate time "+this.headInformation[2];
  
 	     this.email = new EMail(to,from,subject,text);
 	     email.send();
@@ -270,5 +285,14 @@ public class Report {
 	//Add action performed=====================================================
 	public void setActionPerformed(String act){
 		this.action=act;
+	}
+	
+	//Check for massive failure================================================
+	private boolean checkIfmassiveFailure(){
+		for(NodeFailure i:this.mFailures.getNewFailureList())
+  			if(i.returnErrorDescription()!=null&&i.returnErrorDescription().equals("Can't log to server!"))
+  				return true;
+  						
+  			return false;
 	}
 }

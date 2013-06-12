@@ -103,6 +103,19 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.ApplicationFrame;
+
+
 public class MainMenu extends javax.swing.JFrame {
 
 	/**
@@ -117,6 +130,7 @@ public class MainMenu extends javax.swing.JFrame {
 	private DefaultMutableTreeNode rootNode;
 	public boolean select[];
 	private String pageName;
+	private boolean flag;
 	
     public MainMenu() {
     	//Set MainMenu Components & default user & password:
@@ -129,7 +143,7 @@ public class MainMenu extends javax.swing.JFrame {
         jPasswordField.setText(set.getUserPassword());
         
         pageName="";
-
+        this.flag=false;    //Thread finish flag.
     }
 
     /**
@@ -154,6 +168,8 @@ public class MainMenu extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -224,7 +240,7 @@ public class MainMenu extends javax.swing.JFrame {
         //Close App & process.
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         
-        addWindowListener(new WindowAdapter(){
+          addWindowListener(new WindowAdapter(){
           public void windowClosing(WindowEvent e){
         	  endApp();
           }
@@ -283,6 +299,20 @@ public class MainMenu extends javax.swing.JFrame {
         jMenuItem3.setText("Reports");
         jMenu1.add(jMenuItem3);
 
+        jMenuItem4.setText("Settings");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        
+        jMenuItem5.setText("Failure Analyzer");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        
         jMenuItem2.setText("Exit");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,17 +323,10 @@ public class MainMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Settings   ");
-        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu2MouseClicked(evt);
-            }
-        });
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
-            }
-        });
+        jMenu2.setText("Manage   ");
+        jMenu2.add(jMenuItem4);
+        jMenu2.add(jMenuItem5);
+        
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Help   ");
@@ -378,12 +401,33 @@ public class MainMenu extends javax.swing.JFrame {
     	endApp();
     	System.exit(0);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) throws Exception{//GEN-FIRST:event_jButtonRunTestActionPerformed
-    	this.thread2 = new Thread(new MainTest(this.rootNode));
-    	
-    	this.thread2.start();
     
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    	Settings set=new Settings();
+        set.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    	FailureAnalyzer fa=new FailureAnalyzer();
+        fa.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+	private void jButtonRunTestActionPerformed(java.awt.event.ActionEvent evt) throws Exception{//GEN-FIRST:event_jButtonRunTestActionPerformed
+    	if(this.flag){
+    		while(thread2.isAlive()){
+    			jButtonRunTest.setText("Run Test");
+	    		Runtime.getRuntime().exec("killall chromedriver");
+	    		thread2.interrupt();
+	    		this.flag=false;
+    		}
+    		
+    		return;
+    	}
+    	
+    	this.thread2 = new Thread(new MainTest(this.rootNode));
+    	this.flag=true;
+    	this.thread2.start();
+    	jButtonRunTest.setText("Stop Test");
        
     }//GEN-LAST:event_jButtonRunTestActionPerformed
 
@@ -400,8 +444,8 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu4ActionPerformed
 
     private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
-        About about=new About();
-        about.setVisible(true);
+        //About about=new About();
+        //about.setVisible(true);
     }//GEN-LAST:event_jMenu4MouseClicked
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
@@ -467,6 +511,8 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JTextField jUserNameField;
     private javax.swing.JTree jTree;

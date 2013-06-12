@@ -1,56 +1,33 @@
 package com.optifyTest;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
-import junit.framework.TestCase;
+import java.io.File;
+import java.util.Calendar;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
-import static org.junit.Assume.assumeTrue; 
 
-import com.google.common.base.Function;
 
-@RunWith(BlockJUnit4ClassRunner.class)
-public class Keywords extends TestCase {
-	public static MainMenu ts=new MainMenu();
-	public static Settings st=new Settings();
- 
-    //Set test parameters:
-	private static ChromeDriverService service;
-	private static WebDriver driver;
-    Actions builder = new Actions(driver);
-    static String homeAddress=st.getServerUrl();
-    static String userName=ts.getUserName();
-    static String password=ts.getUserPassword();
-    static String setPath=st.getSeleniumBit();
-    String keyWord="";
-    String keyWordUrl="";
-    static public String object;
-    static public String pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();
-    static public double time=0; 
-    static List<String>scripList; //Loads all enable script list.
-    boolean junit=false;           //The default should be false. True for JUnit test only!
-    
+public class Keywords extends OptifyTestScenario{
+	
+    @SuppressWarnings("static-access")
+	public Keywords(){
+		  super();
+		  super.pageName=new Object(){}.getClass().getEnclosingClass().getSimpleName();	
+		  super.junit=false;           //The default should be false. True for JUnit test only!
+		  this.scripList=getScriptList();  //Loads all enable script list.
+    }
   
   @BeforeClass
   public static void createAndStartService() throws Throwable {
@@ -75,7 +52,6 @@ public class Keywords extends TestCase {
   
   public static void enterToKeywords(int numTry) throws Throwable{
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
-	  Actions builder = new Actions(driver);
 	  time=System.currentTimeMillis();
 	  object="";
 	  
@@ -404,37 +380,6 @@ public class Keywords extends TestCase {
 	  driver.close();
 	  driver.quit();
   }
-  
-  //===============================================================================================
-  private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
-	    return new Function<WebDriver, WebElement>() {
-	        public WebElement apply(WebDriver driver) {
-	            return driver.findElement(locator);
-	          }
-       };
-  }
-  
-  //==================================================================================================
-  private void goBase(){
-	  if(!driver.getTitle().equals("Keywords | Optify"))
-		  driver.get(homeAddress+"/keyword/overview");
-  }
-  
-  //==================================================================================================
-  private void switcWindow(){
-	  for(String winHandle : driver.getWindowHandles())
-		  driver.switchTo().window(winHandle);
-  }
-  
-  //=================================================================================================
-  public static void selectValue(String valToBeSelected){
-      List <WebElement> options = driver.findElements(By.tagName("option"));
-		for (WebElement option : options) {
-			if (valToBeSelected.equalsIgnoreCase(option.getText())){
-				option.click();
-			}
-	    }
-	}
   
   //==================================================================================================
   private void helpWithThisPage_link(int numTry)throws Exception{
@@ -931,7 +876,7 @@ public class Keywords extends TestCase {
 	  
 		  String getId=wait.until(presenceOfElementLocated(By.xpath("//div[@class='add-to-list-box']/div/div"))).getAttribute("id");
 	  
-		  keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
+		  String keyWord=wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td[2]/span"))).getText();
 		  wait.until(presenceOfElementLocated(By.xpath("//div[@class='table-wrapper']/table/tbody/tr/td/div/table/tbody/tr/td/input"))).click();
 		  
 		  Thread.sleep(3000);
@@ -964,6 +909,7 @@ public class Keywords extends TestCase {
   //=========================================================================================================
   private void getSuggestions_savingSuggestUrl(int numTry)throws Exception{ 
 	  WebDriverWait wait = new WebDriverWait(driver, 10);
+	  String keyWordUrl="";
   	  goBase();
 
 	  try{getSuggestions_popUp(numTry);
@@ -1647,97 +1593,9 @@ public class Keywords extends TestCase {
   	  }
   }
   
-  //==================================================================================================
-  private int returnMonthInt(String month){
-	  final int SUM_MONTH=12;
-	  final int MONTH_NUM[]={0,1,2,3,4,5,6,7,8,9,10,11};
-	  final String MONTH_STR[]={"January","February","March","April","May","June","July","August",
-			  "September","October","November","December"};
-	  for(int i=0;i<SUM_MONTH;i++){
-		 if(month.equals(MONTH_STR[i]))
-			 return MONTH_NUM[i];
-	  }
-
-	  return -1;
-  }
-  
-  //==========================================================================================================
-  private static void print(String action){
-	  FileWriter fstreamWrite=null;
-	  
-	  System.out.printf("%-40s",action);
-	  
-	  try{fstreamWrite = new FileWriter("data/actionStram");
-		 }catch(IOException e) {
-		 	// TODO Auto-generated catch block
-			e.printStackTrace();
-		 }
-		 
-		BufferedWriter out = new BufferedWriter(fstreamWrite);
-		try {out.write(action);
-			 out.close();
-		} catch (IOException e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-  }
-  
-//===========================================================================
-  public boolean enable(String name){
-	  if(junit)
-			 return true;
-	  
-	  for(String elem:Keywords.scripList)
-    	 if(elem!=null && elem.toString().equals(name))
-    		 return true;
-      
-    return false; 
-  }
-  
-  //===========================================================================
-  private static List<String> getScriptList(){
-	  	//Load all file info into Contact List.
-		BufferedReader reader=null;
-		File file=new File("data/data3");
-		List<String> list=new ArrayList<String>();
-		String line="";
-		
-		try { FileReader fstreamRead=new FileReader(file);
-		  reader=new BufferedReader(fstreamRead);
-		  line = reader.readLine();
-		  
-		  while(line!=null){
-			  list.add(line);
-			  line = reader.readLine();
-		  }
-		  
-		  reader.close();
-	
-		} catch (Exception e) {
-		// TODO Auto-generated catch block
-			System.out.println("Can't load scripts list from file data/data3!");
-			e.printStackTrace();
-		}
-		
-	 	return list;
-  }
-  
-  //=================================================================
-  public static void printSuccess(){
-	  double sumTime=(System.currentTimeMillis()-time)/1000;
-	  System.out.printf("%-5s","Success");
-	  System.out.printf("%5.0f",(sumTime/60)%60);
-	  System.out.printf(".%-5.0f",sumTime%60);
-	  System.out.printf("%-30s %s%n",object,pageName);
-	  time=System.currentTimeMillis();
-  }
-  
-  //=================================================================
-  public static void printFailed(){
-	  double sumTime=(System.currentTimeMillis()-time)/1000;
-	  System.out.printf("%-7s","Failed");
-	  System.out.printf("%5.0f",(sumTime/60)%60);
-	  System.out.printf(".%-5.0f",sumTime%60);
-	  System.out.printf("%-30s %s%n",object,pageName);
-	  time=System.currentTimeMillis();
-  }
+ //==================================================================================================
+ public void goBase(){
+	  if(!driver.getTitle().equals("Keywords | Optify"))
+		  driver.get(homeAddress+"keyword/overview#view=custom");
+ }
 }

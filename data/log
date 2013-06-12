@@ -1,52 +1,15 @@
-com.optifyTest.DashBoard,,websiteFeedWidget,,Testing lead detail link.,,Lead Detail expected:<[Lead] Detail | Optify> but was:<[Visitor] Detail | Optify>,,junit.framework.ComparisonFailure: Lead Detail expected:<[Lead] Detail | Optify> but was:<[Visitor] Detail | Optify>	at junit.framework.Assert.assertEquals(Assert.java:85)
-	at com.optifyTest.DashBoard.websiteFeedWidget_leadDetailLink(DashBoard.java:1167)
-	at com.optifyTest.DashBoard.websiteFeedWidget(DashBoard.java:294)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:601)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
-	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:30)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
-	at org.junit.runners.Suite.runChild(Suite.java:128)
-	at org.junit.runners.Suite.runChild(Suite.java:24)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
-	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:136)
-	at org.junit.runner.JUnitCore.run(JUnitCore.java:117)
-	at com.optifyTest.MainTest.run(MainTest.java:153)
-	at java.lang.Thread.run(Thread.java:722)
-,,1
-
-com.optifyTest.DashBoard,,twitterForBusinessWidget,,Testing Social monitor.,,Timed out after 10 seconds waiting for com.optifyTest.DashBoard$2@ac797Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
-Driver info: driver.version: unknown,,org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for com.optifyTest.DashBoard$2@ac797
+06/12/2013
+com.optifyTest.DashBoard,,twitterForBusinessWidget,,Testing Social monitor.,,Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1,,org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1@581bce
 Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'
 System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
 Driver info: driver.version: unknown
 	at org.openqa.selenium.support.ui.FluentWait.timeoutException(FluentWait.java:251)
 	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:220)
-	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1818)
-	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1854)
-	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1854)
-	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1854)
-	at com.optifyTest.DashBoard.twitterForBusinessWidget(DashBoard.java:166)
+	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1750)
+	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1785)
+	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1785)
+	at com.optifyTest.DashBoard.twitterForBusinessWidget_socialMonitor(DashBoard.java:1785)
+	at com.optifyTest.DashBoard.twitterForBusinessWidget(DashBoard.java:141)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -77,15 +40,15 @@ Driver info: driver.version: unknown
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:136)
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:117)
-	at com.optifyTest.MainTest.run(MainTest.java:153)
+	at com.optifyTest.MainTest.run(MainTest.java:166)
 	at java.lang.Thread.run(Thread.java:722)
 Caused by: org.openqa.selenium.NoSuchElementException: The element could not be found (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 50 milliseconds
+Command duration or timeout: 52 milliseconds
 For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
 Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'
 System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
 Driver info: driver.version: RemoteWebDriver
-Session ID: c9541251a036372c9282686b285abaaf
+Session ID: 00d474079dc2dc9a3bfb40e7897c32a4
 	at sun.reflect.GeneratedConstructorAccessor14.newInstance(Unknown Source)
 	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.lang.reflect.Constructor.newInstance(Constructor.java:525)
@@ -96,13 +59,27 @@ Session ID: c9541251a036372c9282686b285abaaf
 	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:327)
 	at org.openqa.selenium.By$ByXPath.findElement(By.java:343)
 	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:234)
-	at com.optifyTest.DashBoard$2.apply(DashBoard.java:450)
-	at com.optifyTest.DashBoard$2.apply(DashBoard.java:1)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:162)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:1)
 	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:200)
 	... 37 more
-,,1
+,,1,,20130612_143741::
 
-com.optifyTest.DashBoard,,keywordPerformanceWidget,,Testing rank2 label.,,rank2 expected:<[7]6> but was:<[10]6>,,junit.framework.ComparisonFailure: rank2 expected:<[7]6> but was:<[10]6>	at junit.framework.Assert.assertEquals(Assert.java:85)	at com.optifyTest.DashBoard.keywordPerformanceWidget_rank2(DashBoard.java:839)	at com.optifyTest.DashBoard.keywordPerformanceWidget(DashBoard.java:192)	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)	at java.lang.reflect.Method.invoke(Method.java:601)
+com.optifyTest.DashBoard,,welcomeToolbar,,Testing Import Contacts.,,Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1,,org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1@88160c
+Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'
+System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.FluentWait.timeoutException(FluentWait.java:251)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:220)
+	at com.optifyTest.DashBoard.welcomeToolbar_moreImportContacts(DashBoard.java:1537)
+	at com.optifyTest.DashBoard.welcomeToolbar_moreImportContacts(DashBoard.java:1550)
+	at com.optifyTest.DashBoard.welcomeToolbar_moreImportContacts(DashBoard.java:1550)
+	at com.optifyTest.DashBoard.welcomeToolbar_moreImportContacts(DashBoard.java:1550)
+	at com.optifyTest.DashBoard.welcomeToolbar(DashBoard.java:392)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:601)
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
@@ -129,7 +106,123 @@ com.optifyTest.DashBoard,,keywordPerformanceWidget,,Testing rank2 label.,,rank2 
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:136)
 	at org.junit.runner.JUnitCore.run(JUnitCore.java:117)
-	at com.optifyTest.MainTest.run(MainTest.java:153)
+	at com.optifyTest.MainTest.run(MainTest.java:166)
 	at java.lang.Thread.run(Thread.java:722)
-,,1
+Caused by: org.openqa.selenium.NoSuchElementException: The element could not be found (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 32 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'
+System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
+Driver info: driver.version: RemoteWebDriver
+Session ID: 00d474079dc2dc9a3bfb40e7897c32a4
+	at sun.reflect.GeneratedConstructorAccessor14.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:525)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:188)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:145)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:472)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:242)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:327)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:343)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:234)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:162)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:1)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:200)
+	... 37 more
+,,1,,20130612_144908::
+
+com.optifyTest.DashBoard,,keywordPerformanceWidget,,Testing rank2 label.,,rank2 expected:<[7]6> but was:<[10]6>,,org.junit.ComparisonFailure: rank2 expected:<[7]6> but was:<[10]6>	at org.junit.Assert.assertEquals(Assert.java:125)	at com.optifyTest.DashBoard.keywordPerformanceWidget_rank2(DashBoard.java:758)	at com.optifyTest.DashBoard.keywordPerformanceWidget(DashBoard.java:167)	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:601)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:30)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:24)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:136)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:117)
+	at com.optifyTest.MainTest.run(MainTest.java:166)
+	at java.lang.Thread.run(Thread.java:722)
+,,5,,20130612_140011::20130612_140540::20130612_141114::20130612_141632::20130612_143854::
+
+com.optifyTest.DashBoard,,linkOpportunitiesWidget,,Testing Add more URLs.,,Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1,,org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for com.optifyTest.OptifyTestScenario$1@e07abdBuild info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'Driver info: driver.version: unknown	at org.openqa.selenium.support.ui.FluentWait.timeoutException(FluentWait.java:251)	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:220)
+	at com.optifyTest.DashBoard.linkOpportunitiesWidget_addMoreURLs(DashBoard.java:997)
+	at com.optifyTest.DashBoard.linkOpportunitiesWidget_addMoreURLs(DashBoard.java:1010)
+	at com.optifyTest.DashBoard.linkOpportunitiesWidget_addMoreURLs(DashBoard.java:1010)
+	at com.optifyTest.DashBoard.linkOpportunitiesWidget_addMoreURLs(DashBoard.java:1010)
+	at com.optifyTest.DashBoard.linkOpportunitiesWidget(DashBoard.java:222)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:601)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:30)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:24)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:136)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:117)
+	at com.optifyTest.MainTest.run(MainTest.java:166)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.openqa.selenium.NoSuchElementException: The element could not be found (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 275 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.24.1', revision: '17205', time: '2012-06-19 17:28:14'
+System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.6.11-5.fc17.i686', java.version: '1.7.0_09-icedtea'
+Driver info: driver.version: RemoteWebDriver
+Session ID: 270dc08184e8c3d53e685f7a3b28929f
+	at sun.reflect.GeneratedConstructorAccessor14.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:525)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:188)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:145)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:472)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:242)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:327)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:343)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:234)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:162)
+	at com.optifyTest.OptifyTestScenario$1.apply(OptifyTestScenario.java:1)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:200)
+	... 37 more
+,,6,,20130612_135541::20130612_140251::20130612_140829::20130612_141352::20130612_141911::20130612_144212::
 
